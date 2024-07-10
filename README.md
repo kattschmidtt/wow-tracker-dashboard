@@ -2,7 +2,7 @@
 A simple and user-friendly dashboard for World of Warcraft (WoW) players to keep track of all their daily activities, plan events ahead of time, and look up analytics about certain characters
 
 ### Tech Stack
-**Client:** React, Redux, TailwindCSS
+**Client:** React, TypeScript, TailwindCSS
 
 **Server:** Golang, Postgres
 
