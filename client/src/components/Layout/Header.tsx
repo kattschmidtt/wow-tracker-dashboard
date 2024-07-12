@@ -2,6 +2,7 @@ import { AppBar, Box, List, ListItem, Switch, Toolbar, Typography } from '@mui/m
 import { NavLink } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import User from '../User/User';
+import { useEffect } from 'react';
 
 const rightLinks = [
   {title: 'login', path: '/login'},
@@ -26,9 +27,12 @@ const navStyles = {
   fontFamily: 'Poppins'
 };
 
+
+
 const Header = ({darkMode, handleThemeToggle}: Props) => {
+
   return (
-    <AppBar position='static' sx={{mb: 3}}>
+    <AppBar position='static' sx={{mb: 3, background: '#a1dce6', boxShadow: 'none', color: 'black'}}>
       <Toolbar sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Box display='flex' alignItems='center'>
           <Typography 

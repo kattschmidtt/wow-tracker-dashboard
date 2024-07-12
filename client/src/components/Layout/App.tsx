@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react';
-import { Container, createTheme, CssBaseline, Button } from '@mui/material';
+import { Container, createTheme, CssBaseline } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
@@ -16,7 +16,7 @@ const App = () => {
     palette: {
       mode: paletteType,
       background: {
-        default: paletteType === 'light' ? '#eaeaea' : '#121212' //retain original darkMode bg color
+        default: paletteType === 'light' ? '#eaeaea' : '#a1dce6' //retain original darkMode bg color
       }
     }
   })
@@ -24,6 +24,7 @@ const App = () => {
   const handleThemeToggle = () => setDarkMode(!darkMode)
 
   return (
+    <Container className='app-wide-container'>
     <ThemeProvider theme={theme}>
       <ToastContainer position="bottom-right" theme="colored"/>
       <CssBaseline />
@@ -32,6 +33,7 @@ const App = () => {
         <Outlet />
       </Container>
     </ThemeProvider>
+    </Container>
   )
 }
 

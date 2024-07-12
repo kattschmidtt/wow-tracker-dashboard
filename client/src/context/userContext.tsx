@@ -1,6 +1,7 @@
 // context/UserProvider.tsx
 import { createContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
 import { UserModel } from '../Models/userModel';
+import { getCurrentISODate } from '../util/util';
 
 /**
  * Initial user state will be grabbed from server user profile end point
@@ -9,7 +10,8 @@ import { UserModel } from '../Models/userModel';
 const initialUserState: UserModel = {
   id: 1,
   name: 'Leroy Jenkins',
-  pictureUrl: 'WIP'
+  pictureUrl: 'WIP',
+  currentDateTime: getCurrentISODate(),
 };
 
 /**
