@@ -14,26 +14,38 @@ const App = () => {
 
   const theme = createTheme({
     palette: {
+      primary: {
+        main: '#00e676'
+      },
       mode: paletteType,
       background: {
         default: paletteType === 'light' ? '#eaeaea' : '#a1dce6' //retain original darkMode bg color
       }
-    }
+    },
+    
   })
 
   const handleThemeToggle = () => setDarkMode(!darkMode)
 
   return (
-    <Container className='app-wide-container'>
     <ThemeProvider theme={theme}>
       <ToastContainer position="bottom-right" theme="colored"/>
       <CssBaseline />
-      <Header darkMode={darkMode} handleThemeToggle={handleThemeToggle}/>
-      <Container>
-        <Outlet />
+      <Container
+        disableGutters
+        maxWidth={false}
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        <Header darkMode={darkMode} handleThemeToggle={handleThemeToggle} />
+          <Outlet />
       </Container>
     </ThemeProvider>
-    </Container>
   )
 }
 

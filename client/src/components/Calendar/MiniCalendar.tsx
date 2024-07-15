@@ -1,13 +1,10 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { UserContext } from '../../context/userContext';
 import AddIcon from '@mui/icons-material/Add';
 import { IconButton, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
-
-
-
 
 const MiniCalendar = () => {
 
@@ -17,16 +14,13 @@ const MiniCalendar = () => {
 
   return (
     <>
-      <Tooltip title='Add calendar event' placement='top' >
-        <IconButton component={Link} to="/login" style={{ 
-          justifyContent: 'space-between', 
-          marginLeft: 'auto', 
-          background: '#68ad51', 
-          color: '#ffffff',
-          top: '1.125rem'}}>
-          <AddIcon />
-        </IconButton>
-      </Tooltip>
+      <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+        <Tooltip title='Add calendar event' placement='top' >
+          <IconButton sx={{backgroundColor: '#5c946d', color: '#ffffff'}} size='small' component={Link} to="/login">
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </div>
 
       <br/>
       
