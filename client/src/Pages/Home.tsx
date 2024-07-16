@@ -4,6 +4,7 @@ import {getCurrentISODate, prettyDate} from '../util/util';
 import { UserContext } from '../context/userContext';
 import CharacterCard from '../components/CharacterSelect/CharacterCard';
 import { Box, Grid } from '@mui/material';
+import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
 
 const Home = () => {
 
@@ -29,7 +30,7 @@ const Home = () => {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={2} md={2}>
-            this is where the side bar will go
+            <NavigationSidebar />
           </Grid>
           <Grid item xs={12} sm={8} md={8}>
             <Grid container spacing={2}>
