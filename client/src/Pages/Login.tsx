@@ -1,10 +1,18 @@
-import React from 'react';
+import { Card, CardContent, Grid } from '@mui/material';
 
 const Login = () => {
   return (
-    <div>
-      login :)
-    </div>
+    <Grid container direction='column' justifyContent='center' alignItems='center' sx={{ minHeight: '100vh'}}>
+      <Card>
+        <Grid container>
+          <Grid item>
+            <CardContent>
+              login
+            </CardContent>
+          </Grid>
+        </Grid>
+      </Card>
+    </Grid>
   );
 };
 
