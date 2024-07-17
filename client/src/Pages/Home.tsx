@@ -16,13 +16,32 @@ const Home = () => {
   }, [])
 
   //amount of characters in favorite list (random WoW streamers I watch)
+  //will switch to user context when backend is finished
   const charList = [
-    'foxx',
-    'maximum',
-    'dorki',
-    'eiya',
-    'yummmy',
-    'meeix'
+    {
+      name: 'foxx',
+      isFavorite: true
+    },
+    {
+      name: 'maximum',
+      isFavorite: false
+    },
+    {
+      name: 'dorki',
+      isFavorite: false
+    },
+    {
+      name: 'eiya',
+      isFavorite: false
+    },
+    {
+      name: 'yummmy',
+      isFavorite: false
+    },
+    {
+      name: 'meeix',
+      isFavorite: false
+    }
   ]
 
   return (
@@ -34,9 +53,9 @@ const Home = () => {
           </Grid>
           <Grid item xs={12} sm={8} md={8}>
             <Grid container spacing={2}>
-              {charList.map((name, idx) => (
+              {charList.map((item, idx) => (
                 <Grid item key={idx} xs={12} sm={4} md={4}>
-                  <CharacterCard charId={idx} name={name} />
+                  <CharacterCard charId={idx} favorite={item.isFavorite} name={item.name} />
                 </Grid>
               ))}
             </Grid>

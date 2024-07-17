@@ -85,7 +85,7 @@ const NavigationSidebar = () => {
           {sideLinks.map(sidebarItem => {
             const Icon = icons[sidebarItem.icon]
             return (
-              <Tooltip title={sidebarItem.tooltip} placement="right">
+              <Tooltip key={sidebarItem.id} title={sidebarItem.tooltip} placement="right">
                 <ListItem disablePadding component={NavLink} to={sidebarItem.path} sx={{textDecoration: 'none', color: 'black'}}>
                   <ListItemButton key={sidebarItem.path}>
                     <ListItemIcon>
