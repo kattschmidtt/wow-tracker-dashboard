@@ -1,6 +1,5 @@
 function getUserRegion(): string {
   const locale = new Intl.DateTimeFormat().resolvedOptions().locale;
-  console.log(locale)
   return locale;
 }
 
@@ -22,4 +21,8 @@ export function prettyDate(): string {
     default: 
       return "Region not supported";
   }
+}
+
+export function prettyNumberFormat(x: number): string {
+  return x.toLocaleString(getUserRegion());
 }

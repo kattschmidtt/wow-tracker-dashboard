@@ -1,5 +1,6 @@
 import { Card, CardContent, Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
+import MythicPlusLeadboard from './MythicPlusLeadboard';
 
 const Leaderboard = () => {
 
@@ -25,10 +26,10 @@ const Leaderboard = () => {
         return (<div>Guild Raiding Card Component here</div>)
       } 
       case 'PvP': { 
-        return (<div>PvP Card Component here</div>)
+        return (<div>Who even does PvP OMEGALUL</div>)
       } 
       default: { 
-        return (<div>M+ Card Component here</div>)
+        return (<MythicPlusLeadboard />)
       } 
    } 
   }
