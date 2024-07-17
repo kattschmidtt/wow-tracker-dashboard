@@ -8,6 +8,7 @@ import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
 import MythicPlusTrackingStats from '../components/MythicPlusTracking/MythicPlusTrackingStats';
 import MythicPlusTracking from '../components/MythicPlusTracking/MythicPlusTracking';
 import Leaderboard from '../components/Leaderboard/Leaderboard';
+import Header from '../components/Layout/Header';
 
 const Home = () => {
 
@@ -48,6 +49,8 @@ const Home = () => {
   ]
 
   return (
+    <>
+    <Header />
       <div>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
@@ -90,6 +93,7 @@ const Home = () => {
           </Grid>
         </Box>
       </div>
+      </>
   );
 };
 export default Home;

@@ -12,26 +12,8 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(false)
   const paletteType = darkMode ? 'dark' : 'light'
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#00e676',
-      },
-      mode: paletteType,
-      background: {
-        default: paletteType === 'light' ? '#eaeaea' : '#a1dce6' //retain original darkMode bg color
-      },
-      text: {
-        secondary: paletteType === 'light' ? '#eaeaea' : '#a1dce6' 
-      },
-    },
-    
-  })
-
-  const handleThemeToggle = () => setDarkMode(!darkMode)
-
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <ToastContainer position="bottom-right" theme="colored"/>
       <CssBaseline />
       <Container
@@ -45,10 +27,9 @@ const App = () => {
           margin: 0,
         }}
       >
-        <Header darkMode={darkMode} handleThemeToggle={handleThemeToggle} />
           <Outlet />
       </Container>
-    </ThemeProvider>
+    </>
   )
 }
 

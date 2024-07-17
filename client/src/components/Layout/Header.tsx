@@ -26,7 +26,7 @@ const navStyles = {
   fontFamily: 'Poppins'
 };
 
-const Header = ({/* darkMode, handleThemeToggle */}: Props) => {
+const Header = ({/* darkMode, handleThemeToggle */}/* : Props */) => {
 
   return (
     <AppBar position='fixed' sx={{mb: 3, background: '#a1dce6', boxShadow: 'none', color: 'black'}}>
