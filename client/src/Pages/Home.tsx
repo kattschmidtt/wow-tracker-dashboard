@@ -58,7 +58,7 @@ const Home = () => {
             {/* Middle of home page, sandwhiched inbetween the nav bar and calendar */}
             <Grid item xs={12} sm={8} md={8}>
               {/* Character Card container */}
-              <Grid container spacing={2} sx={{pt: '1rem', pb: '2rem'}}>
+              <Grid container spacing={2} sx={{pt: '5rem', pb: '2rem'}}>
                 {charList.map((item, idx) => (
                   <Grid item key={idx} xs={12} sm={4} md={4}>
                     <CharacterCard charId={idx} favorite={item.isFavorite} name={item.name} />

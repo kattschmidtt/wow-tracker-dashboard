@@ -26,10 +26,10 @@ const navStyles = {
   fontFamily: 'Poppins'
 };
 
-const Header = ({darkMode, handleThemeToggle}: Props) => {
+const Header = ({/* darkMode, handleThemeToggle */}: Props) => {
 
   return (
-    <AppBar position='static' sx={{mb: 3, background: '#a1dce6', boxShadow: 'none', color: 'black'}}>
+    <AppBar position='fixed' sx={{mb: 3, background: '#a1dce6', boxShadow: 'none', color: 'black'}}>
       <Toolbar sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Box display='flex' alignItems='center'>
           <Typography 

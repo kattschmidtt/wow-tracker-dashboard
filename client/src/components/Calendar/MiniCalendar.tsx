@@ -12,7 +12,7 @@ const MiniCalendar = () => {
 
   return (
     <>
-      <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+      <div style={{display: 'flex', justifyContent: 'flex-start', paddingTop: '5rem'}}>
         <Tooltip title='Add calendar event' placement='right'>
           <IconButton sx={{
             '&:hover': {

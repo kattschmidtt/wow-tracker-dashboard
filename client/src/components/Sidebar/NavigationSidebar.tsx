@@ -67,21 +67,21 @@ const NavigationSidebar = () => {
   ]
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%'}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh'}}>
       <Drawer
         sx={{
+          zIndex: 1, 
           width: drawerWidth,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            top: '4.45rem'
           },
         }}
         variant="permanent"
         anchor="left"
       >
-        <List>
+        <List sx={{top: '4.45rem'}}>
           {sideLinks.map(sidebarItem => {
             const Icon = icons[sidebarItem.icon]
             return (
@@ -99,7 +99,7 @@ const NavigationSidebar = () => {
           })}
         </List>
 
-        <List sx={{ pt: '41rem' }}>
+        <List sx={{ pt: '45rem' }}>
           <Tooltip title='Account wide settings'>
             <ListItem 
               disablePadding 
