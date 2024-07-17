@@ -15,12 +15,15 @@ const App = () => {
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#00e676'
+        main: '#00e676',
       },
       mode: paletteType,
       background: {
         default: paletteType === 'light' ? '#eaeaea' : '#a1dce6' //retain original darkMode bg color
-      }
+      },
+      text: {
+        secondary: paletteType === 'light' ? '#eaeaea' : '#a1dce6' 
+      },
     },
     
   })

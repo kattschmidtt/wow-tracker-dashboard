@@ -10,13 +10,20 @@ const MiniCalendar = () => {
 
   const { user } = useContext(UserContext);
 
-
-
   return (
     <>
-      <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-        <Tooltip title='Add calendar event' placement='top' >
-          <IconButton sx={{backgroundColor: '#5c946d', color: '#ffffff'}} size='small' component={Link} to="/login">
+      <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+        <Tooltip title='Add calendar event' placement='right'>
+          <IconButton sx={{
+            '&:hover': {
+              color: 'black',
+            },
+            backgroundColor: '#5c946d', 
+            color: '#ffffff',
+          }}
+            size="small"
+            component={Link}
+            to="/login">
             <AddIcon />
           </IconButton>
         </Tooltip>
