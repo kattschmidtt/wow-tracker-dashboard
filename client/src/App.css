@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Metamorphous&display=swap');
 
 #root {
   max-width: 100%;
@@ -35,6 +36,12 @@ body {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
+}
+
+.login-text {
+  font-family: "Metamorphous", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .card {
