@@ -1,70 +1,61 @@
 package models
 
-type Link struct {
-	Href string `json:"href" gorm:"type:text"`
+type UserProfile struct {
+	Links       Links        `json:"_links"`
+	ID          int          `gorm:"primaryKey" json:"id"`
+	WowAccounts []WowAccount `json:"wow_accounts"  gorm:"foreignKey:UserProfileID"`
 }
 
 type Links struct {
-	Self    Link `json:"self" gorm:"embedded;embeddedPrefix:self_"`
-	User    Link `json:"user" gorm:"embedded;embeddedPrefix:user_"`
-	Profile Link `json:"profile" gorm:"embedded;embeddedPrefix:profile_"`
+	Self    Link `json:"self" gorm:"foreignKey:UserProfileID"`
+	User    Link `json:"user"`
+	Profile Link `json:"profile"`
 }
 
-type Realm struct {
-	ID   uint              `json:"id"`
-	Slug string            `json:"slug" gorm:"type:text"`
-	Name map[string]string `json:"names,omitempty" gorm:"-"`
-}
-
-type PlayableClass struct {
-	ID   uint              `json:"id"`
-	Name map[string]string `json:"names,omitempty" gorm:"-"`
-}
-
-type PlayableRace struct {
-	Key  Link              `json:"key" gorm:"embedded;embeddedPrefix:key_"`
-	Name map[string]string `json:"name" gorm:"-"`
-	ID   uint              `json:"id"`
-}
-
-type Gender struct {
-	Type string            `json:"type" gorm:"type:text"`
-	Name map[string]string `json:"name" gorm:"-"`
-}
-
-type Faction struct {
-	Type string            `json:"type" gorm:"type:text"`
-	Name map[string]string `json:"name" gorm:"-"`
-}
-
-type Character struct {
-	ID              uint          `json:"id" gorm:"primaryKey"`
-	Name            string        `json:"name" gorm:"type:text"`
-	CharacterHref   Link          `json:"character" gorm:"embedded;embeddedPrefix:character_"`
-	ProtectedHref   Link          `json:"protected_character" gorm:"embedded;embeddedPrefix:protected_character_"`
-	RealmID         uint          `json:"-" gorm:"index"` // Foreign key column
-	Realm           Realm         `json:"realm" gorm:"embedded;embeddedPrefix:realm_"`
-	PlayableClassID uint          `json:"-" gorm:"index"` // Foreign key column
-	PlayableClass   PlayableClass `json:"playable_class" gorm:"embedded;embeddedPrefix:playable_class_"`
-	PlayableRaceID  uint          `json:"-" gorm:"index"` // Foreign key column
-	PlayableRace    PlayableRace  `json:"playable_race" gorm:"embedded;embeddedPrefix:playable_race_"`
-	GenderID        uint          `json:"-" gorm:"index"` // Foreign key column
-	Gender          Gender        `json:"gender" gorm:"embedded;embeddedPrefix:gender_"`
-	FactionID       uint          `json:"-" gorm:"index"` // Foreign key column
-	Faction         Faction       `json:"faction" gorm:"embedded;embeddedPrefix:faction_"`
-	Level           int           `json:"level"`
-	WowAccountID    uint          `gorm:"index"`
+type Link struct {
+	Href string `json:"href"`
 }
 
 type WowAccount struct {
-	ID         uint        `json:"id" gorm:"primaryKey"`
-	UserID     uint        `json:"-" gorm:"index"` // Foreign key column
-	Characters []Character `json:"characters" gorm:"foreignKey:WowAccountID"`
+	ID            int         `gorm:"primaryKey" json:"id"`
+	UserProfileID uint        `json:"user_profile_id"` // Foreign key for UserProfile
+	Characters    []Character `json:"characters" gorm:"foreignKey:WowAccountID"`
 }
 
-type User struct {
-	ID          uint         `json:"id" gorm:"primaryKey"`
-	Links       Links        `json:"_links" gorm:"embedded"`
-	WowAccounts []WowAccount `json:"wow_accounts" gorm:"foreignKey:UserID"`
-	Collections Link         `json:"collections" gorm:"embedded;embeddedPrefix:collections_"`
+type Character struct {
+	Character          Link     `json:"character"`
+	ProtectedCharacter Link     `json:"protected_character"`
+	Name               string   `json:"name"`
+	ID                 int      `gorm:"primaryKey" json:"id"`
+	Realm              Realm    `json:"realm"`
+	PlayableClass      Playable `json:"playable_class"`
+	PlayableRace       Playable `json:"playable_race"`
+	Gender             Gender   `json:"gender"`
+	Faction            Faction  `json:"faction"`
+	Level              int      `json:"level"`
+}
+
+type Realm struct {
+	Key  Link              `json:"key"`
+	Name map[string]string `json:"name"`
+	ID   int               `gorm:"primaryKey" json:"id"`
+	Slug string            `json:"slug"`
+}
+
+type Playable struct {
+	Key  Link              `json:"key"`
+	Name map[string]string `json:"name"`
+	ID   int               `gorm:"primaryKey" json:"id"`
+}
+
+type Gender struct {
+	ID   int               `gorm:"primaryKey" json:"id"`
+	Type string            `json:"type"`
+	Name map[string]string `json:"name"`
+}
+
+type Faction struct {
+	ID   int               `gorm:"primaryKey" json:"id"`
+	Type string            `json:"type"`
+	Name map[string]string `json:"name"`
 }
