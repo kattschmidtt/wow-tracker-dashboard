@@ -1,10 +1,15 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Metamorphous&display=swap');
 
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Poppins', sans-serif !important;
+}
+body {
+  font-family: 'Poppins', sans-serif !important;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -33,6 +38,12 @@
   }
 }
 
+.login-text {
+  font-family: "Metamorphous", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .card {
   padding: 2em;
 }
@@ -40,3 +51,23 @@
 .read-the-docs {
   color: #888;
 }
+
+.mini-cal {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primary-button {
+  display: 'flex';
+  justify-content: 'space-between';
+  margin-left: 'auto';
+  background: '#68ad51';
+  color: '#ffffff';
+  top: '1.125rem';
+}
+
+/*== Basics ==*/
+.MuiFab-root {
+  background-color: '#5c946d';
+}
+
