@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import Header from './Header';
 
 import '../../App.css'
+import Footer from './Footer';
 
 const App = () => {
 

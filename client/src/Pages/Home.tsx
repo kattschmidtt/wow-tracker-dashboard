@@ -9,6 +9,7 @@ import MythicPlusTrackingStats from '../components/MythicPlusTracking/MythicPlus
 import MythicPlusTracking from '../components/MythicPlusTracking/MythicPlusTracking';
 import Leaderboard from '../components/Leaderboard/Leaderboard';
 import Header from '../components/Layout/Header';
+import Footer from '../components/Layout/Footer';
 
 const Home = () => {
 
@@ -93,7 +94,7 @@ const Home = () => {
           </Grid>
         </Box>
       </div>
-      </>
+    </>
   );
 };
 export default Home;

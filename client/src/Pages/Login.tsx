@@ -3,6 +3,7 @@ import motherLogin from '/motherLogin.png';
 import otherMotherReg from '/otherMotherReg.jpg';
 import TWWLogo from '/TWWLogo.png';
 import { useState } from 'react';
+import Footer from '../components/Layout/Footer';
 
 const textFieldStyles = {
   '& .MuiOutlinedInput-root': {
@@ -35,6 +36,12 @@ const Login = () => {
   };
 
   return (
+    <Grid
+      container 
+      direction="column" 
+      justifyContent="space-between" 
+      alignItems="center" 
+      sx={{ minHeight: '100vh', backgroundColor: '#36316b' }}>
     <Grid container justifyContent='center' alignItems='center' sx={{ minHeight: '100vh', backgroundColor: '#36316b' }}>
       <Card sx={{ background: '#271a38', display: 'flex', flexDirection: 'row', overflow: 'hidden' }}>
         <Grid item xs={12} sm={6} container justifyContent='center' alignItems='center' sx={{ transition: 'transform 0.5s ease-in-out', transform: isRegistering ? 'translateX(100%)' : 'translateX(0)' }}>
@@ -103,6 +110,8 @@ const Login = () => {
           </CardContent>
         </Grid>
       </Card>
+    </Grid>
+    <Footer />
     </Grid>
   );
 };
