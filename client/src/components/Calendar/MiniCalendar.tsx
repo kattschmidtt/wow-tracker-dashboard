@@ -23,7 +23,7 @@ const MiniCalendar = () => {
           }}
             size="small"
             component={Link}
-            to="/login">
+            to="/my-calendar">
             <AddIcon />
           </IconButton>
         </Tooltip>
