@@ -1,20 +1,22 @@
 package routes
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
-	"server/controllers"
+	"server/models"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 	"github.com/parnurzeal/gorequest"
 )
 
 const (
-	clientID     = "<YOUR CLIENT id>"
-	clientSecret = "<YOUR CLIENT SECRET>"
+	clientID     = ""
+	clientSecret = ""
 	redirectURI  = "http://localhost:8080/callback"
 	authURL      = "https://oauth.battle.net/authorize"
 	tokenURL     = "https://oauth.battle.net/token"
@@ -28,7 +30,6 @@ func SetupRouter() *gin.Engine {
 	r.GET("/login", loginHandler)
 	r.GET("/callback", callbackHandler)
 	r.GET("/profile/user/wow", profileHandler)
-	r.GET("/test", controllers.TestGet)
 
 	return r
 }
@@ -76,8 +77,81 @@ func profileHandler(c *gin.Context) {
 		return
 	}
 
+	log.Println("User Profile JSON:", profile)
+
+	var userProfile models.UserProfile
+	err = json.Unmarshal([]byte(profile), &userProfile)
+	if err != nil {
+		log.Printf("Failed to parse user profile JSON: %v", err)
+		c.String(http.StatusInternalServerError, fmt.Sprintf("Failed to parse user profile JSON: %v", err))
+		return
+	}
+
+	connStr := "user= password= dbname= sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatalf("Failed to connect to the database: %v", err)
+		c.String(http.StatusInternalServerError, "Failed to connect to database")
+		return
+	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatalf("Failed to ping the database: %v", err)
+		c.String(http.StatusInternalServerError, "Failed to ping the database")
+		return
+	}
+
+	sqlStatement := generateCreateTableSQL()
+	_, err = db.Exec(sqlStatement)
+	if err != nil {
+		log.Printf("Failed to create table: %v", err)
+		c.String(http.StatusInternalServerError, fmt.Sprintf("Failed to create table: %v", err))
+		return
+	}
+
+	for _, wowAccount := range userProfile.WowAccounts {
+		for _, character := range wowAccount.Characters {
+			_, err = db.Exec(`
+							INSERT INTO user_profiles (wow_account_id, character_name, character_id, realm_name, playable_class, playable_race, gender, faction, level)
+							VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+				wowAccount.ID, character.Name, character.ID, toJSON(character.Realm.Name), toJSON(character.PlayableClass.Name), toJSON(character.PlayableRace.Name), toJSON(character.Gender.Name), toJSON(character.Faction.Name), character.Level)
+			if err != nil {
+				log.Printf("Failed to insert data into table: %v", err)
+				c.String(http.StatusInternalServerError, fmt.Sprintf("Failed to insert data into table: %v", err))
+				return
+			}
+		}
+	}
+
 	c.String(http.StatusOK, "User Profile: %s", profile)
-	controllers.CreateAccountInfoEntry(c, profile)
+}
+
+func toJSON(value interface{}) string {
+	jsonValue, err := json.Marshal(value)
+	if err != nil {
+		log.Printf("Failed to marshal JSON: %v", err)
+		return ""
+	}
+	return string(jsonValue)
+}
+
+func generateCreateTableSQL() string {
+	return `
+	CREATE TABLE IF NOT EXISTS user_profiles (
+			id SERIAL PRIMARY KEY,
+			wow_account_id INT,
+			character_name VARCHAR(255),
+			character_id INT,
+			realm_name JSONB,
+			playable_class JSONB,
+			playable_race JSONB,
+			gender JSONB,
+			faction JSONB,
+			level INT
+	);
+	`
 }
 
 func getAccessToken(code string) (string, error) {

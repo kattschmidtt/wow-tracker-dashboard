@@ -21,5 +21,5 @@ func ConnectToDB() {
 }
 
 func AutoMigrateCharacter() {
-	DB.AutoMigrate(&models.Character{}, &models.WowAccount{}, &models.User{})
+	DB.AutoMigrate(&models.Character{}, &models.WowAccount{})
 }
