@@ -100,7 +100,7 @@ const NavigationSidebar = () => {
           })}
         </List>
 
-        <List sx={{ pt: '44rem' }}>
+        <List sx={{ pt: '44rem', zIndex: '-1'}}>
           <Tooltip title='Account wide settings'>
             <ListItem 
               disablePadding 
