@@ -1,7 +1,7 @@
 
 const Footer = () => {
   return (
-    <span>
+    <span style={{fontSize: '.5rem'}}>
       *All pictures belong to Blizzard Entertainment*
     </span>
   );

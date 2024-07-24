@@ -111,7 +111,17 @@ const Login = () => {
         </Grid>
       </Card>
     </Grid>
-    <Footer />
+    <span style={{
+        position: 'fixed',
+        fontSize: '.5rem',
+        bottom: 0,
+        width: '100%',
+        backgroundColor: '#36316b',
+        color: 'white',
+        textAlign: 'center',
+        padding: '1rem'}}>
+      *All pictures belong to Blizzard Entertainment*
+    </span>
     </Grid>
   );
 };

@@ -14,6 +14,7 @@ import SportsHandballOutlinedIcon from '@mui/icons-material/SportsHandballOutlin
 import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import { NavLink } from "react-router-dom";
+import Footer from "../Layout/Footer";
 
 const icons = {
   SettingsOutlinedIcon,
@@ -99,7 +100,7 @@ const NavigationSidebar = () => {
           })}
         </List>
 
-        <List sx={{ pt: '45rem' }}>
+        <List sx={{ pt: '44rem' }}>
           <Tooltip title='Account wide settings'>
             <ListItem 
               disablePadding 
@@ -114,6 +115,9 @@ const NavigationSidebar = () => {
               </ListItemButton>
             </ListItem>
           </Tooltip>
+          <span style={{fontSize: '.5rem'}}>
+            *All pictures belong to Blizzard Entertainment*
+          </span>
         </List>
       </Drawer>
     </Box>
