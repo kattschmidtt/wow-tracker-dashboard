@@ -7,14 +7,12 @@ import {
   ListItemIcon,
   Tooltip, 
 } from "@mui/material";
-import Icon from '@mui/material/Icon';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
 import SportsHandballOutlinedIcon from '@mui/icons-material/SportsHandballOutlined';
 import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import { NavLink } from "react-router-dom";
-import Footer from "../Layout/Footer";
 
 const icons = {
   SettingsOutlinedIcon,

@@ -1,8 +1,7 @@
-import { Card, CardContent, Tab, Tabs } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Box, Card, CardContent, IconButton, Tab, Tabs, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
 import ThisWeekTracking from './ThisWeekTracking';
-import {AffixDetail} from '../../Models/affixModel';
-import MythicPlusTrackingStats from './MythicPlusTrackingStats';
+import { NavLink } from 'react-router-dom';
 
 const MythicPlusTracking = () => {
 
@@ -11,7 +10,7 @@ const MythicPlusTracking = () => {
 
   const tabs: string[] = [
     'This week (week #)',
-    'Next three (3) weeks'
+    //'Next three (3) weeks' <- implement later when I figure out a way to get next weeks
   ];
 
 /*  
@@ -27,26 +26,35 @@ const MythicPlusTracking = () => {
       case 'This week (week #)': { 
         return (<ThisWeekTracking />)
       }
-      case 'Next three (3) weeks': {
-        return (<MythicPlusTrackingStats />)
-      }
       default: { 
         return (
           <Card>
             <CardContent></CardContent>
           </Card>)
       } 
-   } 
+    } 
   } 
 
   return (
     <Card>
       <CardContent>
-        <Tabs value={activeTab} onChange={handleTabSwitch}>
-          {tabs.map((tab) => (
-            <Tab label={tab} key={tab} value={tab} sx={{color: 'black', fontFamily: 'Poppins'}}/>
-          ))}
-        </Tabs>
+        <Box display='flex' justifyContent='space-between' alignItems='center'>
+          <Tabs value={activeTab} onChange={handleTabSwitch}>
+            {tabs.map((tab) => (
+              <Tab label={tab} key={tab} value={tab} sx={{color: 'black', fontFamily: 'Poppins'}}/>
+            ))}
+          </Tabs>
+          <Tooltip placement='top' title='Raider.io Best Routes'>
+            <IconButton 
+              aria-label='raider.io' 
+              component={NavLink} 
+              to={'https://raider.io/weekly-routes'}
+              disableRipple={true}
+              sx={{display: 'flex', justifyContent: 'flex-end'}}>
+              <img style={{width: '10%'}}src="https://avatars.githubusercontent.com/u/26493840?s=280&v=4" />
+            </IconButton>
+          </Tooltip>
+        </Box>
         {renderTab()}
       </CardContent>
     </Card>

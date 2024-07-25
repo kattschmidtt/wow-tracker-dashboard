@@ -2,10 +2,10 @@ export interface Root {
   region: string
   title: string
   leaderboard_url: string
-  affix_details: AffixDetail[]
+  affix_details: AffixModel[]
 }
 
-export interface AffixDetail {
+export interface AffixModel {
   id: number
   name: string
   description: string

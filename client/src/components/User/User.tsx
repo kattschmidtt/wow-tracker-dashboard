@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { UserContext } from '../../context/userContext';
-import { UserModel } from '../../Models/userModel';
 
 
 const User = () => {
