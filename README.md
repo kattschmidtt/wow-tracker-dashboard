@@ -4,8 +4,19 @@ A simple and user-friendly dashboard for World of Warcraft (WoW) players to keep
 
 ### Tech Stack
 
-**Client:** React, TypeScript, Material-UI, React Google Charts, React Beautiful DnD
+**Client:** 
+- React with TS
+- Material-UI
+- React Google Charts
+- React Beautiful DnD
+- Raider.io and Blizzard 
 
-**Server:** Golang, Postgres, GORM
+**Server:** 
+- Golang
+- Postgres 
+- GORM
 
-![alt text](https://i.redd.it/al5f1rbrrm341.jpg)
+![alt text](https://i.redd.it/al5f1rbrrm341.jpg)  
+
+*All pictures/account information belong to Blizzard Entertainment*  
+*except this great meme*
