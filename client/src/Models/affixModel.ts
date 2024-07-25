@@ -1,4 +1,4 @@
-export interface AffixRoot {
+export interface Root {
   region: string
   title: string
   leaderboard_url: string

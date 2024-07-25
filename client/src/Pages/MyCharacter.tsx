@@ -1,17 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
-import MiniCalendar from '../components/Calendar/MiniCalendar';
-import {getCurrentISODate, prettyDate} from '../util/util';
-import { UserContext } from '../context/userContext';
-import CharacterCard from '../components/CharacterSelect/CharacterCard';
 import { Box, Grid } from '@mui/material';
 import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
-import MythicPlusTrackingStats from '../components/MythicPlusTracking/MythicPlusTrackingStats';
-import MythicPlusTracking from '../components/MythicPlusTracking/MythicPlusTracking';
-import Leaderboard from '../components/Leaderboard/Leaderboard';
 import Header from '../components/Layout/Header';
-import Footer from '../components/Layout/Footer';
+import { useEffect } from 'react';
 
 const MyCharacter = () => {
+
 
   return (
     <>

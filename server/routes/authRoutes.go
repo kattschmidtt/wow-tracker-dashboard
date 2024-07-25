@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	clientID     = ""
-	clientSecret = ""
+	clientID     = "0PmPCHQ8zvh8awEBiO0OX16m7ilwUeJ1"
+	clientSecret = "70fecafdbd534133802e791234e6769e"
 	redirectURI  = "http://localhost:8080/callback"
 	authURL      = "https://oauth.battle.net/authorize"
 	tokenURL     = "https://oauth.battle.net/token"

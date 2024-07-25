@@ -1,19 +1,11 @@
 import { Card, CardContent, Tab, Tabs } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ThisWeekTracking from './ThisWeekTracking';
+import {AffixDetail} from '../../Models/affixModel';
+import MythicPlusTrackingStats from './MythicPlusTrackingStats';
 
 const MythicPlusTracking = () => {
 
-  const fetchAffixes = () => {
-    fetch('https://raider.io/api/v1/mythic-plus/affixes?region=us&locale=en')
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
-  }
-
-  useEffect(() => {
-    fetchAffixes()
-  }, []);
 
   const [activeTab, setActiveTab] = useState<string>('Mythic+') //set to default, will read from user profile db
 
@@ -36,10 +28,13 @@ const MythicPlusTracking = () => {
         return (<ThisWeekTracking />)
       }
       case 'Next three (3) weeks': {
-        return (<ThisWeekTracking />)
+        return (<MythicPlusTrackingStats />)
       }
       default: { 
-        return (null)
+        return (
+          <Card>
+            <CardContent></CardContent>
+          </Card>)
       } 
    } 
   } 
