@@ -30,6 +30,7 @@ func main() {
 	r.GET("/ping", TestGet)
 	r.GET("/getChars", controllers.GetChars)
 	r.GET("/affixes", controllers.GetCurrentAffixList)
+	r.GET("/getSeasonalDungeons", controllers.GetSeasonalDungeonList)
 
 	log.Println("Starting server on :8080")
 	r.Run(":8080")
