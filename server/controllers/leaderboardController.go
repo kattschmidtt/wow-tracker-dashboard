@@ -16,11 +16,13 @@ func GetSeasonalDungeonList(c *gin.Context) {
 	/*
 	*		TODO: once OAuth junk is finished, grab the favorited character and
 	*					get realm/character name
+	* https://raider.io/api/v1/characters/profile?region=us&realm=stormrage&name=foxxghost&fields=mythic_plus_best_runs
 	 */
+	region := "us"
 	realm := "stormrage"
 	character := "foxxghost"
 
-	requestURI := fmt.Sprintf("https://raider.io/api/v1/characters/profile?region=us&realm=%s&name=%s&fields=mythic_plus_best_runs", realm, character)
+	requestURI := fmt.Sprintf("https://raider.io/api/v1/characters/profile?region=%s&realm=%s&name=%s&fields=mythic_plus_best_runs", region, realm, character)
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
