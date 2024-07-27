@@ -48,6 +48,7 @@ type ExtractedRun struct {
 	Level       int              `json:"mythic_level"`
 	Score       int64            `json:"score"`
 	AffixList   []AffixesBestRun `json:"affixes"`
+	ClearTimeMs int              `json:"clear_time_ms"`
 }
 
 type AffixesBestRun struct {

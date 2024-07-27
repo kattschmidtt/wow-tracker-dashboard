@@ -58,9 +58,10 @@ func GetSeasonalDungeonList(c *gin.Context) {
 		mythicLevel, ok2 := runMap["mythic_level"].(float64)
 		score, ok3 := runMap["score"].(float64)
 		affixList, ok5 := runMap["affixes"].([]interface{}) //parse as array
+		clearTime, ok6 := runMap["clear_time_ms"].(float64)
 
-		if !ok1 || !ok2 || !ok3 || !ok4 || !ok5 {
-			fmt.Println("Field check: dungeon(%v) mythic_level(%v) score(%v) completed_at(%v) affixes(%v)\n", ok1, ok2, ok3, ok4, ok5)
+		if !ok1 || !ok2 || !ok3 || !ok4 || !ok5 || !ok6 {
+			fmt.Println("Field check: dungeon(%v) mythic_level(%v) score(%v) completed_at(%v) affixes(%v) clearTime(%v)", ok1, ok2, ok3, ok4, ok5, ok6)
 			continue
 		}
 
@@ -91,6 +92,12 @@ func GetSeasonalDungeonList(c *gin.Context) {
 			affixes = append(affixes, affixItem)
 		}
 
+		if err != nil {
+			fmt.Println("Failed to convert clearTimeMsStr to int:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Conversion failed"})
+			return
+		}
+
 		//final entry to be returned to frontend
 		extractedRun := models.ExtractedRun{
 			CompletedAt: completedAt,
@@ -98,6 +105,7 @@ func GetSeasonalDungeonList(c *gin.Context) {
 			Level:       int(mythicLevel),
 			Score:       int64(score),
 			AffixList:   affixes,
+			ClearTimeMs: int(clearTime),
 		}
 
 		fmt.Printf("Extracted Run: %+v\n", extractedRun)

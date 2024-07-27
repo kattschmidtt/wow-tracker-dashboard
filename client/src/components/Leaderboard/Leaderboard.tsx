@@ -1,6 +1,7 @@
 import { Card, CardContent, Tab, Tabs } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MythicPlusLeadboard from './MythicPlusLeadboard';
+import { LeaderboardContext } from '../../context/LeaderboardContext';
 
 const Leaderboard = () => {
 

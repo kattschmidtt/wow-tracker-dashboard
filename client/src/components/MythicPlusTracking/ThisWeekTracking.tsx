@@ -6,7 +6,7 @@ import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { RaiderContext } from '../../context/RaiderIoContext';
+import { AffixContext } from '../../context/AffixContext';
 import { CircularProgress } from '@mui/material';
 import '../../App.css';
 
@@ -49,7 +49,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const ThisWeekTracking = () => {
   const [expanded, setExpanded] = React.useState<string | false>('panel0');
-  const { affixes, isLoading, error } = React.useContext(RaiderContext);
+  const { affixes, isLoading, error } = React.useContext(AffixContext);
 
   const handleChange = (panel: string) => (e: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
