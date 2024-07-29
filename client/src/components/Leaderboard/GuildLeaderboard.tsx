@@ -1,4 +1,4 @@
-import { Box, Paper, TableContainer, Table, TableHead, TableBody } from '@mui/material';
+import { Box, Paper, TableContainer, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -8,6 +8,10 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import { GuildContext } from '../../context/GuildContext';
+import { RaidModel } from '../../Models/raidModel';
+import CloseIcon from '@mui/icons-material/Close';
+import { Link } from 'react-router-dom';
+import ProgressAccordion from './ProgressAccordian';
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -47,49 +51,75 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const GuildLeaderboard = () => {
   const [expanded, setExpanded] = useState<string | false>('panel0');
-  const { guildProg, isLoading, error } = useContext(GuildContext);
+  const [bosses, setBosses] = useState<RaidModel[] | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const { guildProg } = useContext(GuildContext);
 
   useEffect(() => {
     console.log('guild prog: ', guildProg)
+
+    //using in component fetch since we won't need this state globally
+    fetch('http://localhost:8080/staticRaidData')
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error('Network response was no bueno')
+      }
+      return resp.json();
+    })
+    .then(data => {
+      console.log('static raid info: ', data)
+      setBosses(data)
+      setIsLoading(false);
+    })
+    .catch(err => {
+      console.log(err);
+      setIsLoading(false);
+      setError(err)
+    })
   }, [guildProg])
 
   const handleChange = (panel: string) => (e: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
 
-
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <span><b>{guildProg.guildName}:</b></span>
-        <br/>
-        <span><b>{guildProg.raidName}</b></span>
-        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <span>Mythic {guildProg.mythicKills}/9</span>
-        </AccordionSummary>
-        <AccordionDetails>
-          {guildProg.mythicKills}
-        </AccordionDetails>
-      </Accordion>
-      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <span>Heroic {guildProg.heroicKills}/9</span>
-        </AccordionSummary>
-        <AccordionDetails>
-          {guildProg.heroicKills}
-        </AccordionDetails>
-      </Accordion>
-      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-          <span>Normal {guildProg.normalKills}/9</span>
-        </AccordionSummary>
-        <AccordionDetails>
-          {guildProg.normalKills}
-        </AccordionDetails>
-      </Accordion>
-      </Paper>
-    </Box>
+    <Paper sx={{ width: '100%', mb: 2 }}>
+      <span><b>{guildProg.guildName}: {guildProg.summary}</b></span>
+      <br/>
+      <span><b>{guildProg.raidName}</b></span>
+      <ProgressAccordion
+        title="Mythic"
+        count={guildProg.mythicKills}
+        max={9}
+        bosses={bosses}
+        onChange={handleChange('panel1')}
+        expanded={expanded === 'panel1'}
+        limit={guildProg.mythicKills} 
+      />
+
+      <ProgressAccordion
+        title="Heroic"
+        count={guildProg.heroicKills}
+        max={9}
+        bosses={bosses}
+        onChange={handleChange('panel2')}
+        expanded={expanded === 'panel2'}
+        limit={guildProg.heroicKills} 
+      />
+
+      <ProgressAccordion
+        title="Normal"
+        count={guildProg.normalKills}
+        max={9}
+        bosses={bosses}
+        onChange={handleChange('panel3')}
+        expanded={expanded === 'panel3'}
+        limit={guildProg.normalKills} 
+      />
+    </Paper>
+  </Box>
   );
 };
 

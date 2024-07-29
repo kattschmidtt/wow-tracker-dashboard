@@ -190,8 +190,9 @@ export default function EnhancedTable() {
                       id={labelId}
                       scope="row"
                       padding="none"
+                      sx={{fontFamily: 'Poppins'}}
                     >
-                      {row.dungeon}
+                      <b>{row.dungeon}</b>
                     </TableCell>
                     <TableCell align="right">{row.score}</TableCell>
                     <Tooltip placement="top" title={affixNames}>
