@@ -206,3 +206,32 @@ type ExtractedGuildProg struct {
 	HeroicKills int64  `json:"heroic_bosses_killed"`
 	MythicKills int64  `json:"mythic_bosses_killed"`
 }
+
+type StaticRaidModel struct {
+	Raids []struct {
+		ID        int    `json:"id"`
+		Slug      string `json:"slug"`
+		Name      string `json:"name"`
+		ShortName string `json:"short_name"`
+		Icon      string `json:"icon"`
+		Starts    struct {
+			Us time.Time `json:"us"`
+			Eu time.Time `json:"eu"`
+			Tw time.Time `json:"tw"`
+			Kr time.Time `json:"kr"`
+			Cn time.Time `json:"cn"`
+		} `json:"starts"`
+		Ends struct {
+			Us time.Time `json:"us"`
+			Eu time.Time `json:"eu"`
+			Tw time.Time `json:"tw"`
+			Kr time.Time `json:"kr"`
+			Cn time.Time `json:"cn"`
+		} `json:"ends"`
+		Encounters []struct {
+			ID   int    `json:"id"`
+			Slug string `json:"slug"`
+			Name string `json:"name"`
+		} `json:"encounters"`
+	} `json:"raids"`
+}
