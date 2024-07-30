@@ -1,4 +1,4 @@
-import { Box, Paper, TableContainer, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material';
+import { Box, Paper, TableContainer, Table, TableHead, TableBody, TableCell, TableRow, CircularProgress } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -85,39 +85,47 @@ const GuildLeaderboard = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-    <Paper sx={{ width: '100%', mb: 2 }}>
-      <span><b>{guildProg.guildName}: {guildProg.summary}</b></span>
-      <br/>
-      <span><b>{guildProg.raidName}</b></span>
-      <ProgressAccordion
-        title="Mythic"
-        count={guildProg.mythicKills}
-        max={9}
-        bosses={bosses}
-        onChange={handleChange('panel1')}
-        expanded={expanded === 'panel1'}
-        limit={guildProg.mythicKills} 
-      />
+    <Paper sx={{ width: '100%', mb: 2, pt: '1rem' }}>
+      {isLoading ? (<CircularProgress />)
+      : (
+        <>
+          <span><b>{guildProg.guildName}: {guildProg.summary}</b></span>
+          <br/>
+          <span><b>{guildProg.raidName}</b></span>
+          <br />
+          <br />
+          <ProgressAccordion
+            title="Mythic"
+            count={guildProg.mythicKills}
+            max={9}
+            bosses={bosses}
+            onChange={handleChange('panel1')}
+            expanded={expanded === 'panel1'}
+            limit={guildProg.mythicKills} 
+          />
 
-      <ProgressAccordion
-        title="Heroic"
-        count={guildProg.heroicKills}
-        max={9}
-        bosses={bosses}
-        onChange={handleChange('panel2')}
-        expanded={expanded === 'panel2'}
-        limit={guildProg.heroicKills} 
-      />
+          <ProgressAccordion
+            title="Heroic"
+            count={guildProg.heroicKills}
+            max={9}
+            bosses={bosses}
+            onChange={handleChange('panel2')}
+            expanded={expanded === 'panel2'}
+            limit={guildProg.heroicKills} 
+          />
 
-      <ProgressAccordion
-        title="Normal"
-        count={guildProg.normalKills}
-        max={9}
-        bosses={bosses}
-        onChange={handleChange('panel3')}
-        expanded={expanded === 'panel3'}
-        limit={guildProg.normalKills} 
-      />
+          <ProgressAccordion
+            title="Normal"
+            count={guildProg.normalKills}
+            max={9}
+            bosses={bosses}
+            onChange={handleChange('panel3')}
+            expanded={expanded === 'panel3'}
+            limit={guildProg.normalKills} 
+          />
+        </>
+      )}
+      
     </Paper>
   </Box>
   );

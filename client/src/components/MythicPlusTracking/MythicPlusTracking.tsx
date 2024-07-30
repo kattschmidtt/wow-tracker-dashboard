@@ -50,8 +50,8 @@ const MythicPlusTracking = () => {
               component={NavLink} 
               to={'https://raider.io/weekly-routes'}
               disableRipple={true}
-              sx={{display: 'flex', justifyContent: 'flex-end'}}>
-              <img style={{width: '10%'}}src="https://avatars.githubusercontent.com/u/26493840?s=280&v=4" />
+              sx={{display: 'flex', justifyContent: 'flex-end', width: 'auto', height: 'auto', padding: 0 }}>
+              <img style={{width: '32px', height: '32px' }}src="https://avatars.githubusercontent.com/u/26493840?s=280&v=4" />
             </IconButton>
           </Tooltip>
         </Box>

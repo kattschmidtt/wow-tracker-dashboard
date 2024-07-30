@@ -1,7 +1,7 @@
 import { useState, useContext, useMemo } from 'react';
 import { alpha } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
-import { Box, TableHead, TableRow, TableCell, TableSortLabel, Paper, TableContainer, Table, TableBody, FormControlLabel, Switch, Tooltip } from '@mui/material';
+import { Box, TableHead, TableRow, TableCell, TableSortLabel, Paper, TableContainer, Table, TableBody, FormControlLabel, Switch, Tooltip, CircularProgress } from '@mui/material';
 import { LeaderboardContext } from '../../context/LeaderboardContext';
 import { LeaderboardModel } from '../../Models/leaderboardModel';
 import { prettySpecificDate, prettyTime } from '../../util/util';
@@ -162,59 +162,64 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={leaderboard.length}
-            />
-            <TableBody>
-              {sortedRows.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`
-                const affixNames = row.affixes.map((affix) => affix.name).join(', ')
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={index}
-                  >
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                      sx={{fontFamily: 'Poppins'}}
+        {
+          isLoading ? (<CircularProgress />) : (
+            <TableContainer>
+              <Table
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size={dense ? 'small' : 'medium'}
+              >
+                <EnhancedTableHead
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={handleRequestSort}
+                  rowCount={leaderboard.length}
+                />
+                <TableBody>
+                  {sortedRows.map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`
+                    const affixNames = row.affixes.map((affix) => affix.name).join(', ')
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={index}
+                      >
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          sx={{fontFamily: 'Poppins'}}
+                        >
+                          <b>{row.dungeon}</b>
+                        </TableCell>
+                        <TableCell align="right">{row.score}</TableCell>
+                        <Tooltip placement="top" title={affixNames}>
+                          <TableCell align="right">{row.mythic_level}</TableCell>
+                        </Tooltip>
+                        <TableCell align="right">{prettyTime(row.clear_time_ms)}</TableCell>
+                        <TableCell align="right">{prettySpecificDate(row.completed_at)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow
+                      style={{
+                        height: (dense ? 33 : 53) * emptyRows,
+                      }}
                     >
-                      <b>{row.dungeon}</b>
-                    </TableCell>
-                    <TableCell align="right">{row.score}</TableCell>
-                    <Tooltip placement="top" title={affixNames}>
-                      <TableCell align="right">{row.mythic_level}</TableCell>
-                    </Tooltip>
-                    <TableCell align="right">{prettyTime(row.clear_time_ms)}</TableCell>
-                    <TableCell align="right">{prettySpecificDate(row.completed_at)}</TableCell>
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )
+        }
+        
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
