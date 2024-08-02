@@ -1,6 +1,8 @@
 import { Card, CardContent, Tab, Tabs } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MythicPlusLeadboard from './MythicPlusLeadboard';
+import { LeaderboardContext } from '../../context/LeaderboardContext';
+import GuildLeaderboard from './GuildLeaderboard';
 
 const Leaderboard = () => {
 
@@ -23,7 +25,7 @@ const Leaderboard = () => {
   const renderTab = () => {
     switch(activeTab) { 
       case 'Guild Raiding': { 
-        return (<div>Guild Raiding Card Component here</div>)
+        return (<GuildLeaderboard />)
       } 
       case 'PvP': { 
         return (<div>Who even does PvP OMEGALUL</div>)

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
 import { AffixModel } from "../Models/affixModel";
 
-export const RaiderContext = createContext<{
+export const AffixContext = createContext<{
   affixes: AffixModel[];
   isLoading: boolean;
   error: string | null;
@@ -14,7 +14,6 @@ export const RaiderContext = createContext<{
 interface AffixProviderProps {
   children: ReactNode;
 }
-
 
 export const AffixProvider = ({ children }: AffixProviderProps): JSX.Element => {
   const [affixes, setAffixes] = useState<AffixModel[]>([]);
@@ -41,8 +40,8 @@ export const AffixProvider = ({ children }: AffixProviderProps): JSX.Element => 
   }, []);
 
   return (
-    <RaiderContext.Provider value={{ affixes, isLoading, error }}>
+    <AffixContext.Provider value={{ affixes, isLoading, error }}>
       {children}
-    </RaiderContext.Provider>
+    </AffixContext.Provider>
   );
 };

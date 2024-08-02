@@ -1,52 +1,10 @@
-import * as React from 'react';
+import { useState, useContext, useMemo } from 'react';
 import { alpha } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
-import { prettyNumberFormat } from '../../util/util';
-import { Box, TableHead, TableRow, TableCell, TableSortLabel, Toolbar, Typography, Paper, TableContainer, Table, TableBody, FormControlLabel, Switch } from '@mui/material';
-
-interface MythicPlusData {
-  id: number;
-  dungeonName: string;
-  fortScore: number;
-  tyranScore: number;
-  rating: number;
-  bestTime: string;
-  latestTime: string;
-  worldRanking: number;
-}
-
-function createData(
-  id: number,
-  dungeonName: string,
-  fortScore: number,
-  tyranScore: number,
-  rating: number,
-  bestTime: string,
-  latestTime: string,
-  worldRanking: number,
-): MythicPlusData {
-  return {
-    id,
-    dungeonName,
-    fortScore,
-    tyranScore,
-    rating,
-    bestTime,
-    latestTime,
-    worldRanking,
-  };
-}
-
-const rows = [
-  createData(1, 'Brackenhide Hollow', 11, 11, 359.7, '24:58', '25:30', 116239),
-  createData(2, 'Azure Vault', 10, 12, 359.7, '24:58', '25:30', 116239),
-  createData(3, 'Algethar Academy', 9, 11, 359.7, '24:58', '25:30', 116239),
-  createData(4, 'Ruby Life Pools', 5, 1, 359.7, '24:58', '25:30', 116239),
-  createData(5, 'Neltharius', 11, 11, 359.7, '24:58', '25:30', 116239),
-  createData(6, 'Halls of Infusion', 10, 11, 359.7, '24:58', '25:30', 116239),
-  createData(7, 'The Nokhud Offensive', 11, 11, 359.7, '24:58', '25:30', 116239),
-  createData(8, 'Uldaman: Legacy of Tyr', 11, 11, 359.7, '24:58', '25:30', 116239),
-];
+import { Box, TableHead, TableRow, TableCell, TableSortLabel, Paper, TableContainer, Table, TableBody, FormControlLabel, Switch, Tooltip, CircularProgress } from '@mui/material';
+import { LeaderboardContext } from '../../context/LeaderboardContext';
+import { LeaderboardModel } from '../../Models/leaderboardModel';
+import { prettySpecificDate, prettyTime } from '../../util/util';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -64,8 +22,8 @@ function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key,
 ): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
+  a: { [key in Key]: string | number },
+  b: { [key in Key]: string | number },
 ) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -86,72 +44,56 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof MythicPlusData;
+  id: Exclude<keyof LeaderboardModel, 'affixes'>;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'dungeonName',
+    id: 'dungeon',
     numeric: false,
     disablePadding: true,
-    label: 'Dungeon Name',
+    label: 'Dungeon',
   },
   {
-    id: 'fortScore',
+    id: 'score',
     numeric: true,
     disablePadding: false,
-    label: 'Fortified Score',
+    label: 'Score',
   },
   {
-    id: 'tyranScore',
+    id: 'mythic_level',
     numeric: true,
     disablePadding: false,
-    label: 'Tyranical Score',
+    label: 'Level',
   },
   {
-    id: 'rating',
+    id: 'clear_time_ms',
     numeric: true,
     disablePadding: false,
-    label: 'Rating',
+    label: 'Clear Time',
   },
   {
-    id: 'bestTime',
+    id: 'completed_at',
     numeric: true,
     disablePadding: false,
-    label: 'Best Time',
-  },
-  {
-    id: 'latestTime',
-    numeric: true,
-    disablePadding: false,
-    label: 'Latest Time',
-  },
-  {
-    id: 'worldRank',
-    numeric: true,
-    disablePadding: false,
-    label: 'World Rank',
+    label: 'Completed On',
   },
 ];
 
 interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof MythicPlusData) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: Exclude<keyof LeaderboardModel, 'affixes'>) => void;
   order: Order;
-  orderBy: string;
+  orderBy: Exclude<keyof LeaderboardModel, 'affixes'>;
   rowCount: number;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } =
-    props;
-  const createSortHandler =
-    (property: keyof MythicPlusData) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
+  const { order, orderBy, onRequestSort } = props;
+  const createSortHandler = (property: Exclude<keyof LeaderboardModel, 'affixes'>) => (event: React.MouseEvent<unknown>) => {
+    onRequestSort(event, property);
+  };
 
   return (
     <TableHead>
@@ -168,7 +110,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
+              <b>{headCell.label}</b>
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -182,89 +124,22 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Dragonflight Season 4
-        </Typography>
-      )}
-    </Toolbar>
-  );
-}
 export default function EnhancedTable() {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof MythicPlusData>('fortScore');
-  const [selected, setSelected] = React.useState<readonly number[]>([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<Exclude<keyof LeaderboardModel, 'affixes'>>('score');
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
+  
+  const { leaderboard, isLoading, error } = useContext(LeaderboardContext);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof MythicPlusData,
+    property: Exclude<keyof LeaderboardModel, 'affixes'>,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
   };
 
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -273,77 +148,77 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - leaderboard.length) : 0;
 
-  const visibleRows = React.useMemo(
+  const sortedRows = useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(leaderboard, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage],
+    [leaderboard, order, orderBy, page, rowsPerPage],
   );
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {visibleRows.map((row, index) => {
-                
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.id)}
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.id}
-                    sx={{ cursor: 'pointer' }}
-                  >
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
+        {
+          isLoading ? (<CircularProgress />) : (
+            <TableContainer>
+              <Table
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size={dense ? 'small' : 'medium'}
+              >
+                <EnhancedTableHead
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={handleRequestSort}
+                  rowCount={leaderboard.length}
+                />
+                <TableBody>
+                  {sortedRows.map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`
+                    const affixNames = row.affixes.map((affix) => affix.name).join(', ')
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={index}
+                      >
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          sx={{fontFamily: 'Poppins'}}
+                        >
+                          <b>{row.dungeon}</b>
+                        </TableCell>
+                        <TableCell align="right">{row.score}</TableCell>
+                        <Tooltip placement="top" title={affixNames}>
+                          <TableCell align="right">{row.mythic_level}</TableCell>
+                        </Tooltip>
+                        <TableCell align="right">{prettyTime(row.clear_time_ms)}</TableCell>
+                        <TableCell align="right">{prettySpecificDate(row.completed_at)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow
+                      style={{
+                        height: (dense ? 33 : 53) * emptyRows,
+                      }}
                     >
-                      {row.dungeonName}
-                    </TableCell>
-                    <TableCell align="right">{row.fortScore}</TableCell>
-                    <TableCell align="right">{row.tyranScore}</TableCell>
-                    <TableCell align="right">{row.rating}</TableCell>
-                    <TableCell align="right">{row.bestTime}</TableCell>
-                    <TableCell align="right">{row.latestTime}</TableCell>
-                    <TableCell align="right">{prettyNumberFormat(row.worldRanking)}</TableCell>
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )
+        }
         
       </Paper>
       <FormControlLabel
