@@ -1,7 +1,9 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Card, CardContent, Grid } from '@mui/material';
 import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
 import Header from '../components/Layout/Header';
 import { useEffect } from 'react';
+import Character from '../components/Character/Character';
+import Items from '../components/Character/Items';
 
 const MyCharacter = () => {
 
@@ -9,16 +11,34 @@ const MyCharacter = () => {
   return (
     <>
     <Header />
-      <div>
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={2} md={2}>
-              <NavigationSidebar />
+        <Box sx={{ display: 'flex', height: '100vh' }}>
+          <NavigationSidebar />
+          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <Card>
+                  <CardContent>
+                    <Items />
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Card>
+                  <CardContent>
+                    <Character />
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Card>
+                  <CardContent>
+                    <Items />
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
-
-          </Grid>
+          </Box>
         </Box>
-      </div>
     </>
   );
 };

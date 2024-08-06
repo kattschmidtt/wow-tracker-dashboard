@@ -7,6 +7,7 @@ import { UserProvider } from './context/userContext.tsx'
 import { AffixProvider } from './context/AffixContext.tsx'
 import { LeaderboardProvider } from './context/LeaderboardContext.tsx'
 import { GuildProgProvider } from './context/GuildContext.tsx'
+import { CharacterProvider } from './context/CharacterContext.tsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <AffixProvider>
     <LeaderboardProvider>
     <GuildProgProvider>
+    <CharacterProvider >
       <RouterProvider router={router} />
+    </CharacterProvider>
     </GuildProgProvider>
     </LeaderboardProvider>
     </AffixProvider>
