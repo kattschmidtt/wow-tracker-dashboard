@@ -99,7 +99,7 @@ func GetCharacterGear(c *gin.Context) {
 
 	// Reset the response body reader
 	resp.Body = io.NopCloser(bytes.NewReader(bodyBytes))
-
+	fmt.Println("something else: ", resp.Body)
 	// Decode the JSON response into the gear struct
 	if err := json.NewDecoder(resp.Body).Decode(&gear); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode response", "details": err.Error()})
@@ -108,7 +108,8 @@ func GetCharacterGear(c *gin.Context) {
 
 	// Extract the Items field
 	items := gear.Items
+	fmt.Println(items)
 
 	// Return the Items field as JSON
-	c.JSON(http.StatusOK, items)
+	c.JSON(http.StatusOK, string(bodyBytes))
 }
