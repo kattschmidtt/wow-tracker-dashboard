@@ -4,8 +4,7 @@ import SearchBar from './SearchBar';
 import User from '../User/User';
 
 const rightLinks = [
-  {title: 'login', path: '/login'},
-  {title: 'register', path: '/register'},
+  {title: 'login', path: '/login'}
 ];
 
 interface Props {

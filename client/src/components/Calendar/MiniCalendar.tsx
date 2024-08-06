@@ -1,10 +1,11 @@
 import { useContext } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
 import { UserContext } from '../../context/userContext';
 import AddIcon from '@mui/icons-material/Add';
-import { IconButton, Tooltip } from '@mui/material';
+import { Card, CardContent, IconButton, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
 const MiniCalendar = () => {
 
@@ -30,10 +31,16 @@ const MiniCalendar = () => {
       </div>
 
       <br/>
-      
+
+      <Card sx={{width: '38vh'}}>
+        <CardContent>
       <div className='mini-cal'>
-        <Calendar />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DateCalendar sx={{}}/>
+        </LocalizationProvider>
       </div>
+      </CardContent>
+      </Card>
     </>
   );
 };

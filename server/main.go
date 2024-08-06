@@ -33,6 +33,8 @@ func main() {
 	r.GET("/getSeasonalDungeons", controllers.GetSeasonalDungeonList)
 	r.GET("/getGuildProgress", controllers.GetGuildProg)
 	r.GET("/staticRaidData", controllers.GetRaidInfo)
+	r.GET("/characterStats", controllers.GetCharacterStats)
+	r.GET("/characterGear", controllers.GetCharacterGear)
 
 	log.Println("Starting server on :8080")
 	r.Run(":8080")

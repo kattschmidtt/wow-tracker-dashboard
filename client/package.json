@@ -10,13 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.15.19",
     "@mui/lab": "^5.0.0-alpha.170",
-    "@mui/material": "^5.15.20",
+    "@mui/material": "^5.16.6",
+    "@mui/x-date-pickers": "^7.12.0",
     "@types/react-beautiful-dnd": "^13.1.8",
     "boring-avatars": "^1.10.2",
+    "dayjs": "^1.11.12",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-calendar": "^5.0.0",

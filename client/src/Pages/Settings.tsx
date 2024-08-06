@@ -25,7 +25,7 @@ const Settings = () => {
                   pt: '5rem',
                   pb: '2rem'
                 }}>
-                <Card>
+                <Card sx={{width: '55vh'}}>
                   <CardContent>
                     {/* default, will have user's Battle.net account name */}
                     <Avatar
@@ -34,22 +34,19 @@ const Settings = () => {
                       variant="marble"
                       colors={['#92A1C6', '#146A7C', '#F0AB3D', '#C271B4', '#C20D90']}
                     />
-                    <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                    <FormControl fullWidth sx={{ m: 7, justifyContent: 'center', alignItems: 'center', alignContent: 'center', display:'flex' }} variant="standard">
                       <Grid container spacing={2} alignItems="center">
                         <Grid item xs={12} sm={2} md={2}>
-                          <Typography>Username</Typography>
+                          <div>Username</div>
                         </Grid>
-                        <Grid item xs={12} sm={10} md={10}>
-                          <Input />
+                        <Grid item xs={12} sm={2} md={10}>
+                          <Input  sx={{fontFamily: 'Poppins'}}/>
                         </Grid>
                         <Grid item xs={12} sm={2} md={2}>
-                          <Typography>Password</Typography>
+                          <div>Password</div>
                         </Grid>
                         <Grid item xs={12} sm={10} md={10}>
                           <Input type='password' />
-                        </Grid>
-                        <Grid item xs={12} sm={2} md={2}>
-                          <Typography>Font Size</Typography>
                         </Grid>
                        
                       </Grid>

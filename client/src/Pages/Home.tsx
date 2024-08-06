@@ -72,7 +72,7 @@ const Home = () => {
 
               {/* M+ Charts for nerds (me) */}
               <Grid container spacing={2} sx={{pb: '2rem'}}>
-                <Grid item xs={8} sm={6} md={6}>
+                <Grid item xs={8} sm={4} md={6}>
                   <MythicPlusTrackingStats />
                 </Grid>
                 {/* M+ Tracking */}
