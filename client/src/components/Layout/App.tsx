@@ -1,12 +1,9 @@
-import { ThemeProvider } from '@emotion/react';
-import { Container, createTheme, CssBaseline } from '@mui/material';
+import { Container, CssBaseline } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
-import Header from './Header';
 
 import '../../App.css'
-import Footer from './Footer';
 
 const App = () => {
 
@@ -22,7 +19,7 @@ const App = () => {
         maxWidth={false}
         sx={{
           minHeight: '100vh',
-          display: 'flex',
+          display: 'flex', 
           flexDirection: 'column',
           padding: 0,
           margin: 0,

@@ -8,7 +8,7 @@ interface ExtractedItems {
 }
 
 interface ExtractedItemsProviderProps {
-  children: ReactNode;
+  children: ReactNode; 
 }
 
 export const CharacterProvider = ({ children } : ExtractedItemsProviderProps ): JSX.Element => {

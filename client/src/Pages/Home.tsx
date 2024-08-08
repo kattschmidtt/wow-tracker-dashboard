@@ -88,9 +88,6 @@ const Home = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} sm={2} md={2} sx={{pr: '2rem'}}>
-              <MiniCalendar />
-            </Grid>
           </Grid>
         </Box>
       </div>
