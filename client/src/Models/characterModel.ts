@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface Spell {
   id: number;
   school: number;
@@ -16,7 +17,6 @@ interface Corruption {
   added: number;
   resisted: number;
   total: number;
-  cloakRank: number;
   spells: any[];
 }
 
@@ -25,7 +25,6 @@ interface DominationShard {}
 export interface Item {
   item_id: number;
   item_level: number;
-  enchant: number;
   icon: string;
   name: string;
   item_quality: number;
@@ -39,10 +38,9 @@ export interface Item {
   bonuses: number[];
 }
 
-interface Gear {
+export interface Gear {
   updated_at: string;
   item_level_equipped: number;
-  item_level_total: number;
   artifact_traits: number;
   corruption: Corruption;
   items: {

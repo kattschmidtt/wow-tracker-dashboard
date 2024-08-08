@@ -1,37 +1,56 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { Item } from "../Models/characterModel";
 
-const ExtractedItemsContext = createContext<ExtractedItems | undefined>(undefined);
-
-interface ExtractedItems {
-  [key: string]: Item;
+interface CharacterItemsContextType {
+  gear: Item[] | undefined;
+  error: string | null;
+  isLoading: boolean;
 }
 
-interface ExtractedItemsProviderProps {
+export const CharacterItemsContext = createContext<CharacterItemsContextType>({
+  gear: undefined,
+  error: null,
+  isLoading: true,
+});
+
+interface CharacterItemsProviderProps {
   children: ReactNode; 
 }
 
-export const CharacterProvider = ({ children } : ExtractedItemsProviderProps ): JSX.Element => {
-  const [items, setItems] = useState<Item>()
+export const CharacterProvider = ({ children } : CharacterItemsProviderProps ): JSX.Element => {
+  const [gear, setGear] = useState<Item[] | undefined>(undefined)
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
   useEffect(() => {
     fetch('http://localhost:8080/characterGear')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response failed')
         }
-        return response.json();
+        return response.json()
       })
-      .then((data: string) => {
-        console.dir(JSON.parse(data))
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((data: any) => {
+        const parsedData = JSON.parse(data)
+        if (parsedData && parsedData.gear && parsedData.gear.items) {
+          setGear(parsedData.gear.items)
+          setIsLoading(false)
+        } else {
+          setError('Invalid data struct')
+          setIsLoading(false)
+        }
       })
       .catch(err => {
-        console.error(err)
+        console.error('Failed to do the things it was supposed to')
+        setError(err)
+        setIsLoading(false)
       })
   }, [])
 
   return (
-    <ExtractedItemsContext.Provider value={{  }}>
+    <CharacterItemsContext.Provider value={{ gear, error, isLoading }}>
       {children}
-    </ExtractedItemsContext.Provider>
+    </CharacterItemsContext.Provider>
   )
 }

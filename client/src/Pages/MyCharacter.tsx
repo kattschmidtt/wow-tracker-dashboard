@@ -1,45 +1,44 @@
 import { Box, Card, CardContent, Grid } from '@mui/material';
 import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
 import Header from '../components/Layout/Header';
-import { useEffect } from 'react';
 import Character from '../components/Character/Character';
 import Items from '../components/Character/Items';
 
 const MyCharacter = () => {
 
-
   return (
     <>
     <Header />
-        <Box sx={{ display: 'flex', height: '100vh' }}>
-          <NavigationSidebar />
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
-                <Card>
-                  <CardContent>
-                    <Items />
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Card>
-                  <CardContent>
-                    <Character />
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Card>
-                  <CardContent>
-                    <Items />
-                  </CardContent>
-                </Card>
-              </Grid>
+      <Box sx={{ display: 'flex', height: '100vh' }}>
+        <NavigationSidebar />
+        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <Card>
+                <CardContent>
+                  <Items />
+                </CardContent>
+              </Card>
             </Grid>
-          </Box>
+            <Grid item xs={12} sm={4}>
+              <Card>
+                <CardContent>
+                  <Character />
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Card>
+                <CardContent>
+                  <Items />
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
         </Box>
+      </Box>
     </>
   );
 };
 export default MyCharacter;
+
