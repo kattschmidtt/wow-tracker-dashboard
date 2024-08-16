@@ -48,7 +48,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 
 const ThisWeekTracking = () => {
-  const [expanded, setExpanded] = React.useState<string | false>('panel0');
+  const [expanded, setExpanded] = React.useState<string | false>('');
   const { affixes, isLoading, error } = React.useContext(AffixContext);
 
   const handleChange = (panel: string) => (e: React.SyntheticEvent, newExpanded: boolean) => {
@@ -65,7 +65,8 @@ const ThisWeekTracking = () => {
 
   return (
     <div>
-      {!isLoading && 
+      {
+        isLoading ? (<CircularProgress />) :
         <>
           {affixes.map((affix, key) => (
             <Accordion key={key} expanded={expanded === `panel${key}`} onChange={handleChange(`panel${key}`)}>
