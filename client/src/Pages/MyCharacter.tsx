@@ -18,7 +18,7 @@ const MyCharacter = () => {
             <Grid item xs={12} sm={4}>
               <Card>
                 <CardContent>
-                  <Items />
+                  <Items side='left'/>
                 </CardContent>
               </Card>
             </Grid>
@@ -32,7 +32,7 @@ const MyCharacter = () => {
             <Grid item xs={12} sm={4}>
               <Card>
                 <CardContent>
-                  <Items />
+                  <Items side='right'/>
                 </CardContent>
               </Card>
             </Grid>
