@@ -49,3 +49,8 @@ export function prettySpecificDate(t: string): string {
   const formattedDate = `${month} ${day}, ${year}`;
   return formattedDate
 }
+
+export function convertToPercentage(t: number): string {
+  const percentage = Math.round(t)
+  return `${percentage}%`
+}

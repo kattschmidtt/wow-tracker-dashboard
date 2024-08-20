@@ -64,6 +64,30 @@ export interface Gear {
   };
 }
 
+export interface Stats {
+  health: number
+  power: number
+  speed: number
+  strength: number
+  agility: number
+  intellect: number
+  stamina: number
+  melee_crit: number
+  melee_haste: number
+  mastery: number
+  bonus_armor: number
+  lifesteal: number
+  versatility: number
+  attack_power: number
+  spell_power: number
+  spell_crit: number
+  ranged_crit: number
+  ranged_haste: number
+  spell_haste: number
+  character: string
+}
+
+
 export interface Character {
   name: string;
   race: string;

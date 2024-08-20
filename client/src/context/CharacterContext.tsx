@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Item } from "../Models/characterModel";
+import { Item, Stats } from "../Models/characterModel";
 
 interface CharacterItemsContextType {
   gear: Item[] | undefined;
@@ -7,6 +7,7 @@ interface CharacterItemsContextType {
   isLoading: boolean;
   leftItems: Item[];
   rightItems: Item[];
+  stats: Stats | null;
 }
 
 export const CharacterItemsContext = createContext<CharacterItemsContextType>({
@@ -14,19 +15,21 @@ export const CharacterItemsContext = createContext<CharacterItemsContextType>({
   error: null,
   isLoading: true,
   leftItems: [],
-  rightItems: []
+  rightItems: [],
+  stats: null,
 });
 
 interface CharacterItemsProviderProps {
   children: ReactNode; 
 }
 
-export const CharacterProvider = ({ children } : CharacterItemsProviderProps ): JSX.Element => {
-  const [gear, setGear] = useState<Item[] | undefined>(undefined)
-  const [leftItems, setLeftItems] = useState<Item[]>([])
-  const [rightItems, setRightItems] = useState<Item[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+export const CharacterProvider = ({ children }: CharacterItemsProviderProps): JSX.Element => {
+  const [gear, setGear] = useState<Item[] | undefined>(undefined);
+  const [leftItems, setLeftItems] = useState<Item[]>([]);
+  const [rightItems, setRightItems] = useState<Item[]>([]);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetch('http://localhost:8080/characterGear')
@@ -71,11 +74,28 @@ export const CharacterProvider = ({ children } : CharacterItemsProviderProps ): 
         setIsLoading(false)
       })
   }, [])
-  
+
+  useEffect(() => {
+    fetch('http://localhost:8080/characterStats')
+    .then(response => {
+      if (!response.ok) throw new Error('Network response error')
+      return response.json()
+    })
+    .then((data: any) => {
+      console.log(data)
+      setStats(data)
+      setIsLoading(false)
+    })
+    .catch(err => {
+      console.error('Failed to get character stats')
+      setError(err)
+      setIsLoading(false)
+    })
+  }, [])
 
   return (
-    <CharacterItemsContext.Provider value={{ gear, leftItems, rightItems, error, isLoading }}>
+    <CharacterItemsContext.Provider value={{ gear, leftItems, rightItems, stats, error, isLoading }}>
       {children}
     </CharacterItemsContext.Provider>
-  )
-}
+  );
+};

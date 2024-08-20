@@ -11,14 +11,11 @@ const Items = ({side}: ItemProps) => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  console.log(leftItems)
-  console.log(rightItems)
-
   const returnCorrectSide = () => {
     if (side === 'left') {
-      return leftItems.map(item => <div>{item}</div>)
+      return leftItems.map((item, id) => <div key={id}>{item}</div>)
     } else {
-      return rightItems.map(item => <div>{item}</div>)
+      return rightItems.map((item, id) => <div key={id}>{item}</div>)
     }
   }
 
