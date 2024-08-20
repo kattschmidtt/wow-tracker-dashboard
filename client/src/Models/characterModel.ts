@@ -1,12 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-interface Spell {
-  id: number;
-  school: number;
-  icon: string;
-  name: string;
-  rank: string | null;
-}
-
 interface AzeritePower {
   id: number;
   spell: Spell;
@@ -87,7 +79,6 @@ export interface Stats {
   character: string
 }
 
-
 export interface Character {
   name: string;
   race: string;
@@ -107,4 +98,21 @@ export interface Character {
   gear: Gear;
 }
 
+export interface Talents {
+  spells: any;
+  HasCooldown: boolean
+  ID: number
+  Icon: string
+  Name: string
+  Rank: any
+  School: number
+}
 
+export interface Spell {
+  HasCooldown: boolean;
+  ID: number;
+  Icon: string;
+  Name: string;
+  Rank: number | null;
+  School: number;
+}

@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type CharacterStatModel struct {
 	Links struct {
 		Self struct {
@@ -219,4 +221,56 @@ type Gear struct {
 		Mainhand Item `json:"mainhand"`
 		Offhand  Item `json:"offhand"`
 	} `json:"items"`
+}
+
+type CharacterTalentsModel struct {
+	Name              string    `json:"name"`
+	Race              string    `json:"race"`
+	Class             string    `json:"class"`
+	ActiveSpecName    string    `json:"active_spec_name"`
+	ActiveSpecRole    string    `json:"active_spec_role"`
+	Gender            string    `json:"gender"`
+	Faction           string    `json:"faction"`
+	AchievementPoints int       `json:"achievement_points"`
+	HonorableKills    int       `json:"honorable_kills"`
+	ThumbnailURL      string    `json:"thumbnail_url"`
+	Region            string    `json:"region"`
+	Realm             string    `json:"realm"`
+	LastCrawledAt     time.Time `json:"last_crawled_at"`
+	ProfileURL        string    `json:"profile_url"`
+	ProfileBanner     string    `json:"profile_banner"`
+	TalentLoadout     struct {
+		LoadoutSpecID int    `json:"loadout_spec_id"`
+		LoadoutText   string `json:"loadout_text"`
+		Loadout       []struct {
+			Node struct {
+				ID        int `json:"id"`
+				TreeID    int `json:"treeId"`
+				SubTreeID int `json:"subTreeId"`
+				Type      int `json:"type"`
+				Entries   []struct {
+					ID                int `json:"id"`
+					TraitDefinitionID int `json:"traitDefinitionId"`
+					TraitSubTreeID    int `json:"traitSubTreeId"`
+					Type              int `json:"type"`
+					MaxRanks          int `json:"maxRanks"`
+					Spell             struct {
+						ID          int         `json:"id"`
+						Name        string      `json:"name"`
+						Icon        string      `json:"icon"`
+						School      int         `json:"school"`
+						Rank        interface{} `json:"rank"`
+						HasCooldown bool        `json:"hasCooldown"`
+					} `json:"spell"`
+				} `json:"entries"`
+				Important bool `json:"important"`
+				PosX      int  `json:"posX"`
+				PosY      int  `json:"posY"`
+				Row       int  `json:"row"`
+				Col       int  `json:"col"`
+			} `json:"node"`
+			EntryIndex int `json:"entryIndex"`
+			Rank       int `json:"rank"`
+		} `json:"loadout"`
+	} `json:"talentLoadout"`
 }

@@ -17,31 +17,33 @@ func GetCharacterStats(c *gin.Context) {
 	region := "us"
 	realm := "stormrage"
 	characterName := "foxxghost"
-	accessCode := "USguckojOBQEYu1nLZTZ40kcvU2wyNtT8u" //hardcoded for now sorry
+	accessCode := "USuXMlnHUSb5bUSHaeTEu90sSKzDEBieMr"
 
 	requestURI := fmt.Sprintf("https://us.api.blizzard.com/profile/wow/character/%s/%s/statistics?namespace=profile-%s&locale=en_US&access_token=%s", realm, characterName, region, accessCode)
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
+		fmt.Println("Failed to make request to Blizzard API:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data"})
 		return
 	}
 	defer resp.Body.Close()
 
-	// Read and log the response body
+	if resp.StatusCode != http.StatusOK {
+		fmt.Println("Blizzard API returned non-OK status code:", resp.StatusCode)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Blizzard API returned non-OK status", "status": resp.StatusCode})
+		return
+	}
+
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read response body"})
 		return
 	}
 
-	// Print the response body for debugging
-	fmt.Println(string(bodyBytes))
+	fmt.Println("Response from Blizzard API:", string(bodyBytes))
 
-	// Reset the response body reader
-	resp.Body = io.NopCloser(bytes.NewReader(bodyBytes))
-
-	if err := json.NewDecoder(resp.Body).Decode(&character); err != nil {
+	if err := json.Unmarshal(bodyBytes, &character); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode response", "details": err.Error()})
 		return
 	}
@@ -68,7 +70,6 @@ func GetCharacterStats(c *gin.Context) {
 		SpellHaste:  character.SpellHaste.Value,
 		Character:   character.Character.Name,
 	}
-	fmt.Println(extractedChar)
 
 	c.JSON(http.StatusOK, extractedChar)
 }
@@ -112,4 +113,57 @@ func GetCharacterGear(c *gin.Context) {
 
 	// Return the Items field as JSON
 	c.JSON(http.StatusOK, string(bodyBytes))
+}
+
+func GetCharacterTalents(c *gin.Context) {
+	var talents models.CharacterTalentsModel
+
+	region := "us"
+	realm := "stormrage"
+	characterName := "foxxghost"
+
+	requestURI := fmt.Sprintf("https://raider.io/api/v1/characters/profile?region=%s&realm=%s&name=%s&fields=talents", region, realm, characterName)
+
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data"})
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read and log the response body
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read response body"})
+		return
+	}
+
+	// Print the response body for debugging
+	fmt.Println("Response body:", string(bodyBytes))
+
+	// Reset the response body reader
+	resp.Body = io.NopCloser(bytes.NewReader(bodyBytes))
+	// Decode the JSON response into the talents struct
+	if err := json.NewDecoder(resp.Body).Decode(&talents); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode response", "details": err.Error()})
+		return
+	}
+
+	spells := []interface{}{}
+	for _, loadout := range talents.TalentLoadout.Loadout {
+		for _, entry := range loadout.Node.Entries {
+			spell := entry.Spell
+			spells = append(spells, gin.H{
+				"ID":          spell.ID,
+				"Name":        spell.Name,
+				"Icon":        spell.Icon,
+				"School":      spell.School,
+				"Rank":        spell.Rank,
+				"HasCooldown": spell.HasCooldown,
+			})
+		}
+	}
+
+	// Return the extracted spells as JSON
+	c.JSON(http.StatusOK, gin.H{"spells": spells})
 }

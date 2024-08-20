@@ -37,6 +37,7 @@ func main() {
 	r.GET("/staticRaidData", controllers.GetRaidInfo)
 	r.GET("/characterStats", controllers.GetCharacterStats)
 	r.GET("/characterGear", controllers.GetCharacterGear)
+	r.GET("/characterTalents", controllers.GetCharacterTalents)
 
 	log.Println("Starting server on :8080")
 	r.Run(":8080")
