@@ -1,22 +1,20 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"server/controllers"
-	"server/initializers"
 	"server/routes"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-var db *sql.DB
+//var db *sql.DB
 
-func init() {
+/* func init() {
 	initializers.ConnectToDB()
 	initializers.AutoMigrateCharacter()
-}
+} */
 
 func TestGet(c *gin.Context) {
 	c.JSON(200, gin.H{
@@ -25,7 +23,11 @@ func TestGet(c *gin.Context) {
 }
 
 func main() {
+
+	// Creates default gin router with Logger and Recovery middleware already attached
+	//r := gin.Default()
 	r := routes.SetupRouter()
+
 	r.Use(cors.Default())
 	r.GET("/ping", TestGet)
 	r.GET("/getChars", controllers.GetChars)

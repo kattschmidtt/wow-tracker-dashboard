@@ -17,8 +17,9 @@ func GetCharacterStats(c *gin.Context) {
 	region := "us"
 	realm := "stormrage"
 	characterName := "foxxghost"
+	accessCode := "USguckojOBQEYu1nLZTZ40kcvU2wyNtT8u" //hardcoded for now sorry
 
-	requestURI := fmt.Sprintf("https://us.api.blizzard.com/profile/wow/character/%s/%s/statistics?namespace=profile-%s&locale=en_US&access_token=USjKnCsJOPG8pBEdRej19KE7wcxyXkToZy", realm, characterName, region)
+	requestURI := fmt.Sprintf("https://us.api.blizzard.com/profile/wow/character/%s/%s/statistics?namespace=profile-%s&locale=en_US&access_token=%s", realm, characterName, region, accessCode)
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -67,6 +68,7 @@ func GetCharacterStats(c *gin.Context) {
 		SpellHaste:  character.SpellHaste.Value,
 		Character:   character.Character.Name,
 	}
+	fmt.Println(extractedChar)
 
 	c.JSON(http.StatusOK, extractedChar)
 }
