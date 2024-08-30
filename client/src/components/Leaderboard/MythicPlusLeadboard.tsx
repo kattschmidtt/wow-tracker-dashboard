@@ -152,12 +152,19 @@ export default function EnhancedTable() {
 
   const sortedRows = useMemo(
     () =>
-      stableSort(leaderboard, getComparator(order, orderBy)).slice(
+      //ensure that leaderboard is not null or undefined
+      stableSort(leaderboard || [], getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
     [leaderboard, order, orderBy, page, rowsPerPage],
   );
+
+  console.log(error)
+
+  if (error === null) {
+    return <div>No current season active. <br/>Check back later!</div>
+  }
 
   return (
     <Box sx={{ width: '100%' }}>

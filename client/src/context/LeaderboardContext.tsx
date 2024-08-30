@@ -30,7 +30,6 @@ export const LeaderboardProvider = ({ children } : LeaderboardProviderProps ): J
         return response.json();
       })
       .then((data: LeaderboardModel[]) => {
-        console.dir(data)
         setLeaderboard(data);
         setIsLoading(false);
       })
