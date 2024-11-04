@@ -18,10 +18,10 @@ func GetGuildProg(c *gin.Context) {
 	* https://raider.io/api/v1/guilds/profile?region=us&realm=stormrage&name=inexorable&fields=raid_progression
 	 */
 	region := "us"
-	realm := "stormrage"
-	guild := "inexorable"
+	realm := "Proudmoore"
+	guild := "Acrimonious"
 
-	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/profile?region=%s&realm=%s&name=%s&fields=raid_progression", region, realm, guild)
+	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/profile?region=%v&realm=%v&name=%v&fields=raid_progression", region, realm, guild)
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -35,12 +35,15 @@ func GetGuildProg(c *gin.Context) {
 		return
 	}
 
-	raidProgression := result.RaidProgression.AmirdrassilTheDreamsHope
+	fmt.Println(result)
+
+	raidProgression := result.RaidProgression.NeruBarPalace
+	fmt.Println(raidProgression)
 
 	//final entry to be returned to frontend
 	extractedRaid := models.ExtractedGuildProg{
 		GuildName:   result.Name,
-		RaidName:    "amidrassil-the-dreams-hope",
+		RaidName:    "nerubar-palace",
 		Summary:     raidProgression.Summary,
 		TotalBosses: int64(raidProgression.TotalBosses),
 		NormalKills: int64(raidProgression.NormalBossesKilled),
@@ -55,7 +58,7 @@ func GetRaidInfo(c *gin.Context) {
 	var result models.StaticRaidModel
 
 	// Expansion ID to get slugs for. 9 = Dragonflight, 8 = Shadowlands, 7 = Battle for Azeroth, 6 = Legion
-	expansionId := 9
+	expansionId := 10
 	requestURI := fmt.Sprintf("https://raider.io/api/v1/raiding/static-data?expansion_id=%d", expansionId)
 
 	resp, err := http.Get(requestURI)
@@ -75,7 +78,7 @@ func GetRaidInfo(c *gin.Context) {
 	//Since the raider.io api sends back ALL raids within an expansion, we are only grabbing
 	// the most recent tier based on the non slug name. We will use the IDs returned from raid.Encounters
 	// to create links to the correlating wowhead articles for guides and other info
-	targetRaidName := "Amirdrassil, the Dream's Hope"
+	targetRaidName := "Nerub-ar Palace"
 
 	//filtering the extracted counters based on targetRaidName and adding them to response json
 	var filteredEncounters []gin.H

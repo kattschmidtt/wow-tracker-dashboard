@@ -44,6 +44,7 @@ export const CharacterProvider = ({ children }: CharacterItemsProviderProps): JS
       })
       .then((data: Gear) => {
         const parsedData = JSON.parse(data)
+        console.log(data)
         if (parsedData && parsedData.gear && parsedData.gear.items) {
           const left: Item[] = []
           const right: Item[] = []

@@ -160,11 +160,12 @@ export default function EnhancedTable() {
     [leaderboard, order, orderBy, page, rowsPerPage],
   );
 
-  console.log(error)
-
-  if (error === null) {
+  if (error !== null) {
+    console.error(error)
     return <div>No current season active. <br/>Check back later!</div>
   }
+
+  
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -185,6 +186,7 @@ export default function EnhancedTable() {
                 />
                 <TableBody>
                   {sortedRows.map((row, index) => {
+                    console.log(row)
                     const labelId = `enhanced-table-checkbox-${index}`
                     const affixNames = row.affixes.map((affix) => affix.name).join(', ')
                     return (

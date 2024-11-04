@@ -45,7 +45,7 @@ export const GuildProgProvider = ({ children }: GuildProviderProps): JSX.Element
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log('thisis data: ', data);
 
         const prettyRaidName = (raidName: string) => {
           return raidName

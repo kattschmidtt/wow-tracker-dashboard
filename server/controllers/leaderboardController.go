@@ -20,7 +20,7 @@ func GetSeasonalDungeonList(c *gin.Context) {
 	 */
 	region := "us"
 	realm := "stormrage"
-	character := "foxxghost"
+	character := "foxxbozo"
 
 	requestURI := fmt.Sprintf("https://raider.io/api/v1/characters/profile?region=%s&realm=%s&name=%s&fields=mythic_plus_best_runs", region, realm, character)
 
