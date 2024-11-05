@@ -97,7 +97,7 @@ const GuildLeaderboard = () => {
           <ProgressAccordion
             title="Mythic"
             count={guildProg.mythicKills}
-            max={9}
+            max={8}
             bosses={bosses}
             onChange={handleChange('panel1')}
             expanded={expanded === 'panel1'}

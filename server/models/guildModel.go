@@ -16,7 +16,7 @@ type GuildProgModel struct {
 			NormalBossesKilled int    `json:"normal_bosses_killed"`
 			HeroicBossesKilled int    `json:"heroic_bosses_killed"`
 			MythicBossesKilled int    `json:"mythic_bosses_killed"`
-		} `json:"aberrus-the-shadowed-crucible"`
+		} `json:"nerubar-palace"`
 	} `json:"raid_progression"`
 }
 

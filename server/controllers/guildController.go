@@ -96,7 +96,7 @@ func GetRaidInfo(c *gin.Context) {
 		}
 	}
 
-	fmt.Println(filteredEncounters)
+	fmt.Println("Filtered encounters: ", filteredEncounters)
 
 	//error handling
 	if len(filteredEncounters) > 0 {
