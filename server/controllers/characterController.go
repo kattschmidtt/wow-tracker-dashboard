@@ -17,7 +17,7 @@ func GetCharacterStats(c *gin.Context) {
 	region := "us"
 	realm := "stormrage"
 	characterName := "foxxghost"
-	accessCode := "USNeeFqp3JXHaJVfpT4oyiwCnJRajnwK9b"
+	accessCode := "US0PizocQeqXwv8LHrUPjYLL0k3GwDfy4s"
 
 	requestURI := fmt.Sprintf("https://us.api.blizzard.com/profile/wow/character/%s/%s/statistics?namespace=profile-%s&locale=en_US&access_token=%s", realm, characterName, region, accessCode)
 

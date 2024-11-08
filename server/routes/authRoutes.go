@@ -87,7 +87,7 @@ func profileHandler(c *gin.Context) {
 		return
 	}
 
-	connStr := "user=foxx password=admin dbname=wow-tracker-dashboard port=5432 sslmode=disable"
+	connStr := "user=foxx password=admin dbname=wow-tracker-board port=5432 sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
