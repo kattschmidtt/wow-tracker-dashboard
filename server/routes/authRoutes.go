@@ -16,7 +16,7 @@ import (
 
 const (
 	clientID     = "70fecafdbd534133802e791234e6769e"
-	clientSecret = "0PmPCHQ8zvh8awEBiO0OX16m7ilwUeJ1"
+	clientSecret = "Vx2xsUBLneWMBUtLZgFtmj2n414OP00H"
 	redirectURI  = "http://localhost:8080/callback"
 	authURL      = "https://oauth.battle.net/authorize"
 	tokenURL     = "https://oauth.battle.net/token"
@@ -178,7 +178,7 @@ func getAccessToken(code string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to parse token response: %v", err)
 	}
-	fmt.Printf(body)
+	//fmt.Printf(body)
 	return tokenResponse["access_token"].(string), nil
 }
 

@@ -110,7 +110,7 @@ func GetSeasonalDungeonList(c *gin.Context) {
 			ClearTimeMs: int(clearTime),
 		}
 
-		fmt.Printf("Extracted Run: %+v\n", extractedRun)
+		//fmt.Printf("Extracted Run: %+v\n", extractedRun)
 
 		extractedRuns = append(extractedRuns, extractedRun)
 	}

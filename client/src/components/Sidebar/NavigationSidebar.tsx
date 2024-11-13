@@ -12,6 +12,7 @@ import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
 import SportsHandballOutlinedIcon from '@mui/icons-material/SportsHandballOutlined';
 import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { NavLink } from "react-router-dom";
 
 const icons = {
@@ -19,7 +20,8 @@ const icons = {
   AppsOutlinedIcon,
   SportsHandballOutlinedIcon,
   Groups2OutlinedIcon, 
-  AccessTimeOutlinedIcon
+  AccessTimeOutlinedIcon,
+  CalendarMonthIcon
 };
 
 interface SideBarItem {
@@ -62,6 +64,13 @@ const NavigationSidebar = () => {
       icon: 'AccessTimeOutlinedIcon',
       tooltip: 'View all types of character progress'
     },
+    {
+      id: 5, 
+      name: "My Calendar",
+      path: '/my-calendar',
+      icon: 'CalendarMonthIcon',
+      tooltip: 'Add, Edit, and View all important dates'
+    },
 
   ]
 
@@ -98,7 +107,7 @@ const NavigationSidebar = () => {
           })}
         </List>
 
-        <List sx={{ pt: '44rem', zIndex: '-1'}}>
+        <List sx={{ pt: '40rem', zIndex: '-1'}}>
           <Tooltip title='Account wide settings'>
             <ListItem 
               disablePadding 

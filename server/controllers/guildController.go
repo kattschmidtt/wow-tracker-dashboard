@@ -35,10 +35,10 @@ func GetGuildProg(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(result)
+	//fmt.Println(result)
 
 	raidProgression := result.RaidProgression.NeruBarPalace
-	fmt.Println(raidProgression)
+	//fmt.Println(raidProgression)
 
 	//final entry to be returned to frontend
 	extractedRaid := models.ExtractedGuildProg{
@@ -73,7 +73,7 @@ func GetRaidInfo(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("result: ", result)
+	//fmt.Println("result: ", result)
 
 	//Since the raider.io api sends back ALL raids within an expansion, we are only grabbing
 	// the most recent tier based on the non slug name. We will use the IDs returned from raid.Encounters
@@ -96,7 +96,7 @@ func GetRaidInfo(c *gin.Context) {
 		}
 	}
 
-	fmt.Println("Filtered encounters: ", filteredEncounters)
+	//fmt.Println("Filtered encounters: ", filteredEncounters)
 
 	//error handling
 	if len(filteredEncounters) > 0 {

@@ -17,7 +17,7 @@ func GetCharacterStats(c *gin.Context) {
 	region := "us"
 	realm := "stormrage"
 	characterName := "foxxghost"
-	accessCode := "US0PizocQeqXwv8LHrUPjYLL0k3GwDfy4s"
+	accessCode := "US9lkic1XL27qzh5SfFRrSk7soIpp2vJ1X"
 
 	requestURI := fmt.Sprintf("https://us.api.blizzard.com/profile/wow/character/%s/%s/statistics?namespace=profile-%s&locale=en_US&access_token=%s", realm, characterName, region, accessCode)
 
@@ -98,7 +98,7 @@ func GetCharacterGear(c *gin.Context) {
 	}
 
 	// Print the response body for debugging
-	fmt.Println("Response body:", string(bodyBytes))
+	//fmt.Println("Response body:", string(bodyBytes))
 
 	// Reset the response body reader
 	resp.Body = io.NopCloser(bytes.NewReader(bodyBytes))
@@ -139,7 +139,7 @@ func GetCharacterTalents(c *gin.Context) {
 	}
 
 	// Print the response body for debugging
-	fmt.Println("Response body:", string(bodyBytes))
+	//fmt.Println("Response body:", string(bodyBytes))
 
 	// Reset the response body reader
 	resp.Body = io.NopCloser(bytes.NewReader(bodyBytes))
