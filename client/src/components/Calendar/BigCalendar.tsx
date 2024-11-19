@@ -44,7 +44,7 @@ const MyCalendar = () => {
   }, []);
 
   return (
-    <div style={{ height: 500 }}>
+    <div style={{ height: '100vh' }}>
       <Calendar
         localizer={localizer}
         events={blizzEvents}
@@ -52,7 +52,7 @@ const MyCalendar = () => {
         endAccessor="end"
         defaultView="month"
         views={['month', 'week', 'day']}
-        style={{ height: '100%' }}
+        style={{ height: '100%', width: '100%'}}
       />
     </div>
   );
