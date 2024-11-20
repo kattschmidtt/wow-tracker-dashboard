@@ -9,6 +9,7 @@ A simple and user-friendly dashboard for World of Warcraft (WoW) players to keep
 - Material-UI
 - React Google Charts
 - React Beautiful DnD
+- React-Big-Calendar
 
 
 **Server:** 
