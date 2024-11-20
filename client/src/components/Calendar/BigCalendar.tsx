@@ -5,6 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import enUS from 'date-fns/locale/en-US';
 import { BlizzardEventModel } from '../../Models/calendarModel';
+import CalendarToolbar from './CalendarToolbar';
 
 const locales = { 'en-US': enUS };
 const localizer = dateFnsLocalizer({
@@ -53,6 +54,7 @@ const MyCalendar = () => {
         defaultView="month"
         views={['month', 'week', 'day']}
         style={{ height: '100%', width: '100%'}}
+        components={{toolbar: CalendarToolbar}}
       />
     </div>
   );
