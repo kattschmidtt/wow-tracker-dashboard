@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { CharacterItemsContext } from '../../context/CharacterContext';
 import { CircularProgress, Grid, Tooltip } from '@mui/material';
 import { convertToPercentage, prettyNumberFormat } from '../../util/util';
+import { Stats as StatsModel } from '../../Models/characterModel';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
@@ -24,18 +25,41 @@ const Stats = () => {
   if (!stats) {
     return null; 
   }
-  const data = {"hehe":"haha"}; // Replace with the actual stats data passed
 
-  console.log('Rendering Stats component with data:', data);
+  console.log('Rendering Stats component with data:', stats);
 
-  if (!data || data instanceof Error) {
+  if (!stats || stats instanceof Error) {
     return <div>Error loading stats data.</div>;
   }
+
+  const statIcons: Partial<Record<keyof StatsModel, React.ReactNode>> = {
+    health: <FavoriteIcon />,
+    power: <PsychologyIcon />,
+    speed: <DirectionsRunIcon />,
+    strength: <SportsMartialArtsIcon />,
+    agility: <InsightsIcon />,
+    intellect: <HandymanIcon />,
+    stamina: <PersonAddAlt1Icon />,
+  };
+
 
   return (
     <div>
       <h3>Stats</h3>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <Grid container spacing={3}>
+        {Object.entries(stats).map(([key, value]) => (
+          <Grid item key={key}>
+            <Tooltip title={key.toUpperCase()} arrow>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {statIcons[key as keyof StatsModel]} {/* Display the icon if it exists */}
+                <span style={{ marginLeft: 8 }}>
+                  {prettyNumberFormat(value)}
+                </span>
+              </div>
+            </Tooltip>
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 };

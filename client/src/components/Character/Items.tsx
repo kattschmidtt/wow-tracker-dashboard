@@ -11,8 +11,6 @@ const Items = ({side}: ItemProps) => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  console.log(leftItems)
-
   const returnCorrectSide = () => {
     if (side === 'left') {
       return leftItems.map((item, id) => <div key={id}>{item}</div>)
