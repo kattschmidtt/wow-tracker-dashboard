@@ -92,6 +92,7 @@ export const CharacterProvider = ({ children }: CharacterItemsProviderProps): JS
     })
     .catch(err => {
       console.error('Failed to get character stats')
+      console.log("this is the error: ", err)
       setError(err)
       setIsLoading(false)
     })

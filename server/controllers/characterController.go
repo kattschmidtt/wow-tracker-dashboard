@@ -16,12 +16,23 @@ func GetCharacterStats(c *gin.Context) {
 
 	region := "us"
 	realm := "stormrage"
-	characterName := "foxxghost"
-	accessCode := "US9lkic1XL27qzh5SfFRrSk7soIpp2vJ1X"
+	characterName := "foxxbozo"
+	token := "USRB2h8dpvYrlkZTi26FayF0yAc8InJMts"
 
-	requestURI := fmt.Sprintf("https://us.api.blizzard.com/profile/wow/character/%s/%s/statistics?namespace=profile-%s&locale=en_US&access_token=%s", realm, characterName, region, accessCode)
+	requestURI := fmt.Sprintf("https://us.api.blizzard.com/profile/wow/character/%s/%s/statistics?namespace=profile-%s&locale=en_US", realm, characterName, region)
 
-	resp, err := http.Get(requestURI)
+	req, err := http.NewRequest("GET", requestURI, nil)
+	if err != nil {
+		fmt.Println("Failed to create request: ", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create request."})
+		return
+	}
+
+	//adding bearer token manually
+	req.Header.Add("Authorization", "Bearer "+token)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println("Failed to make request to Blizzard API:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data"})
@@ -79,7 +90,7 @@ func GetCharacterGear(c *gin.Context) {
 
 	region := "us"
 	realm := "stormrage"
-	characterName := "foxxghost"
+	characterName := "foxxbozo"
 
 	requestURI := fmt.Sprintf("https://raider.io/api/v1/characters/profile?region=%s&realm=%s&name=%s&fields=gear", region, realm, characterName)
 
@@ -120,7 +131,7 @@ func GetCharacterTalents(c *gin.Context) {
 
 	region := "us"
 	realm := "stormrage"
-	characterName := "foxxghost"
+	characterName := "foxxbozo"
 
 	requestURI := fmt.Sprintf("https://raider.io/api/v1/characters/profile?region=%s&realm=%s&name=%s&fields=talents", region, realm, characterName)
 
