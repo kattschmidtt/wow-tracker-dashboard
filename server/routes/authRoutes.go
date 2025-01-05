@@ -1,13 +1,11 @@
 package routes
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"net/url"
-	"server/models"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -15,12 +13,13 @@ import (
 )
 
 const (
-	clientID     = "70fecafdbd534133802e791234e6769e"
-	clientSecret = "Vx2xsUBLneWMBUtLZgFtmj2n414OP00H"
-	redirectURI  = "http://localhost:8080/callback"
-	authURL      = "https://oauth.battle.net/authorize"
-	tokenURL     = "https://oauth.battle.net/token"
-	apiBaseURL   = "https://us.api.blizzard.com"
+	clientID      = "70fecafdbd534133802e791234e6769e"
+	clientSecret  = "Vx2xsUBLneWMBUtLZgFtmj2n414OP00H"
+	redirectURI   = "http://localhost:8080/callback"
+	authURL       = "https://oauth.battle.net/authorize"
+	tokenURL      = "https://oauth.battle.net/token"
+	apiBaseURL    = "https://us.api.blizzard.com"
+	battleNetAuth = "https://oauth.battle.net/oauth"
 )
 
 func SetupRouter() *gin.Engine {
@@ -47,21 +46,27 @@ func loginHandler(c *gin.Context) {
 func callbackHandler(c *gin.Context) {
 	code := c.Query("code")
 	if code == "" {
-		c.String(http.StatusBadRequest, "Code not found")
+		c.String(http.StatusBadRequest, "Authorization code not found")
 		return
 	}
-	log.Println("Authorization code received:", code)
 
 	accessToken, err := getAccessToken(code)
 	if err != nil {
-		log.Printf("Failed to get access token: %v\n", err)
+		log.Printf("Failed to get access token: %v", err)
 		c.String(http.StatusInternalServerError, "Failed to get access token")
 		return
 	}
-	log.Println("Access token received:", accessToken)
 
+	battleNetInfo, err := getBattleNetAccountInfo(accessToken)
+	if err != nil {
+		log.Printf("Failed to fetch user info: %v", err)
+		c.String(http.StatusInternalServerError, "Failed to fetch user info")
+		return
+	}
 	c.SetCookie("access_token", accessToken, 3600, "/", "localhost", false, true)
-	c.Redirect(http.StatusFound, "/profile/user/wow")
+
+	//only allow userInfo to be sent
+	c.JSON(http.StatusOK, battleNetInfo)
 }
 
 func profileHandler(c *gin.Context) {
@@ -73,59 +78,13 @@ func profileHandler(c *gin.Context) {
 
 	profile, err := getUserProfile(cookie)
 	if err != nil {
+		log.Printf("Failed to get user profile: %v", err)
 		c.String(http.StatusInternalServerError, "Failed to get user profile")
 		return
 	}
 
-	log.Println("User Profile JSON:", profile)
-
-	var userProfile models.UserProfile
-	err = json.Unmarshal([]byte(profile), &userProfile)
-	if err != nil {
-		log.Printf("Failed to parse user profile JSON: %v", err)
-		c.String(http.StatusInternalServerError, fmt.Sprintf("Failed to parse user profile JSON: %v", err))
-		return
-	}
-
-	connStr := "user=foxx password=admin dbname=wow-tracker-board port=5432 sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatalf("Failed to connect to the database: %v", err)
-		c.String(http.StatusInternalServerError, "Failed to connect to database")
-		return
-	}
-	defer db.Close()
-
-	err = db.Ping()
-	if err != nil {
-		log.Fatalf("Failed to ping the database: %v", err)
-		c.String(http.StatusInternalServerError, "Failed to ping the database")
-		return
-	}
-
-	sqlStatement := generateCreateTableSQL()
-	_, err = db.Exec(sqlStatement)
-	if err != nil {
-		log.Printf("Failed to create table: %v", err)
-		c.String(http.StatusInternalServerError, fmt.Sprintf("Failed to create table: %v", err))
-		return
-	}
-
-	for _, wowAccount := range userProfile.WowAccounts {
-		for _, character := range wowAccount.Characters {
-			_, err = db.Exec(`
-							INSERT INTO user_profiles (wow_account_id, character_name, character_id, realm_name, playable_class, playable_race, gender, faction, level)
-							VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-				wowAccount.ID, character.Name, character.ID, toJSON(character.Realm.Name), toJSON(character.PlayableClass.Name), toJSON(character.PlayableRace.Name), toJSON(character.Gender.Name), toJSON(character.Faction.Name), character.Level)
-			if err != nil {
-				log.Printf("Failed to insert data into table: %v", err)
-				c.String(http.StatusInternalServerError, fmt.Sprintf("Failed to insert data into table: %v", err))
-				return
-			}
-		}
-	}
-
-	c.String(http.StatusOK, "User Profile: %s", profile)
+	c.Header("Content-Type", "application/json")
+	c.String(http.StatusOK, profile)
 }
 
 func toJSON(value interface{}) string {
@@ -135,23 +94,6 @@ func toJSON(value interface{}) string {
 		return ""
 	}
 	return string(jsonValue)
-}
-
-func generateCreateTableSQL() string {
-	return `
-	CREATE TABLE IF NOT EXISTS user_profiles (
-			id SERIAL PRIMARY KEY,
-			wow_account_id INT,
-			character_name VARCHAR(255),
-			character_id INT,
-			realm_name JSONB,
-			playable_class JSONB,
-			playable_race JSONB,
-			gender JSONB,
-			faction JSONB,
-			level INT
-	);
-	`
 }
 
 func getAccessToken(code string) (string, error) {
@@ -197,4 +139,27 @@ func getUserProfile(accessToken string) (string, error) {
 	}
 
 	return body, nil
+}
+
+func getBattleNetAccountInfo(accessToken string) (map[string]interface{}, error) {
+	request := gorequest.New()
+	resp, body, errs := request.Get("https://oauth.battle.net/oauth/userinfo").
+		Set("Authorization", fmt.Sprintf("Bearer %s", accessToken)).
+		End()
+
+	if len(errs) > 0 {
+		return nil, fmt.Errorf("failed to fetch user info: %v", errs)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed to fetch user info: %s", body)
+	}
+
+	var userInfo map[string]interface{}
+	err := json.Unmarshal([]byte(body), &userInfo)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse user info: %v", err)
+	}
+
+	return userInfo, nil
 }

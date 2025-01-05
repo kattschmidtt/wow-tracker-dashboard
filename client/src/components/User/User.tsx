@@ -1,19 +1,22 @@
-import { useContext, useEffect } from 'react';
-import { UserContext } from '../../context/userContext';
+import { useEffect } from 'react';
+import { useUser } from '../../context/userContext';
 
 
 const User = () => {
-  
-  const { user, setUser } = useContext(UserContext);
+  const { fetchUserProfile, user, isLoggedIn } = useUser();
 
   useEffect(() => {
-    console.dir(user.currentDateTime)
-  }, [])
+    fetchUserProfile();
+  }, []);
 
   return (
-    <>
-      {`Hello ${user.name}`}
-    </>
+    <div>
+      {isLoggedIn ? (
+        <div>Welcome, {user?.battletag || 'User'}!</div>
+      ) : (
+        <div>Please log in</div>
+      )}
+    </div>
   );
 };
 
