@@ -1,68 +1,54 @@
+// userContext.tsx
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import axios from 'axios';
 
-interface UserProviderProps {
+interface UserContextType {
+  token: string | null;
+  isLoggedIn: boolean;
+  login: () => void;
+  logout: () => void;
+}
+
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+interface UserContextProviderProps {
   children: ReactNode;
 }
 
-interface UserModel {
-  id: number;
-  name: string;
-  pictureUrl: string;
-  currentDateTime: string;
-  battletag?: string;
-}
+export const UserProvider = ({ children }: UserContextProviderProps) => {
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-interface UserContextProps {
-  user: UserModel | null;
-  isLoggedIn: boolean;
-  fetchUserProfile: () => void;
-}
-
-//initial user state
-const UserContext = createContext<UserContextProps>({
-  user: null,
-  isLoggedIn: false,
-  fetchUserProfile: () => {},
-});
-
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<any>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const login = () => {
-    window.location.href = 'http://localhost:8080/login'; //redirect to login route
-  };
-
-  const fetchUserProfile = async () => {
+  const login = async () => {
     try {
-      const response = await fetch('http://localhost:8080/profile/user/wow', {
-        credentials: 'include', //cookies for auth
-      });
-      console.log(response)
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        setUser(data);
-        setIsLoggedIn(true);
-      } else {
-        console.error('Failed to fetch user profile:', await response.text());
-      }
+      const response = await axios.get('http://localhost:8080/auth/token');
+      const accessToken = response.data.access_token;
+      setToken(accessToken);
+      localStorage.setItem('bearer_token', accessToken);
+      setIsLoggedIn(!isLoggedIn)
+
+      
     } catch (error) {
-      console.error('Error fetching user profile:', error);
+      console.error('Error fetching token:', error);
     }
   };
 
+  const logout = () => {
+    setToken(null);
+    localStorage.removeItem('bearer_token');
+  };
+
   return (
-    <UserContext.Provider value={{ user, isLoggedIn, login, fetchUserProfile }}>
+    <UserContext.Provider value={{ token, isLoggedIn, login, logout }}>
       {children}
     </UserContext.Provider>
   );
 };
 
-export const useUser = () => {
+export const useUserContext = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error('useUserContext must be used within a UserContextProvider');
   }
   return context;
 };

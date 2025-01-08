@@ -7,14 +7,15 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
-//var db *sql.DB
-
-/* func init() {
-	initializers.ConnectToDB()
-	initializers.AutoMigrateCharacter()
-} */
+func init() {
+	//load .env
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+}
 
 func TestGet(c *gin.Context) {
 	c.JSON(200, gin.H{
@@ -23,12 +24,12 @@ func TestGet(c *gin.Context) {
 }
 
 func main() {
+	r := gin.Default()
 
-	// Creates default gin router with Logger and Recovery middleware already attached
-	//r := gin.Default()
-	r := routes.SetupRouter()
-
+	//cors middleware enabled
 	r.Use(cors.Default())
+
+	// ROUTES
 	r.GET("/ping", TestGet)
 	r.GET("/getChars", controllers.GetChars)
 	r.GET("/affixes", controllers.GetCurrentAffixList)
@@ -38,6 +39,9 @@ func main() {
 	r.GET("/characterStats", controllers.GetCharacterStats)
 	r.GET("/characterGear", controllers.GetCharacterGear)
 	r.GET("/characterTalents", controllers.GetCharacterTalents)
+
+	//init auth process
+	routes.InitAuthRoutes(r)
 
 	log.Println("Starting server on :8080")
 	r.Run(":8080")

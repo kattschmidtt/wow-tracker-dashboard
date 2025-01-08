@@ -1,7 +1,9 @@
 import { Button, Card, CardContent, Grid, TextField } from '@mui/material';
 import motherLogin from '/motherLogin.png';
 import otherMotherReg from '/otherMotherReg.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useUserContext } from '../context/userContext';
+import { useNavigate } from 'react-router-dom';
 
 const textFieldStyles = {
   '& .MuiOutlinedInput-root': {
@@ -27,11 +29,23 @@ const textFieldStyles = {
 };
 
 const Login = () => {
-  const [isRegistering, setIsRegistering] = useState<boolean>(false);
+  const { login, isLoggedIn } = useUserContext();
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const toggleView = () => {
     setIsRegistering(prevState => !prevState);
-  };
+  }; 
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/')
+    }
+    else {
+      console.log('work on error handling')
+    }
+  }, [isLoggedIn]) 
 
   return (
     <Grid
@@ -101,7 +115,17 @@ const Login = () => {
             />
           </CardContent>
           <CardContent>
-            <Button variant='contained' fullWidth>{isRegistering ? (<span className='login-text'>Register</span>) : (<span className='login-text'>Login</span>)}</Button>
+            {isRegistering ?
+              (
+                <Button variant='contained' fullWidth>
+                  <span className='login-text'>Register</span>
+                </Button>
+              ) : (
+                <Button onClick={login} variant='contained' fullWidth>
+                  <span className='login-text'>Login</span>
+                </Button>
+              )
+            }
           </CardContent>
           <CardContent className="login-text"sx={{ textAlign: 'center', marginTop: '1rem', cursor: 'pointer', color: 'white', textDecoration: 'underline' }} onClick={toggleView}>
             {isRegistering ? 'Already have an account? Login here.' : 'New user? Register here.'}
