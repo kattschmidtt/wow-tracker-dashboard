@@ -21,17 +21,22 @@ export const UserProvider = ({ children }: UserContextProviderProps) => {
 
   const login = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/auth/token');
-      const accessToken = response.data.access_token;
+      const response = await axios.get('http://localhost:8080/api/auth/redirect', {
+        method: 'GET',
+        headers: {"Access-Control-Allow-Origin": "*"}
+      });
+    /*   const accessToken = response.data.access_token;
       setToken(accessToken);
       localStorage.setItem('bearer_token', accessToken);
-      setIsLoggedIn(!isLoggedIn)
+      setIsLoggedIn(!isLoggedIn) */
 
-      
+      console.log(response)
+      setIsLoggedIn(true)
+        
     } catch (error) {
       console.error('Error fetching token:', error);
     }
-  };
+  }; 
 
   const logout = () => {
     setToken(null);

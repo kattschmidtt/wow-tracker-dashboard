@@ -27,7 +27,13 @@ func main() {
 	r := gin.Default()
 
 	//cors middleware enabled
-	r.Use(cors.Default())
+	/* r.Use(cors.Default()) */
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
 
 	// ROUTES
 	r.GET("/ping", TestGet)

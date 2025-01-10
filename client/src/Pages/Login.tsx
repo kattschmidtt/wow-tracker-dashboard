@@ -29,12 +29,12 @@ const textFieldStyles = {
 };
 
 const Login = () => {
-  const { login, isLoggedIn } = useUserContext();
+  const { login, isLoggedIn} = useUserContext();
   const [isRegistering, setIsRegistering] = useState(false);
 
   const toggleView = () => {
     setIsRegistering(prevState => !prevState);
-  }; 
+  };
 
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ const Login = () => {
     else {
       console.log('work on error handling')
     }
-  }, [isLoggedIn]) 
+  }, [isLoggedIn, navigate]);
 
   return (
     <Grid
@@ -115,35 +115,13 @@ const Login = () => {
             />
           </CardContent>
           <CardContent>
-            {isRegistering ?
-              (
-                <Button variant='contained' fullWidth>
-                  <span className='login-text'>Register</span>
-                </Button>
-              ) : (
-                <Button onClick={login} variant='contained' fullWidth>
-                  <span className='login-text'>Login</span>
-                </Button>
-              )
-            }
-          </CardContent>
-          <CardContent className="login-text"sx={{ textAlign: 'center', marginTop: '1rem', cursor: 'pointer', color: 'white', textDecoration: 'underline' }} onClick={toggleView}>
-            {isRegistering ? 'Already have an account? Login here.' : 'New user? Register here.'}
+            <Button onClick={login} variant='contained' fullWidth>
+              <span className='login-text'>Login</span>
+            </Button>
           </CardContent>
         </Grid>
       </Card>
     </Grid>
-    <span style={{
-        position: 'fixed',
-        fontSize: '.5rem',
-        bottom: 0,
-        width: '100%',
-        backgroundColor: '#36316b',
-        color: 'white',
-        textAlign: 'center',
-        padding: '1rem'}}>
-      *All pictures belong to Blizzard Entertainment*
-    </span>
     </Grid>
   );
 };
