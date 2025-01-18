@@ -7,3 +7,4 @@ export interface GuildProgModel {
   heroicKills: number
   mythicKills: number
 }
+

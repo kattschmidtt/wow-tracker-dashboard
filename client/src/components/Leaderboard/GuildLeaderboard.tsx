@@ -52,12 +52,11 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 const GuildLeaderboard = () => {
   const [expanded, setExpanded] = useState<string | false>('panel0');
   const [bosses, setBosses] = useState<RaidModel[] | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { guildProg } = useContext(GuildContext);
 
   useEffect(() => {
-    console.log('guild prog: ', guildProg)
+    //console.log('guild prog: ', guildProg)
 
     //using in component fetch since we won't need this state globally
     fetch('http://localhost:8080/staticRaidData')
@@ -68,7 +67,7 @@ const GuildLeaderboard = () => {
       return resp.json();
     })
     .then(data => {
-      console.log('static raid info: ', data)
+      //console.log('static raid info: ', data)
       setBosses(data)
       setIsLoading(false);
     })

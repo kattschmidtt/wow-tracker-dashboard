@@ -104,3 +104,28 @@ func GetRaidInfo(c *fiber.Ctx) error {
 	}
 	return c.JSON(filteredEncounters)
 }
+
+func GetGuildMembers(c *fiber.Ctx) error {
+	//https://raider.io/api/v1/guilds/profile?region=us&realm=proudmoore&name=acrimonious&fields=members
+	//GuildMembers model
+	var result models.GuildMembers
+	region := "us"
+	realm := "Proudmoore"
+	guild := "Acrimonious"
+
+	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/profile?region=%v&realm=%v&name=%v&fields=raid_progression", region, realm, guild)
+
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		c.JSON(fiber.Map{"error": "Failed to fetch data"})
+	}
+	defer resp.Body.Close()
+
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		c.JSON(fiber.Map{"error": "Failed to decode response"})
+	}
+
+	memberList := result.Members
+
+	return c.JSON(memberList)
+}
