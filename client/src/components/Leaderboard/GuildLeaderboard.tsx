@@ -51,6 +51,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const GuildLeaderboard = () => {
   const [expanded, setExpanded] = useState<string | false>('panel0');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [bosses, setBosses] = useState<RaidModel[] | null>(null)
   const [error, setError] = useState<string | null>(null);
   const { guildProg } = useContext(GuildContext);

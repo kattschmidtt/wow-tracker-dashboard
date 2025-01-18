@@ -60,7 +60,6 @@ const w = 'hi'
             <Grid item xs={12} sx={{ flexGrow: 1 }}>
               <Card>
                 <CardContent>
-                  <h4>{`${w} Kill Progress`}</h4>
                   <CardContent>
                     {/* <iframe
                       src={widgetUrl}

@@ -34,3 +34,13 @@ export interface Encounter {
   slug: string
   name: string
 }
+
+export interface BossesModel {
+  bosses: Boss[]
+}
+
+export interface Boss {
+  id: number
+  name: string
+  slug: string
+}
