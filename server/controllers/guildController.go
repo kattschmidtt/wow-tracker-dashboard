@@ -7,9 +7,10 @@ import (
 	"server/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-func GetGuildProg(c *gin.Context) {
+func GetGuildProg(c *fiber.Ctx) error {
 	var result models.GuildProgModel
 
 	/*
@@ -25,14 +26,12 @@ func GetGuildProg(c *gin.Context) {
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data"})
-		return
+		c.JSON(fiber.Map{"error": "Failed to fetch data"})
 	}
 	defer resp.Body.Close()
 
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode response"})
-		return
+		c.JSON(fiber.Map{"error": "Failed to decode response"})
 	}
 
 	//fmt.Println(result)
@@ -51,10 +50,10 @@ func GetGuildProg(c *gin.Context) {
 		MythicKills: int64(raidProgression.MythicBossesKilled),
 	}
 
-	c.JSON(http.StatusOK, extractedRaid)
+	return c.JSON(extractedRaid)
 }
 
-func GetRaidInfo(c *gin.Context) {
+func GetRaidInfo(c *fiber.Ctx) error {
 	var result models.StaticRaidModel
 
 	// Expansion ID to get slugs for. 9 = Dragonflight, 8 = Shadowlands, 7 = Battle for Azeroth, 6 = Legion
@@ -63,14 +62,13 @@ func GetRaidInfo(c *gin.Context) {
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch raid static slug data"})
-		return
+		c.JSON(fiber.Map{"error": "Failed to fetch raid static slug data"})
 	}
 	defer resp.Body.Close()
 
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode raid static slug data response"})
-		return
+		c.JSON(fiber.Map{"error": "Failed to decode raid static slug data response"})
+
 	}
 
 	//fmt.Println("result: ", result)
@@ -100,14 +98,9 @@ func GetRaidInfo(c *gin.Context) {
 
 	//error handling
 	if len(filteredEncounters) > 0 {
-		c.JSON(http.StatusOK, filteredEncounters)
+		c.JSON(filteredEncounters)
 	} else {
-		c.JSON(http.StatusOK, gin.H{"message": "No filtered encounters found"})
+		c.JSON(fiber.Map{"message": "No filtered encounters found"})
 	}
-}
-
-func main() {
-	r := gin.Default()
-	r.GET("/raidinfo", GetRaidInfo)
-	r.Run(":8080")
+	return c.JSON(filteredEncounters)
 }

@@ -76,7 +76,7 @@ const ThisWeekTracking = () => {
               <AccordionDetails>
                 {/*TODO: make this style prettier and more readable*/}
                 <p style={{
-                  backgroundImage: `url("https://wow.zamimg.com/images/wow/icons/large/${affix.icon}.jpg")`,
+                  backgroundImage: `url(${affix.icon_url})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',

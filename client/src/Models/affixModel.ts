@@ -6,6 +6,7 @@ export interface Root {
 }
 
 export interface AffixModel {
+  icon_url: string
   id: number
   name: string
   description: string

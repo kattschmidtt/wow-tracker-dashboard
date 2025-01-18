@@ -1,10 +1,9 @@
-// userContext.tsx
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useContext, ReactNode } from "react";
 
 interface UserContextType {
   token: string | null;
   isLoggedIn: boolean;
+  userData: object | null;
   login: () => void;
   logout: () => void;
 }
@@ -17,43 +16,32 @@ interface UserContextProviderProps {
 
 export const UserProvider = ({ children }: UserContextProviderProps) => {
   const [token, setToken] = useState<string | null>(null);
+  const [userData, setUserData] = useState<object | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const login = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/auth/redirect', {
-        method: 'GET',
-        headers: {"Access-Control-Allow-Origin": "*"}
-      });
-    /*   const accessToken = response.data.access_token;
-      setToken(accessToken);
-      localStorage.setItem('bearer_token', accessToken);
-      setIsLoggedIn(!isLoggedIn) */
-
-      console.log(response)
-      setIsLoggedIn(true)
-        
-    } catch (error) {
-      console.error('Error fetching token:', error);
-    }
-  }; 
+    setIsLoggedIn(true);
+  };
 
   const logout = () => {
     setToken(null);
-    localStorage.removeItem('bearer_token');
+    setUserData(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem("bearer_token");
   };
 
   return (
-    <UserContext.Provider value={{ token, isLoggedIn, login, logout }}>
+    <UserContext.Provider value={{ token, isLoggedIn, userData, login, logout }}>
       {children}
     </UserContext.Provider>
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUserContext = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUserContext must be used within a UserContextProvider');
+    throw new Error("useUserContext must be used within a UserContextProvider");
   }
   return context;
 };

@@ -4,7 +4,7 @@ import SearchBar from './SearchBar';
 import User from '../User/User';
 import { useUserContext } from '../../context/userContext';
 import Avatar from 'boring-avatars';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const userDropdown = [
   {title: 'Settings', path: '/settings'},
@@ -31,7 +31,8 @@ const navStyles = {
 
 const Header = ({/* darkMode, handleThemeToggle */}/* : Props */) => {
 
-  const { isLoggedIn } = useUserContext();
+  const { isLoggedIn, logout } = useUserContext();
+  //const [isLoggedIn, setIsLoggedIn ] = useState(true);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -41,6 +42,15 @@ const Header = ({/* darkMode, handleThemeToggle */}/* : Props */) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  console.log(localStorage.getItem('battletag'))
+
+  const handleLogout = () => {
+    logout()
+    setTimeout(() => {
+        window.location.href = "http://localhost:3000/login";
+    }, 500); 
+  }
 
   return (
     <AppBar position='fixed' sx={{mb: 3, background: '#a1dce6', boxShadow: 'none', color: 'black'}}>
@@ -72,22 +82,26 @@ const Header = ({/* darkMode, handleThemeToggle */}/* : Props */) => {
                   anchorEl={anchorEl}
                   open={open}
                   onClose={handleClose}>
-                    {userDropdown.map(({title, path}) => (
-                      <MenuItem 
-                        key={path} 
-                        component={NavLink} 
-                        to={path} 
-                        onClick={handleClose} 
-                      >
-                        {title}
-                      </MenuItem>
-                    ))}
+                    <MenuItem
+                      key="settings"
+                      component={NavLink}
+                      to='/settings'
+                      onClick={handleClose}>
+                        Settings
+                    </MenuItem>
+                    <MenuItem
+                      key="logout"
+                      component={NavLink}
+                      to='/logout'
+                      onClick={handleLogout}>
+                        Logout
+                    </MenuItem>
                 </Menu>
               </>
             ) : (
               <ListItem component={NavLink}
-                to={"/logout"}
-                key={"/logout"}
+                to={"/login"}
+                key={"/login"}
                 sx={navStyles}>
                   Login
               </ListItem>
