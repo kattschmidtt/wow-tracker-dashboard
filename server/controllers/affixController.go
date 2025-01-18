@@ -5,23 +5,21 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-func GetCurrentAffixList(c *gin.Context) {
+func GetCurrentAffixList(c *fiber.Ctx) error {
 	var result map[string]interface{}
 
 	resp, err := http.Get("https://raider.io/api/v1/mythic-plus/affixes?region=us&locale=en")
 	if err != nil {
 		log.Fatalln(err)
-		return
 	}
 	defer resp.Body.Close()
 
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		log.Fatalln(err)
-		return
 	}
 
-	c.JSON(http.StatusOK, result["affix_details"])
+	return c.JSON(result["affix_details"])
 }

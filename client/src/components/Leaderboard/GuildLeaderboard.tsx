@@ -97,7 +97,7 @@ const GuildLeaderboard = () => {
           <ProgressAccordion
             title="Mythic"
             count={guildProg.mythicKills}
-            max={9}
+            max={8}
             bosses={bosses}
             onChange={handleChange('panel1')}
             expanded={expanded === 'panel1'}
@@ -107,7 +107,7 @@ const GuildLeaderboard = () => {
           <ProgressAccordion
             title="Heroic"
             count={guildProg.heroicKills}
-            max={9}
+            max={8}
             bosses={bosses}
             onChange={handleChange('panel2')}
             expanded={expanded === 'panel2'}
@@ -117,7 +117,7 @@ const GuildLeaderboard = () => {
           <ProgressAccordion
             title="Normal"
             count={guildProg.normalKills}
-            max={9}
+            max={8}
             bosses={bosses}
             onChange={handleChange('panel3')}
             expanded={expanded === 'panel3'}

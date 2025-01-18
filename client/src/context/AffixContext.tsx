@@ -31,6 +31,7 @@ export const AffixProvider = ({ children }: AffixProviderProps): JSX.Element => 
       .then((data: AffixModel[]) => {
         setAffixes(data);
         setIsLoading(false);
+        console.log(data)
       })
       .catch(error => {
         console.error(error);

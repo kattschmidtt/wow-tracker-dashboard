@@ -22,7 +22,11 @@ export const LeaderboardProvider = ({ children } : LeaderboardProviderProps ): J
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/getSeasonalDungeons')
+    fetch('http://localhost:8080/getSeasonalDungeons', {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response failed');
@@ -30,7 +34,7 @@ export const LeaderboardProvider = ({ children } : LeaderboardProviderProps ): J
         return response.json();
       })
       .then((data: LeaderboardModel[]) => {
-        console.dir(data)
+        console.log(data)
         setLeaderboard(data);
         setIsLoading(false);
       })

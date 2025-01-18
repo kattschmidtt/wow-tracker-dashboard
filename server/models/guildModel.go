@@ -10,48 +10,13 @@ type GuildProgModel struct {
 	LastCrawledAt   time.Time `json:"last_crawled_at"`
 	ProfileURL      string    `json:"profile_url"`
 	RaidProgression struct {
-		AberrusTheShadowedCrucible struct {
+		NeruBarPalace struct {
 			Summary            string `json:"summary"`
 			TotalBosses        int    `json:"total_bosses"`
 			NormalBossesKilled int    `json:"normal_bosses_killed"`
 			HeroicBossesKilled int    `json:"heroic_bosses_killed"`
 			MythicBossesKilled int    `json:"mythic_bosses_killed"`
-		} `json:"aberrus-the-shadowed-crucible"`
-		AmirdrassilTheDreamsHope struct {
-			Summary            string `json:"summary"`
-			TotalBosses        int    `json:"total_bosses"`
-			NormalBossesKilled int    `json:"normal_bosses_killed"`
-			HeroicBossesKilled int    `json:"heroic_bosses_killed"`
-			MythicBossesKilled int    `json:"mythic_bosses_killed"`
-		} `json:"amirdrassil-the-dreams-hope"`
-		AwakenedAberrusTheShadowedCrucible struct {
-			Summary            string `json:"summary"`
-			TotalBosses        int    `json:"total_bosses"`
-			NormalBossesKilled int    `json:"normal_bosses_killed"`
-			HeroicBossesKilled int    `json:"heroic_bosses_killed"`
-			MythicBossesKilled int    `json:"mythic_bosses_killed"`
-		} `json:"awakened-aberrus-the-shadowed-crucible"`
-		AwakenedAmirdrassilTheDreamsHope struct {
-			Summary            string `json:"summary"`
-			TotalBosses        int    `json:"total_bosses"`
-			NormalBossesKilled int    `json:"normal_bosses_killed"`
-			HeroicBossesKilled int    `json:"heroic_bosses_killed"`
-			MythicBossesKilled int    `json:"mythic_bosses_killed"`
-		} `json:"awakened-amirdrassil-the-dreams-hope"`
-		AwakenedVaultOfTheIncarnates struct {
-			Summary            string `json:"summary"`
-			TotalBosses        int    `json:"total_bosses"`
-			NormalBossesKilled int    `json:"normal_bosses_killed"`
-			HeroicBossesKilled int    `json:"heroic_bosses_killed"`
-			MythicBossesKilled int    `json:"mythic_bosses_killed"`
-		} `json:"awakened-vault-of-the-incarnates"`
-		VaultOfTheIncarnates struct {
-			Summary            string `json:"summary"`
-			TotalBosses        int    `json:"total_bosses"`
-			NormalBossesKilled int    `json:"normal_bosses_killed"`
-			HeroicBossesKilled int    `json:"heroic_bosses_killed"`
-			MythicBossesKilled int    `json:"mythic_bosses_killed"`
-		} `json:"vault-of-the-incarnates"`
+		} `json:"nerubar-palace"`
 	} `json:"raid_progression"`
 }
 
@@ -91,7 +56,7 @@ type GuildRank struct {
 	LastCrawledAt time.Time `json:"last_crawled_at"`
 	ProfileURL    string    `json:"profile_url"`
 	RaidRankings  struct {
-		AberrusTheShadowedCrucible struct {
+		NeruBarPalace struct {
 			Normal struct {
 				World  int `json:"world"`
 				Region int `json:"region"`
@@ -107,92 +72,7 @@ type GuildRank struct {
 				Region int `json:"region"`
 				Realm  int `json:"realm"`
 			} `json:"mythic"`
-		} `json:"aberrus-the-shadowed-crucible"`
-		AmirdrassilTheDreamsHope struct {
-			Normal struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"normal"`
-			Heroic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"heroic"`
-			Mythic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"mythic"`
-		} `json:"amirdrassil-the-dreams-hope"`
-		AwakenedAberrusTheShadowedCrucible struct {
-			Normal struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"normal"`
-			Heroic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"heroic"`
-			Mythic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"mythic"`
-		} `json:"awakened-aberrus-the-shadowed-crucible"`
-		AwakenedAmirdrassilTheDreamsHope struct {
-			Normal struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"normal"`
-			Heroic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"heroic"`
-			Mythic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"mythic"`
-		} `json:"awakened-amirdrassil-the-dreams-hope"`
-		AwakenedVaultOfTheIncarnates struct {
-			Normal struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"normal"`
-			Heroic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"heroic"`
-			Mythic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"mythic"`
-		} `json:"awakened-vault-of-the-incarnates"`
-		VaultOfTheIncarnates struct {
-			Normal struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"normal"`
-			Heroic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"heroic"`
-			Mythic struct {
-				World  int `json:"world"`
-				Region int `json:"region"`
-				Realm  int `json:"realm"`
-			} `json:"mythic"`
-		} `json:"vault-of-the-incarnates"`
+		} `json:"nerubar-palace"`
 	} `json:"raid_rankings"`
 }
 

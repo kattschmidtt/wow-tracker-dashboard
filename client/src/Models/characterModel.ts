@@ -1,11 +1,4 @@
-interface Spell {
-  id: number;
-  school: number;
-  icon: string;
-  name: string;
-  rank: string | null;
-}
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface AzeritePower {
   id: number;
   spell: Spell;
@@ -16,7 +9,6 @@ interface Corruption {
   added: number;
   resisted: number;
   total: number;
-  cloakRank: number;
   spells: any[];
 }
 
@@ -25,7 +17,6 @@ interface DominationShard {}
 export interface Item {
   item_id: number;
   item_level: number;
-  enchant: number;
   icon: string;
   name: string;
   item_quality: number;
@@ -39,10 +30,9 @@ export interface Item {
   bonuses: number[];
 }
 
-interface Gear {
+export interface Gear {
   updated_at: string;
   item_level_equipped: number;
-  item_level_total: number;
   artifact_traits: number;
   corruption: Corruption;
   items: {
@@ -66,6 +56,29 @@ interface Gear {
   };
 }
 
+export interface Stats {
+  health: number
+  power: number
+  speed: number
+  strength: number
+  agility: number
+  intellect: number
+  stamina: number
+  melee_crit: number
+  melee_haste: number
+  mastery: number
+  bonus_armor: number
+  lifesteal: number
+  versatility: number
+  attack_power: number
+  spell_power: number
+  spell_crit: number
+  ranged_crit: number
+  ranged_haste: number
+  spell_haste: number
+  character: string
+}
+
 export interface Character {
   name: string;
   race: string;
@@ -85,4 +98,21 @@ export interface Character {
   gear: Gear;
 }
 
+export interface Talents {
+  spells: any;
+  HasCooldown: boolean
+  ID: number
+  Icon: string
+  Name: string
+  Rank: any
+  School: number
+}
 
+export interface Spell {
+  HasCooldown: boolean;
+  ID: number;
+  Icon: string;
+  Name: string;
+  Rank: number | null;
+  School: number;
+}

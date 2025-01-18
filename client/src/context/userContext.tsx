@@ -1,39 +1,47 @@
-// context/UserProvider.tsx
-import { createContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
-import { UserModel } from '../Models/userModel';
-import { getCurrentISODate } from '../util/util';
+import React, { createContext, useState, useContext, ReactNode } from "react";
 
-/**
- * Initial user state will be grabbed from server user profile end point
- * HARDCODED FOR NOW
- */
-const initialUserState: UserModel = {
-  id: 1,
-  name: 'Leroy Jenkins',
-  pictureUrl: 'WIP',
-  currentDateTime: getCurrentISODate(),
-};
+interface UserContextType {
+  token: string | null;
+  isLoggedIn: boolean;
+  userData: object | null;
+  login: () => void;
+  logout: () => void;
+}
 
-/**
- * We are creating a context that will allow the sharing of the 'user' state
- * and state updater 'userState'
- */
-export const UserContext = createContext<{
-  user: UserModel;
-  setUser: Dispatch<SetStateAction<UserModel>>;
-}>({user: initialUserState, setUser: () => {}});
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-interface UserProviderProps {
+interface UserContextProviderProps {
   children: ReactNode;
 }
 
-// Component to wrap around RouterProvider
-export const UserProvider = ({ children }: UserProviderProps): JSX.Element => {
-  const [user, setUser] = useState<UserModel>(initialUserState);
+export const UserProvider = ({ children }: UserContextProviderProps) => {
+  const [token, setToken] = useState<string | null>(null);
+  const [userData, setUserData] = useState<object | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const login = async () => {
+    setIsLoggedIn(true);
+  };
+
+  const logout = () => {
+    setToken(null);
+    setUserData(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem("bearer_token");
+  };
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ token, isLoggedIn, userData, login, logout }}>
       {children}
     </UserContext.Provider>
-  )
+  );
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const useUserContext = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUserContext must be used within a UserContextProvider");
+  }
+  return context;
 };

@@ -4,15 +4,13 @@ import (
 	"server/initializers"
 	"server/models"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-func GetChars(c *gin.Context) {
+func GetChars(c *fiber.Ctx) error {
 	var characters models.UserProfile
 
 	initializers.DB.Find(&characters.WowAccounts)
 
-	c.JSON(200, gin.H{
-		"characters": characters,
-	})
+	return c.JSON(fiber.Map{"characters": characters})
 }

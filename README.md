@@ -9,12 +9,18 @@ A simple and user-friendly dashboard for World of Warcraft (WoW) players to keep
 - Material-UI
 - React Google Charts
 - React Beautiful DnD
-- Raider.io and Blizzard 
+- React-Big-Calendar
+
 
 **Server:** 
 - Golang
 - Postgres 
 - GORM
+
+**Data sources:**
+- Raider.io
+- Blizzard
+- wow.zamimg.com
 
 ![alt text](https://i.redd.it/al5f1rbrrm341.jpg)  
 

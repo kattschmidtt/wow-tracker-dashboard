@@ -1,21 +1,21 @@
 package main
 
 import (
-	"database/sql"
 	"log"
+	"server/config"
 	"server/controllers"
-	"server/initializers"
-	"server/routes"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 )
 
-var db *sql.DB
-
 func init() {
-	initializers.ConnectToDB()
-	initializers.AutoMigrateCharacter()
+	//load .env
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
 }
 
 func TestGet(c *gin.Context) {
@@ -25,17 +25,31 @@ func TestGet(c *gin.Context) {
 }
 
 func main() {
-	r := routes.SetupRouter()
-	r.Use(cors.Default())
-	r.GET("/ping", TestGet)
-	r.GET("/getChars", controllers.GetChars)
-	r.GET("/affixes", controllers.GetCurrentAffixList)
-	r.GET("/getSeasonalDungeons", controllers.GetSeasonalDungeonList)
-	r.GET("/getGuildProgress", controllers.GetGuildProg)
-	r.GET("/staticRaidData", controllers.GetRaidInfo)
-	r.GET("/characterStats", controllers.GetCharacterStats)
-	r.GET("/characterGear", controllers.GetCharacterGear)
+
+	app := fiber.New()
+
+	//enable cors
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:3000",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowMethods:     "GET, POST, OPTIONS",
+		AllowCredentials: true,
+	}))
+
+	config.BattlenetConfig()
+
+	app.Get("/battlenet_login", controllers.BattlenetLogin)
+	app.Post("/battlenet_callback", controllers.BattlenetCallback)
+
+	//app.Get("/getChars", controllers.GetChars)
+	app.Get("/affixes", controllers.GetCurrentAffixList)
+	app.Get("/getSeasonalDungeons", controllers.GetSeasonalDungeonList)
+	app.Get("/getGuildProgress", controllers.GetGuildProg)
+	app.Get("/staticRaidData", controllers.GetRaidInfo)
+	app.Get("/characterStats", controllers.GetCharacterStats)
+	/*app.Get("/characterGear", controllers.GetCharacterGear)
+	app.Get("/characterTalents", controllers.GetCharacterTalents) */
 
 	log.Println("Starting server on :8080")
-	r.Run(":8080")
+	app.Listen(":8080")
 }

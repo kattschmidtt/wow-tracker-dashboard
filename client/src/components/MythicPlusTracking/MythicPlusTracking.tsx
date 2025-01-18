@@ -1,12 +1,13 @@
-import { Box, Card, CardContent, IconButton, Tab, Tabs, Tooltip } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Card, CardContent, CircularProgress, IconButton, Tab, Tabs, Tooltip } from '@mui/material';
+import React, { useContext, useState } from 'react';
 import ThisWeekTracking from './ThisWeekTracking';
 import { NavLink } from 'react-router-dom';
+import { AffixContext } from '../../context/AffixContext';
 
 const MythicPlusTracking = () => {
 
-
-  const [activeTab, setActiveTab] = useState<string>('Mythic+') //set to default, will read from user profile db
+  const { isLoading } = useContext(AffixContext)
+  const [activeTab, setActiveTab] = useState<string>('This week (week #)') //set to default, will read from user profile db
 
   const tabs: string[] = [
     'This week (week #)',
@@ -22,22 +23,17 @@ const MythicPlusTracking = () => {
   }
 
   const renderTab = () => {
-    switch(activeTab) { 
-      case 'This week (week #)': { 
-        return (<ThisWeekTracking />)
-      }
-      default: { 
-        return (
-          <Card>
-            <CardContent></CardContent>
-          </Card>)
-      } 
+    if(activeTab === 'This week (week #)') {
+      return (<ThisWeekTracking />)
+    }
+    else return (<CircularProgress />)
     } 
-  } 
+  
 
   return (
     <Card>
       <CardContent>
+        {isLoading ? (<CircularProgress />) :
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Tabs value={activeTab} onChange={handleTabSwitch}>
             {tabs.map((tab) => (
@@ -55,6 +51,7 @@ const MythicPlusTracking = () => {
             </IconButton>
           </Tooltip>
         </Box>
+        }
         {renderTab()}
       </CardContent>
     </Card>

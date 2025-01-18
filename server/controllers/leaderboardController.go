@@ -7,10 +7,10 @@ import (
 	"server/models"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-func GetSeasonalDungeonList(c *gin.Context) {
+func GetSeasonalDungeonList(c *fiber.Ctx) error {
 	var result map[string]interface{}
 
 	/*
@@ -20,27 +20,24 @@ func GetSeasonalDungeonList(c *gin.Context) {
 	 */
 	region := "us"
 	realm := "stormrage"
-	character := "foxxghost"
+	character := "foxxbozo"
 
 	requestURI := fmt.Sprintf("https://raider.io/api/v1/characters/profile?region=%s&realm=%s&name=%s&fields=mythic_plus_best_runs", region, realm, character)
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch data"})
-		return
+		c.JSON(fiber.Map{"error": "Failed to fetch data"})
 	}
 	defer resp.Body.Close()
 
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode response"})
-		return
+		c.JSON(fiber.Map{"error": "Failed to decode response"})
 	}
 
 	//Grab "mythic_plus_best_runs" property
 	bestRuns, ok := result["mythic_plus_best_runs"].([]interface{})
 	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse best runs"})
-		return
+		c.JSON(fiber.Map{"error": "Failed to parse best runs"})
 	}
 
 	var extractedRuns models.ExtractedBestRuns
@@ -96,8 +93,7 @@ func GetSeasonalDungeonList(c *gin.Context) {
 
 		if err != nil {
 			fmt.Println("Failed to convert clearTimeMsStr to int:", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Conversion failed"})
-			return
+			c.JSON(fiber.Map{"error": "Conversion failed"})
 		}
 
 		//final entry to be returned to frontend
@@ -110,12 +106,12 @@ func GetSeasonalDungeonList(c *gin.Context) {
 			ClearTimeMs: int(clearTime),
 		}
 
-		fmt.Printf("Extracted Run: %+v\n", extractedRun)
+		//fmt.Printf("Extracted Run: %+v\n", extractedRun)
 
 		extractedRuns = append(extractedRuns, extractedRun)
 	}
 
-	c.JSON(http.StatusOK, extractedRuns)
+	return c.JSON(extractedRuns)
 }
 
 // helper
