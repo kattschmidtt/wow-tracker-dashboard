@@ -113,7 +113,7 @@ func GetGuildMembers(c *fiber.Ctx) error {
 	realm := "Proudmoore"
 	guild := "Acrimonious"
 
-	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/profile?region=%v&realm=%v&name=%v&fields=raid_progression", region, realm, guild)
+	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/profile?region=%v&realm=%v&name=%v&fields=members", region, realm, guild)
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
@@ -126,6 +126,11 @@ func GetGuildMembers(c *fiber.Ctx) error {
 	}
 
 	memberList := result.Members
+
+	if len(memberList) > 25 {
+		memberList = memberList[:25]
+	}
+	fmt.Println(memberList)
 
 	return c.JSON(memberList)
 }
