@@ -5,15 +5,12 @@ import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
 import GuildLeaderboard from '../components/Leaderboard/GuildLeaderboard';
 import { GuildContext } from '../context/GuildContext';
 import BossKillProgress from '../components/Guild/BossKillProgress';
+import Members from '../components/Guild/Members';
 
 const MyGuild = () => {
 
   const { isLoading } = useContext(GuildContext);
 
-
-  const widgetUrl =
-    `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=mythic&guilds=us%2Fproudmoore%2FAcrimonious&boss=latest`;
-const w = 'hi'
   return (
     <>
     <Header />
@@ -36,22 +33,25 @@ const w = 'hi'
             <Grid item xs={12} sx={{ flexGrow: 1 }}>
               <Card>
                 <CardContent>
-                  <Box sx={{ width: '100%' }}>
-                    <Grid container spacing={2} sx={{pb: '2rem'}}>
-                      <Paper sx={{ width: '50%', mb: 2, pt: '1rem' }}>
-                        <Grid item xs={8} sm={4} md={6}>
-                          {isLoading ? (<>test it loaded</>) : (<>no load</>)}
-                        </Grid>
-                        {/* M+ Tracking */}
-                      </Paper>
-                      <Paper sx={{ width: '50%', mb: 2, pt: '1rem' }}>
-                        <Grid item xs={8} sm={4} md={6}>
-                          <span></span>
-                        </Grid>
-                        {/* M+ Tracking */}
+                <Box sx={{ width: '100%' }}>
+                  <Grid container spacing={2} sx={{ pb: '2rem' }}>
+                    {/* background is battle net black for now so we can see priest names */}
+                    {/* Left component */}
+                    <Grid item xs={12} sm={6} md={6}>
+                      <Paper sx={{ width: '100%', mb: 2, pt: '1rem', bgcolor: '#191B21', display: 'flex', justifyContent: 'center' }}>
+                        {isLoading ? (<>test it loading</>) : (<Members />)}
                       </Paper>
                     </Grid>
-                  </Box>
+
+                    {/* Left component */}
+                    <Grid item xs={12} sm={6} md={6}>
+                      <Paper sx={{ width: '100%', mb: 2, pt: '1rem' }}>
+                        <span>rankings</span>
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                </Box>
+
                 </CardContent>
               </Card>
             </Grid>
