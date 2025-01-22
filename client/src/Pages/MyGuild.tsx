@@ -6,6 +6,7 @@ import GuildLeaderboard from '../components/Leaderboard/GuildLeaderboard';
 import { GuildContext } from '../context/GuildContext';
 import BossKillProgress from '../components/Guild/BossKillProgress';
 import Members from '../components/Guild/Members';
+import Rankings from '../components/Guild/Rankings';
 
 const MyGuild = () => {
 
@@ -46,7 +47,7 @@ const MyGuild = () => {
                     {/* Left component */}
                     <Grid item xs={12} sm={6} md={6}>
                       <Paper sx={{ width: '100%', mb: 2, pt: '1rem' }}>
-                        <span>rankings</span>
+                        {isLoading ? (<>test it loading</>) : (<Rankings />)}
                       </Paper>
                     </Grid>
                   </Grid>

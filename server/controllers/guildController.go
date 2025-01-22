@@ -105,6 +105,44 @@ func GetRaidInfo(c *fiber.Ctx) error {
 	return c.JSON(filteredEncounters)
 }
 
+func GetKilledOn(c *fiber.Ctx) error {
+	var result models.BossKillModel
+	region := "us"
+	realm := "Proudmoore"
+	guild := "Acrimonious"
+
+	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/profile?region=%v&realm=%v&name=%v&fields=raid_encounters%%3Anerubar-palace%%3Amythic", region, realm, guild)
+
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		c.JSON(fiber.Map{"error": "Failed to fetch data"})
+	}
+	defer resp.Body.Close()
+
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		c.JSON(fiber.Map{"error": "Failed to decode response"})
+	}
+
+	//	fmt.Println(result)
+
+	//only grabbing the raid_encounter array
+	var filteredEncounters []fiber.Map
+	for _, encounter := range result.RaidEncounters {
+		filteredEncounters = append(filteredEncounters, fiber.Map{
+			"slug":        encounter.Slug,
+			"name":        encounter.Name,
+			"defeated_at": encounter.DefeatedAt,
+		})
+	}
+
+	//	fmt.Println(filteredEncounters)
+
+	if len(filteredEncounters) > 0 {
+		return c.JSON(filteredEncounters)
+	}
+	return c.JSON(fiber.Map{"message": "no encounter found"})
+}
+
 func GetGuildMembers(c *fiber.Ctx) error {
 	//https://raider.io/api/v1/guilds/profile?region=us&realm=proudmoore&name=acrimonious&fields=members
 	//GuildMembers model
@@ -133,4 +171,31 @@ func GetGuildMembers(c *fiber.Ctx) error {
 	fmt.Println(memberList)
 
 	return c.JSON(memberList)
+}
+
+func GetDetailedBossKill(c *fiber.Ctx) error {
+
+	var result models.DetailedBossKillModel
+	region := "us"
+	realm := "Proudmoore"
+	guild := "Acrimonious"
+	bossSlug := "ulgrax-the-devourer"
+
+	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/boss-kill?region=%v&realm=%v&guild=%v&raid=nerubar-palace&boss=%v&difficulty=mythic", region, realm, guild, bossSlug)
+
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		c.JSON(fiber.Map{"error": "Failed to fetch data"})
+	}
+	defer resp.Body.Close()
+
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		c.JSON(fiber.Map{"error": "Failed to decode response"})
+	}
+
+	data := result.Roster
+
+	fmt.Println(data)
+
+	return c.JSON(data)
 }
