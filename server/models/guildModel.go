@@ -539,3 +539,17 @@ type DetailedBossKillModel struct {
 		} `json:"character"`
 	} `json:"roster"`
 }
+
+type CharacterPresentInfo struct {
+	Name              string  `json:"name"`
+	RaceName          string  `json:"raceName"`
+	RaceFaction       string  `json:"raceFaction"`
+	ClassName         string  `json:"className"`
+	SpecName          string  `json:"specName"`
+	SpecRole          string  `json:"specRole"`
+	SpecIsMelee       bool    `json:"specIsMelee"`
+	ItemLevelEquipped float64 `json:"itemLevelEquipped"`
+	RealmName         string  `json:"realmName"`
+	RealmSlug         string  `json:"realmSlug"`
+	RegionSlug        string  `json:"regionSlug"`
+}

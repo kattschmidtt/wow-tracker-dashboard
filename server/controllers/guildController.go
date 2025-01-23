@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"server/models"
 
@@ -174,28 +175,56 @@ func GetGuildMembers(c *fiber.Ctx) error {
 }
 
 func GetDetailedBossKill(c *fiber.Ctx) error {
-
-	var result models.DetailedBossKillModel
+	//https://raider.io/api/v1/guilds/boss-kill?region=us&realm=proudmoore&guild=acrimonious&raid=nerubar-palace&boss=ulgrax-the-devourer&difficulty=mythic
+	//http://localhost:8080/detailedEncounter?bossSlug=ulgrax-the-devourer
 	region := "us"
 	realm := "Proudmoore"
 	guild := "Acrimonious"
-	bossSlug := "ulgrax-the-devourer"
+
+	bossSlug := c.Query("bossSlug")
+	if bossSlug == "" {
+		return c.Status(fiber.StatusBadRequest).SendString("bossSlug must be present in url!")
+	}
 
 	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/boss-kill?region=%v&realm=%v&guild=%v&raid=nerubar-palace&boss=%v&difficulty=mythic", region, realm, guild, bossSlug)
 
 	resp, err := http.Get(requestURI)
 	if err != nil {
-		c.JSON(fiber.Map{"error": "Failed to fetch data"})
+		return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Error making GET request: %v", err))
 	}
 	defer resp.Body.Close()
 
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		c.JSON(fiber.Map{"error": "Failed to decode response"})
+	if resp.StatusCode != http.StatusOK {
+		return c.Status(fiber.StatusBadRequest).SendString(fmt.Sprintf("Request failed with status: %d", resp.StatusCode))
 	}
 
-	data := result.Roster
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Error reading response body: %v", err))
+	}
 
-	fmt.Println(data)
+	var result models.DetailedBossKillModel
+	if err := json.Unmarshal(body, &result); err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Error unmarshaling JSON: %v", err))
+	}
 
-	return c.JSON(data)
+	var extractedData []models.CharacterPresentInfo
+	for _, roster := range result.Roster {
+		character := roster.Character
+		extractedData = append(extractedData, models.CharacterPresentInfo{
+			Name:              character.Name,
+			RaceName:          character.Race.Name,
+			RaceFaction:       character.Race.Faction,
+			ClassName:         character.Class.Name,
+			SpecName:          character.Spec.Name,
+			SpecRole:          character.Spec.Role,
+			SpecIsMelee:       character.Spec.IsMelee,
+			ItemLevelEquipped: character.ItemLevelEquipped,
+			RealmName:         character.Realm.Name,
+			RealmSlug:         character.Realm.Slug,
+			RegionSlug:        character.Region.Slug,
+		})
+	}
+
+	return c.JSON(extractedData)
 }
