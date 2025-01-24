@@ -1,54 +1,65 @@
-import { CircularProgress, FormControl, MenuItem, Select, SelectChangeEvent, Tab, Tabs } from '@mui/material';
-import React, { useEffect, useState, useMemo } from 'react';
-import { Boss } from '../../Models/raidModel';
+import {
+  CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Tab,
+  Tabs,
+} from "@mui/material";
+import React, { useEffect, useState, useMemo, useContext } from "react";
+import { Boss } from "../../Models/raidModel";
+import { GuildContext } from "../../context/GuildContext";
 
 const BossKillProgress = () => {
+  const { bossSlug, setBossSlug } = useContext(GuildContext);
   const [bosses, setBosses] = useState<Boss[] | null>(null);
-  const [boss, setBoss] = useState<string>('');
+  const [boss, setBoss] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>('Mythic');
+  const [activeTab, setActiveTab] = useState<string>("Mythic");
 
-  const selectedBoss = bosses?.find(item => item.name === boss);
-
-  const difficultyTabs: string[] = ['Normal', 'Heroic', 'Mythic'];
+  const difficultyTabs: string[] = ["Normal", "Heroic", "Mythic"];
 
   const handleChange = (event: SelectChangeEvent) => {
-    setBoss(event.target.value);
+    const selectedBossName = event.target.value;
+    const selectedBoss = bosses?.find((item) => item.name === selectedBossName);
+    if (selectedBoss) {
+      setBossSlug(selectedBoss.slug);
+    }
   };
 
-  const handleTabSwitch = (e: React.SyntheticEvent, newTab: string) => {
+  const handleTabSwitch = (newTab: string) => {
     setActiveTab(newTab);
   };
 
-  //dynamically rendering the raider.io iframe widget based on tab selected
   const iFrameSrc = useMemo(() => {
-    let difficulty = 'mythic'; 
-    if (activeTab === 'Normal') {
-      difficulty = 'normal';
-    } else if (activeTab === 'Heroic') {
-      difficulty = 'heroic';
+    let difficulty = "mythic";
+    if (activeTab === "Normal") {
+      difficulty = "normal";
+    } else if (activeTab === "Heroic") {
+      difficulty = "heroic";
     }
 
-    return selectedBoss
-      ? `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=${difficulty}&guilds=us%2Fproudmoore%2FAcrimonious&boss=${selectedBoss.slug}`
-      : '';
-  }, [activeTab, selectedBoss]);
+    return bossSlug
+      ? `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=${difficulty}&guilds=us%2Fproudmoore%2FAcrimonious&boss=${bossSlug}`
+      : "";
+  }, [activeTab, bossSlug]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/staticRaidData')
+    fetch("http://localhost:8080/staticRaidData")
       .then((resp) => {
         if (!resp.ok) {
-          throw new Error('Network response was no bueno');
+          throw new Error("Network response was no bueno");
         }
         return resp.json();
       })
       .then((data: Boss[]) => {
         setBosses(data);
 
-        //make sure data is available
-        if (data.length > 0) {
-          setBoss(data[0].name);
+        //make sure there is a boss slug selected and that data is available
+        if (!bossSlug && data.length > 0) {
+          setBossSlug(data[0].name);
         }
         setIsLoading(false);
       })
@@ -68,11 +79,20 @@ const BossKillProgress = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-        <div style={{ width: '200px' }}>
-          <Tabs value={activeTab} onChange={handleTabSwitch} orientation="vertical">
+      <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+        <div style={{ width: "200px" }}>
+          <Tabs
+            value={activeTab}
+            onChange={handleTabSwitch}
+            orientation="vertical"
+          >
             {difficultyTabs.map((tab) => (
-              <Tab label={tab} key={tab} value={tab} sx={{ color: 'black', fontFamily: 'Poppins' }} />
+              <Tab
+                label={tab}
+                key={tab}
+                value={tab}
+                sx={{ color: "black", fontFamily: "Poppins" }}
+              />
             ))}
           </Tabs>
         </div>
@@ -82,9 +102,23 @@ const BossKillProgress = () => {
             <CircularProgress />
           ) : (
             <>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                }}
+              >
                 <FormControl sx={{ minWidth: 120 }} size="small">
-                  <Select value={boss} onChange={handleChange} displayEmpty>
+                  <Select
+                    value={
+                      bosses?.find((item) => item.slug === bossSlug)?.name ||
+                      "Ulgrax, The Devourer"
+                    }
+                    onChange={handleChange}
+                    displayEmpty
+                  >
                     {bosses &&
                       bosses.map((item) => (
                         <MenuItem key={item.id} value={item.name}>
@@ -95,16 +129,16 @@ const BossKillProgress = () => {
                 </FormControl>
                 <h4 style={{ margin: 0 }}>Kill Progress</h4>
               </div>
-              {boss && (
-                <div style={{ marginTop: '20px' }}>
+              {bossSlug && (
+                <div style={{ marginTop: "20px" }}>
                   <iframe
                     src={iFrameSrc}
                     title="Raider.IO Widget"
                     style={{
-                      width: '100%',
-                      height: '600px',
-                      border: 'none',
-                      overflow: 'hidden',
+                      width: "100%",
+                      height: "600px",
+                      border: "none",
+                      overflow: "hidden",
                     }}
                     loading="lazy"
                   />
