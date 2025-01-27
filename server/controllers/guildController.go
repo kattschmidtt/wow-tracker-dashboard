@@ -228,3 +228,33 @@ func GetDetailedBossKill(c *fiber.Ctx) error {
 
 	return c.JSON(extractedData)
 }
+
+func GetGuildKillRank(c *fiber.Ctx) error {
+
+	region := "us"
+	realm := "proudmoore"
+	guild := "acrimonious"
+
+	requestURI := fmt.Sprintf("https://raider.io/api/v1/guilds/profile?region=%v&realm=%v&name=%v&fields=raid_rankings", region, realm, guild)
+	resp, err := http.Get(requestURI)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Error makiing GET request: %v", err))
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return c.Status(fiber.StatusBadRequest).SendString(fmt.Sprintf("Request failed with status: %d", err))
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Error reading response body: %v", err))
+	}
+
+	var result models.GuildRank
+	if err := json.Unmarshal(body, &result); err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Error unmarshaling JSON: %v", err))
+	}
+
+	return c.JSON(result)
+}
