@@ -40,3 +40,41 @@ export interface Character {
   profile_banner: string
   use_animated_banner?: boolean
 }
+
+export interface GuildKillRank {
+  name: string
+  faction: string
+  region: string
+  realm: string
+  last_crawled_at: string
+  profile_url: string
+  raid_rankings: RaidRankings
+}
+
+export interface RaidRankings {
+  "nerubar-palace": NerubarPalace
+}
+
+export interface NerubarPalace {
+  normal: Normal
+  heroic: Heroic
+  mythic: Mythic
+}
+
+export interface Normal {
+  world: number
+  region: number
+  realm: number
+}
+
+export interface Heroic {
+  world: number
+  region: number
+  realm: number
+}
+
+export interface Mythic {
+  world: number
+  region: number
+  realm: number
+}
