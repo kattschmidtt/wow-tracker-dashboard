@@ -1,19 +1,18 @@
-import { Boss } from '../../Models/raidModel.ts';
-import { GuildContext } from '../../context/GuildContext.tsx';
+import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
-import { Box, Paper } from '@mui/material';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import { AffixContext } from '../../context/AffixContext';
 import { CircularProgress } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
 import '../../App.css';
-import ProgressAccordion from '../Leaderboard/ProgressAccordian.tsx';
-import {GuildKillRank} from '../../Models/guildMode.ts';
+import { useContext, useEffect, useState } from 'react';
+import { GuildKillRank, RaidRankings } from '../../Models/guildModel';
+import { prettyNumberFormat } from '../../util/util';
+import { GuildContext } from '../../context/GuildContext';
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -53,58 +52,55 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 
 const Rankings = () => {
-  const { bossSlug, setBossSlug } = useContext(GuildContext);
-  const { guildProg } = useContext(GuildContext);
-  const [boss, setBoss] = useState<string>("");
-  const [bosses, setBosses] = useState<RaidModel[] | null>(null);
-  const [rank, setRank]= useState<GuildKillRank | null>(null);
+  const [expanded, setExpanded] = useState<string | false>('');
+  const [rankings, setRankings] = useState<GuildKillRank | null>(null);
+  const [groupComp, setGroupComp] = useState(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [expanded, setExpanded] = React.useState<string | false>('');
+  const [error, setError] = useState<string|null>(null);
+  const { bossSlug } = useContext(GuildContext);
 
   const handleChange = (panel: string) => (e: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
 
   useEffect(() => {
-    fetch('http://localhost:8080/staticRaidData')
-    .then(resp => {
-      if (!resp.ok) {
-        throw new Error('Network response no bueno');
-      }
-      return resp.json(); 
-    })
-    .then(data => {
-      setBosses(data);
-      setIsLoading(false);
-    })
-    .catch(err => {
-      console.log(err);
-      setIsLoading(false);
-      setError(err);
-    })
-  }, [guildProg])
-  
-  useEffect(() => {
     fetch('http://localhost:8080/killRank')
     .then(resp => {
       if (!resp.ok) {
-        throw new Error('Network response no bueno');
+        throw new Error('Network response no bueno')
       }
-      return resp.json(); 
+      return resp.json();
     })
-    .then(data => {
-      setRank(data);
+    .then((data: GuildKillRank) => {
+      setRankings(data);
       setIsLoading(false);
     })
     .catch(err => {
-      console.log(err);
       setIsLoading(false);
-      setError(err);
+      setError(err.message);
     })
-  }, [])
-  
-console.log('rank out of use: ', rank);
+  }, []);
+
+  useEffect(() => {
+    if (bossSlug) {
+      setIsLoading(true);
+      fetch(`http://localhost:8080/detailedEncounter?bossSlug=${bossSlug}`) // Fetch data based on bossSlug
+        .then((resp) => {
+          if (!resp.ok) {
+            throw new Error('Network response no bueno');
+          }
+          return resp.json();
+        })
+        .then((data) => {
+          console.log(data)
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          setError(err.message);
+        });
+    }
+  }, [bossSlug]); 
 
   if (isLoading) {
     return <CircularProgress />;
@@ -115,35 +111,30 @@ console.log('rank out of use: ', rank);
   }
 
   return (
-  <Box sx={{ width: '100%' }}>
-    <Paper sx={{ width: '100%', mb: 2, pt: '1rem' }}>
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <span><b>Rankings</b></span>
-          <br />
-          <span><b>{guildProg.raidName}</b></span>
-          <br />
-          <br />
-          {bosses && rank ? (
-            <ProgressAccordion
-              title="Mythic"
-              count={rank['raid_rankings']['nerubar/-palace']['mythic']['realm']} // Adjust path to match your data structure
-              max={8}
-              bosses={bosses}
-              onChange={handleChange('panel1')}
-              expanded={expanded === 'panel1'}
-              limit={guildProg.mythicKills} 
-            />
-          ) : (
-            <div>No data available</div>
-          )}
-        </>
-      )}
-    </Paper>
-  </Box>
-);
-};
+    <div>
+      <strong>Rankings</strong>
+      <br/>
+      <Accordion
+        expanded={expanded === 'panel1'}
+        onChange={handleChange('panel1')}
+      >
+        
+        <AccordionSummary
+          aria-controls='panel1d-content'
+          id='panel1d-header'
+        >
+          <strong> 
+            World: {prettyNumberFormat(rankings?.raid_rankings['nerubar-palace'].mythic.world) ?? '-'} 
+            Region: {prettyNumberFormat(rankings.raid_rankings['nerubar-palace'].mythic.region) ?? '-'} 
+            Realm: {prettyNumberFormat(rankings.raid_rankings['nerubar-palace'].mythic.realm) ?? '-'}</strong>
+        </AccordionSummary>
+        <AccordionDetails>
+          details 
+
+        </AccordionDetails>
+      </Accordion>
+    </div>
+  );
+}
 
 export default Rankings;

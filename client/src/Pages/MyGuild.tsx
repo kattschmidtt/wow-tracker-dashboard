@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import { useContext } from 'react';
 import Header from '../components/Layout/Header';
-import { Box, Card, CardContent, CircularProgress, Grid, Paper } from '@mui/material';
+import { Box, Card, CardContent, Grid, Paper } from '@mui/material';
 import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
-import GuildLeaderboard from '../components/Leaderboard/GuildLeaderboard';
 import { GuildContext } from '../context/GuildContext';
 import BossKillProgress from '../components/Guild/BossKillProgress';
 import Members from '../components/Guild/Members';
