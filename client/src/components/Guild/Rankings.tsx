@@ -15,6 +15,7 @@ import { useContext, useEffect, useState } from 'react';
 import { GuildKillRank, RaidRankings } from '../../Models/guildModel';
 import { RaidModel } from '../../Models/raidModel';
 import { prettyNumberFormat } from '../../util/util';
+import ParsedColoredText from '../Generics/ParsedColoredText';
 import { GuildContext } from '../../context/GuildContext';
 
 const Accordion = styled((props: AccordionProps) => (
@@ -84,7 +85,7 @@ const Rankings = () => {
         return resp.json();
       })
       .then((data: GuildKillRank) => {
-        setRankings(data);
+        setRankings(data.raid_rankings['nerubar-palace']); //only available for latest raid
         setIsLoading(false);
       })
       .catch(err => {
@@ -93,6 +94,7 @@ const Rankings = () => {
       });
   }, []);
 
+//fetch for bossnames. etc...
   useEffect(() => {
     fetch('http://localhost:8080/staticRaidData')
       .then(resp => {
@@ -143,7 +145,8 @@ const Rankings = () => {
 
   return (
     <div>
-      <strong>Rankings</strong>
+      <h3>Boss Kill Rankings</h3>
+      <strong>World: <ParsedColoredText number={rankings.mythic.world}/> &nbsp; Region : <ParsedColoredText number={rankings.mythic.region}/> &nbsp; Realm: <ParsedColoredText number={rankings.mythic.realm}/></strong>
       <br />
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2, pt: '1rem' }}>
@@ -153,7 +156,7 @@ const Rankings = () => {
             bosses && bosses.map((boss, idx) => (
               <Accordion key={idx} expanded={expanded === `panel${idx}`} onChange={handleChange(`panel${idx}`, boss.slug)}>
                 <AccordionSummary aria-controls={`panel${idx}d-content`} id={`panel${idx}d-header`}>
-                  {boss.name}
+                  {boss.name} 
                 </AccordionSummary>
                 <AccordionDetails>This was your groups average item level for the fight {avgIlvl} </AccordionDetails>
               </Accordion>
