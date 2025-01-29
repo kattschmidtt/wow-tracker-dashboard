@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
+import { Box, Paper } from '@mui/material'
+import ProgressAccordian from '../Leaderboard/ProgressAccordian.tsx';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary, {
@@ -11,6 +13,7 @@ import { CircularProgress } from '@mui/material';
 import '../../App.css';
 import { useContext, useEffect, useState } from 'react';
 import { GuildKillRank, RaidRankings } from '../../Models/guildModel';
+import { RaidModel } from '../../Models/raidModel';
 import { prettyNumberFormat } from '../../util/util';
 import { GuildContext } from '../../context/GuildContext';
 
@@ -42,7 +45,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
   },
   '& .MuiAccordionSummary-content': {
     marginLeft: theme.spacing(1),
-  },
+  }, 
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
@@ -50,57 +53,85 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
+interface GroupCompModel {
+  tanks: number,
+  healers: number,
+  dps: number
+}
 
 const Rankings = () => {
-  const [expanded, setExpanded] = useState<string | false>('');
+  const [expanded, setExpanded] = useState<string | false>(false);
   const [rankings, setRankings] = useState<GuildKillRank | null>(null);
-  const [groupComp, setGroupComp] = useState(null);
+  const [bosses, setBosses] = useState<RaidModel[] | null>(null);
+  const [avgIlvl, setAvgIlvl] = useState<number | null>(null);
+  const [groupComp, setGroupComp] = useState<GroupCompModel | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string|null>(null);
-  const { bossSlug } = useContext(GuildContext);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (panel: string) => (e: React.SyntheticEvent, newExpanded: boolean) => {
+  const handleChange = (panel: string,  bossSlug: string) => (e: React.SyntheticEvent, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
+    if (newExpanded) {
+      determineGroupComp(bossSlug);
+    }
   };
 
   useEffect(() => {
     fetch('http://localhost:8080/killRank')
-    .then(resp => {
-      if (!resp.ok) {
-        throw new Error('Network response no bueno')
-      }
-      return resp.json();
-    })
-    .then((data: GuildKillRank) => {
-      setRankings(data);
-      setIsLoading(false);
-    })
-    .catch(err => {
-      setIsLoading(false);
-      setError(err.message);
-    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error('Network response no bueno');
+        }
+        return resp.json();
+      })
+      .then((data: GuildKillRank) => {
+        setRankings(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        setIsLoading(false);
+        setError(err.message);
+      });
   }, []);
 
   useEffect(() => {
-    if (bossSlug) {
-      setIsLoading(true);
-      fetch(`http://localhost:8080/detailedEncounter?bossSlug=${bossSlug}`) // Fetch data based on bossSlug
-        .then((resp) => {
-          if (!resp.ok) {
-            throw new Error('Network response no bueno');
-          }
-          return resp.json();
-        })
-        .then((data) => {
-          console.log(data)
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          setError(err.message);
+    fetch('http://localhost:8080/staticRaidData')
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error('Network response not good');
+        }
+        return resp.json();
+      })
+      .then(data => {
+        setBosses(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
+        setIsLoading(false);
+        setError(err);
+      });
+  }, [rankings]);
+
+  const determineGroupComp = (bossSlug: string) => {
+    fetch(`http://localhost:8080/detailedEncounter?bossSlug=${bossSlug}`)
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error('Network response not good');
+        }
+        return resp.json();
+      })
+      .then(data => {
+        console.log(data);
+        let ilvlArr = [];
+        data.forEach(character => {
+          ilvlArr.push(character.itemLevelEquipped);
         });
-    }
-  }, [bossSlug]); 
+        setAvgIlvl(Math.floor(ilvlArr.length > 0 ? ilvlArr.reduce((sum, currentValue) => sum + currentValue, 0) / ilvlArr.length : 0));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   if (isLoading) {
     return <CircularProgress />;
@@ -113,28 +144,25 @@ const Rankings = () => {
   return (
     <div>
       <strong>Rankings</strong>
-      <br/>
-      <Accordion
-        expanded={expanded === 'panel1'}
-        onChange={handleChange('panel1')}
-      >
-        
-        <AccordionSummary
-          aria-controls='panel1d-content'
-          id='panel1d-header'
-        >
-          <strong> 
-            World: {prettyNumberFormat(rankings?.raid_rankings['nerubar-palace'].mythic.world) ?? '-'} 
-            Region: {prettyNumberFormat(rankings.raid_rankings['nerubar-palace'].mythic.region) ?? '-'} 
-            Realm: {prettyNumberFormat(rankings.raid_rankings['nerubar-palace'].mythic.realm) ?? '-'}</strong>
-        </AccordionSummary>
-        <AccordionDetails>
-          details 
-
-        </AccordionDetails>
-      </Accordion>
+      <br />
+      <Box sx={{ width: '100%' }}>
+        <Paper sx={{ width: '100%', mb: 2, pt: '1rem' }}>
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            bosses && bosses.map((boss, idx) => (
+              <Accordion key={idx} expanded={expanded === `panel${idx}`} onChange={handleChange(`panel${idx}`, boss.slug)}>
+                <AccordionSummary aria-controls={`panel${idx}d-content`} id={`panel${idx}d-header`}>
+                  {boss.name}
+                </AccordionSummary>
+                <AccordionDetails>This was your groups average item level for the fight {avgIlvl} </AccordionDetails>
+              </Accordion>
+            ))
+          )}
+        </Paper>
+      </Box>
     </div>
   );
-}
+};
 
 export default Rankings;

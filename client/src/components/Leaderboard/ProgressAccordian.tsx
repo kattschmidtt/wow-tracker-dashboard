@@ -5,12 +5,12 @@ import { RaidModel } from '../../Models/raidModel';
 
 interface ProgressAccordionProps {
   title: string;
-  count: number;
-  max: number;
+  count?: number; //optional
+  max?: number; //optional 
   bosses: RaidModel[] | null;
   onChange: (event: React.SyntheticEvent, newExpanded: boolean) => void;
   expanded: boolean;
-  limit: number;
+  limit?: number; //optional
 }
 
 const ProgressAccordion: React.FC<ProgressAccordionProps> = ({title, count, max, bosses, onChange, expanded, limit}) => {
