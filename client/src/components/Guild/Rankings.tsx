@@ -9,7 +9,7 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import { AffixContext } from '../../context/AffixContext';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Tooltip } from '@mui/material';
 import '../../App.css';
 import { useContext, useEffect, useState } from 'react';
 import { GuildKillRank, RaidRankings } from '../../Models/guildModel';
@@ -17,6 +17,10 @@ import { RaidModel } from '../../Models/raidModel';
 import { prettyNumberFormat } from '../../util/util';
 import ParsedColoredText from '../Generics/ParsedColoredText';
 import { GuildContext } from '../../context/GuildContext';
+import ShieldIcon from '@mui/icons-material/Shield';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'; //for dps icon
+import Diversity3Icon from '@mui/icons-material/Diversity3'; //for average ilvl
+import AddIcon from '@mui/icons-material/Add';
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -65,7 +69,7 @@ const Rankings = () => {
   const [rankings, setRankings] = useState<GuildKillRank | null>(null);
   const [bosses, setBosses] = useState<RaidModel[] | null>(null);
   const [avgIlvl, setAvgIlvl] = useState<number | null>(null);
-  const [groupComp, setGroupComp] = useState<GroupCompModel | null>(null);
+  const [groupComp, setGroupComp] = useState<GroupCompModel>({tanks: 0, healers: 0, dps: 0});
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -124,10 +128,18 @@ const Rankings = () => {
       })
       .then(data => {
         console.log(data);
-        let ilvlArr = [];
+        let ilvlArr = []; 
+        let initComp: GroupCompModel = { tanks: 0, healers: 0, dps: 0 };
+
         data.forEach(character => {
           ilvlArr.push(character.itemLevelEquipped);
+          
+          //incrementing role
+          if (character.specRole === 'tank') initComp.tanks+= 1; 
+          if (character.specRole === 'dps') initComp.dps+= 1;
+          if (character.specRole === 'healer') initComp.healers+= 1;
         });
+        setGroupComp(initComp);
         setAvgIlvl(Math.floor(ilvlArr.length > 0 ? ilvlArr.reduce((sum, currentValue) => sum + currentValue, 0) / ilvlArr.length : 0));
       })
       .catch(err => {
@@ -158,7 +170,60 @@ const Rankings = () => {
                 <AccordionSummary aria-controls={`panel${idx}d-content`} id={`panel${idx}d-header`}>
                   {boss.name} 
                 </AccordionSummary>
-                <AccordionDetails>This was your groups average item level for the fight {avgIlvl} </AccordionDetails>
+                <AccordionDetails>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Tooltip 
+                      title='Average item level of the raid during boss kill' 
+                      followCursor
+                      componentsProps={{
+                        tooltip: {
+                          sx: { fontSize: '1rem'}
+                        }
+                      }}>
+                      <span style={{ fontSize: '4rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Diversity3Icon fontSize="inherit" /> {avgIlvl}
+                     </span>
+                    </Tooltip>
+                    <Tooltip 
+                      title='Number of tanks present during boss kill' 
+                      followCursor
+                      componentsProps={{
+                        tooltip: {
+                          sx: { fontSize: '1rem'}
+                        }
+                      }}>
+                      <span style={{ fontSize: '4rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <ShieldIcon fontSize="inherit" /> {groupComp.tanks}
+                      </span>
+                    </Tooltip>
+                    <Tooltip 
+                      title='Number of healers present during boss kill' 
+                      followCursor
+                      componentsProps={{
+                        tooltip: {
+                          sx: { fontSize: '1rem'}
+                        }
+                      }}>
+                      <span style={{ fontSize: '4rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <AddIcon fontSize="inherit" /> {groupComp.healers}
+                      </span>
+                    </Tooltip>
+                    <Tooltip 
+                      title='Number of dps present during boss kill' 
+                      followCursor
+                      componentsProps={{
+                        tooltip: {
+                          sx: { fontSize: '1rem'}
+                        }
+                      }}>
+                      <span style={{ fontSize: '4rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <AutoFixHighIcon fontSize="inherit" /> {groupComp.dps}
+                      </span>
+                    </Tooltip>
+                  </div>
+                  <br />
+                  These were the members present during the kill
+                </AccordionDetails>
               </Accordion>
             ))
           )}
