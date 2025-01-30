@@ -1,22 +1,17 @@
-import * as React from "react";
 import { styled } from "@mui/material/styles";
 import { Box, Paper } from "@mui/material";
-import ProgressAccordian from "../Leaderboard/ProgressAccordian.tsx";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
 import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import { AffixContext } from "../../context/AffixContext";
 import { CircularProgress, Tooltip } from "@mui/material";
 import "../../App.css";
-import { useContext, useEffect, useState } from "react";
-import { GuildKillRank, RaidRankings } from "../../Models/guildModel";
-import { RaidModel } from "../../Models/raidModel";
-import { prettyNumberFormat } from "../../util/util";
+import { useEffect, useState } from "react";
+import { GuildKillRank, NerubarPalace } from "../../Models/guildModel";
+import { Boss } from "../../Models/raidModel";
 import ParsedColoredText from "../Generics/ParsedColoredText";
-import { GuildContext } from "../../context/GuildContext";
 import ShieldIcon from "@mui/icons-material/Shield";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh"; //for dps icon
 import Diversity3Icon from "@mui/icons-material/Diversity3"; //for average ilvl
@@ -66,23 +61,28 @@ interface GroupCompModel {
 
 const Rankings = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
-  const [rankings, setRankings] = useState<GuildKillRank | null>(null);
-  const [bosses, setBosses] = useState<RaidModel[] | null>(null);
+  const [rankings, setRankings] = useState<NerubarPalace | null>(null);
+  const [bosses, setBosses] = useState<Boss[] | null>(null);
   const [avgIlvl, setAvgIlvl] = useState<number | null>(0);
+  const [bossKilled, setBossKilled] = useState<boolean>(true);
   const [groupComp, setGroupComp] = useState<GroupCompModel>({
     tanks: 0,
     healers: 0,
     dps: 0,
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loadingBosses, setLoadingBosses] = useState<{
+    [key: string]: boolean;
+  }>({}); //used to see if all data is updated before showing boss details
   const [error, setError] = useState<string | null>(null);
 
   const handleChange =
     (panel: string, bossSlug: string) =>
-    (e: React.SyntheticEvent, newExpanded: boolean) => {
+    (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? panel : false);
       //making sure that this is not null
       if (newExpanded && bosses) {
+        setLoadingBosses((prev) => ({ ...prev, [bossSlug]: true }));
         determineGroupComp(bossSlug);
       }
     };
@@ -137,10 +137,11 @@ const Rankings = () => {
         console.log(data);
         if (!Array.isArray(data)) {
           console.error("expected an array but recieved: ", data);
+          setBossKilled(false);
           return;
         }
-        let ilvlArr = [];
-        let initComp: GroupCompModel = { tanks: 0, healers: 0, dps: 0 };
+        const ilvlArr: number[] = [];
+        const initComp: GroupCompModel = { tanks: 0, healers: 0, dps: 0 };
 
         data.forEach((character) => {
           ilvlArr.push(character.itemLevelEquipped);
@@ -150,6 +151,7 @@ const Rankings = () => {
           if (character.specRole === "dps") initComp.dps += 1;
           if (character.specRole === "healer") initComp.healers += 1;
         });
+
         setGroupComp(initComp);
         setAvgIlvl(
           Math.floor(
@@ -159,9 +161,14 @@ const Rankings = () => {
               : 0,
           ),
         );
+
+        setLoadingBosses((prev) => ({ ...prev, [bossSlug]: false }));
+        setBossKilled(true);
       })
       .catch((err) => {
         console.log(err);
+        setLoadingBosses((prev) => ({ ...prev, [bossSlug]: false }));
+        setBossKilled(false);
       });
   };
 
@@ -173,34 +180,35 @@ const Rankings = () => {
     return <div>{error}</div>;
   }
 
+  if (!rankings || !bosses) return <div>No data available</div>;
+
   return (
     <div>
       <h3>Boss Kill Rankings</h3>
       <strong>
         World: <ParsedColoredText number={rankings.mythic.world} /> &nbsp;
-        Region : <ParsedColoredText number={rankings.mythic.region} /> &nbsp;
+        Region: <ParsedColoredText number={rankings.mythic.region} /> &nbsp;
         Realm: <ParsedColoredText number={rankings.mythic.realm} />
       </strong>
       <br />
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2, pt: "1rem" }}>
-          {isLoading ? (
-            <CircularProgress />
-          ) : (
-            bosses &&
-            bosses.map((boss, idx) => (
-              <Accordion
-                key={idx}
-                expanded={expanded === `panel${idx}`}
-                onChange={handleChange(`panel${idx}`, boss.slug)}
+          {bosses.map((boss, idx) => (
+            <Accordion
+              key={idx}
+              expanded={expanded === `panel${idx}`}
+              onChange={handleChange(`panel${idx}`, boss.slug)}
+            >
+              <AccordionSummary
+                aria-controls={`panel${idx}d-content`}
+                id={`panel${idx}d-header`}
               >
-                <AccordionSummary
-                  aria-controls={`panel${idx}d-content`}
-                  id={`panel${idx}d-header`}
-                >
-                  {boss.name}
-                </AccordionSummary>
-                <AccordionDetails>
+                {boss.name}
+              </AccordionSummary>
+              <AccordionDetails>
+                {loadingBosses[boss.slug] ? (
+                  <CircularProgress /> // Show spinner while loading
+                ) : bossKilled ? (
                   <div
                     style={{
                       display: "flex",
@@ -290,12 +298,13 @@ const Rankings = () => {
                       </span>
                     </Tooltip>
                   </div>
-                  <br />
-                  These were the members present during the kill
-                </AccordionDetails>
-              </Accordion>
-            ))
-          )}
+                ) : (
+                  <div>Come back when you kill this boss!</div> // Show message if boss has not been killed
+                )}
+                <br />
+              </AccordionDetails>
+            </Accordion>
+          ))}
         </Paper>
       </Box>
     </div>
