@@ -54,3 +54,35 @@ export function convertToPercentage(t: number): string {
   const percentage = Math.round(t)
   return `${percentage}%`
 }
+
+//ranking parsing colors
+const colorParseRanges = [
+    { min: 1, max: 3, color: '#e5cc80' }, //artifact
+    { min: 4, max: 998, color: '#ff8000' }, //legendary
+    { min: 999, max: 1999, color: '#a335ee' },//epic
+    { min: 2000, max: 3000, color: '#0070ff' }, //rare
+    { min: 3001, max: 6000, color: '#1eff00' }, //common
+];
+
+export const parseColor = (number: number): string => {
+    const match = colorParseRanges.find(range => number >= range.min && number <= range.max);
+    return match ? match.color : '#666666'; 
+};
+
+
+export const classColorMapping: { [key: string]: string } = {
+  "Death Knight": "#C41E3A",
+  "Demon Hunter": "#A330C9",
+  "Druid": "#FF7C0A",
+  "Evoker": "#33937F",
+  "Hunter": "#AAD372",
+  "Mage": "#3FC7EB",
+  "Monk": "#00FF98",
+  "Paladin": "#F48CBA",
+  "Priest": "#FFFFFF",
+  "Rogue": "#FFF468",
+  "Shaman": "#0070DD",
+  "Warlock": "#8788EE",
+  "Warrior": "#C69B6D"
+};
+

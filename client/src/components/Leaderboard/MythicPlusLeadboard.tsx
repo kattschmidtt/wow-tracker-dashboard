@@ -165,7 +165,9 @@ export default function EnhancedTable() {
     return <div>No current season active. <br/>Check back later!</div>
   }
 
-  
+  if (!leaderboard || leaderboard.length === 0) {
+    return <div>No leaderboard data to show</div>
+  }
 
   return (
     <Box sx={{ width: '100%' }}>

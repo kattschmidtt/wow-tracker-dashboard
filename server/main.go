@@ -47,6 +47,11 @@ func main() {
 	app.Get("/getGuildProgress", controllers.GetGuildProg)
 	app.Get("/staticRaidData", controllers.GetRaidInfo)
 	app.Get("/characterStats", controllers.GetCharacterStats)
+	app.Get("/guildMembers", controllers.GetGuildMembers)
+	app.Get("/killedOn", controllers.GetKilledOn)
+	app.Get("/detailedEncounter", controllers.GetDetailedBossKill)
+	app.Get("/killRank", controllers.GetGuildKillRank)
+
 	/*app.Get("/characterGear", controllers.GetCharacterGear)
 	app.Get("/characterTalents", controllers.GetCharacterTalents) */
 
