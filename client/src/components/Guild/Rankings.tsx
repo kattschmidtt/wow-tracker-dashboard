@@ -71,6 +71,8 @@ interface DetailedCharModel {
   isMelee: boolean;
   specName: string;
   specRole: string;
+  realmName: string;
+  regionSlug: string;
 }
 //TODO: add these mappings to util files so its not repeated twice (see members.tsx)
 //map name colorZ based on class name
@@ -172,7 +174,6 @@ const Rankings = () => {
         return resp.json();
       })
       .then((data) => {
-        console.log(data);
         if (!Array.isArray(data)) {
           console.error("expected an array but recieved: ", data);
           setBossKilled(false);
@@ -363,7 +364,7 @@ const Rankings = () => {
                         <span style={{ color: classColor, marginRight: "2px" }}>
                           <Link
                             color="inherit"
-                            href="http://localhost:3000"
+                            href={`https://raider.io/characters/${member.regionSlug}/${member.realmName}/${member.name}`}
                             underline="hover"
                           >
                             {member.name} &nbsp;
