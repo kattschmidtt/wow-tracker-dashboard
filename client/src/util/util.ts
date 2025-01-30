@@ -86,4 +86,3 @@ export const classColorMapping: { [key: string]: string } = {
   "Warrior": "#C69B6D"
 };
 
-

@@ -51,6 +51,7 @@ func main() {
 	app.Get("/killedOn", controllers.GetKilledOn)
 	app.Get("/detailedEncounter", controllers.GetDetailedBossKill)
 	app.Get("/killRank", controllers.GetGuildKillRank)
+
 	/*app.Get("/characterGear", controllers.GetCharacterGear)
 	app.Get("/characterTalents", controllers.GetCharacterTalents) */
 
