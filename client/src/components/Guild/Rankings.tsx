@@ -138,6 +138,7 @@ const Rankings = () => {
         if (!Array.isArray(data)) {
           console.error("expected an array but recieved: ", data);
           setBossKilled(false);
+          setLoadingBosses((prev) => ({ ...prev, [bossSlug]: false })); //stop loading if null or anything else
           return;
         }
         const ilvlArr: number[] = [];
