@@ -14,7 +14,7 @@ import { GuildContext } from "../../context/GuildContext";
 const BossKillProgress = () => {
   const { bossSlug, setBossSlug } = useContext(GuildContext);
   const [bosses, setBosses] = useState<Boss[] | null>(null);
-  const [boss, setBoss] = useState<string>("");
+  const [boss, setBoss] = useState<string>("Ulgrax-the-Devourer"); //ulgrax as default
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("Mythic");
@@ -43,7 +43,7 @@ const BossKillProgress = () => {
 
     return bossSlug
       ? `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=${difficulty}&guilds=us%2Fproudmoore%2FAcrimonious&boss=${bossSlug}`
-      : "";
+      : `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=${difficulty}&guilds=us%2Fproudmoore%2FAcrimonious&boss=${boss}`;
   }, [activeTab, bossSlug]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const BossKillProgress = () => {
 
         //make sure there is a boss slug selected and that data is available
         if (!bossSlug && data.length > 0) {
-          setBossSlug(data[0].name);
+          setBossSlug(data[0].slug);
         }
         setIsLoading(false);
       })
@@ -114,10 +114,9 @@ const BossKillProgress = () => {
                   <Select
                     value={
                       bosses?.find((item) => item.slug === bossSlug)?.name ||
-                      "Ulgrax, The Devourer"
+                      "ulgrax-the-devourer"
                     }
                     onChange={handleChange}
-                    displayEmpty
                   >
                     {bosses &&
                       bosses.map((item) => (
