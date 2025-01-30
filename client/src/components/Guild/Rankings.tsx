@@ -16,6 +16,8 @@ import ShieldIcon from "@mui/icons-material/Shield";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh"; //for dps icon
 import Diversity3Icon from "@mui/icons-material/Diversity3"; //for average ilvl
 import AddIcon from "@mui/icons-material/Add";
+import CustomTooltip from "../Generics/CustomToolTip";
+import { Link } from "@mui/material";
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -59,6 +61,41 @@ interface GroupCompModel {
   dps: number;
 }
 
+interface DetailedCharModel {
+  name: string;
+  className: string;
+  itemLevelEquipped: number;
+  raceFaction: string;
+  race: string;
+  region: string;
+  isMelee: boolean;
+  specName: string;
+  specRole: string;
+}
+//TODO: add these mappings to util files so its not repeated twice (see members.tsx)
+//map name colorZ based on class name
+const classColorMapping: { [key: string]: string } = {
+  "Death Knight": "#C41E3A",
+  "Demon Hunter": "#A330C9",
+  Druid: "#FF7C0A",
+  Evoker: "#33937F",
+  Hunter: "#AAD372",
+  Mage: "#3FC7EB",
+  Monk: "#00FF98",
+  Paladin: "#F48CBA",
+  Priest: "#FFFFFF",
+  Rogue: "#FFF468",
+  Shaman: "#0070DD",
+  Warlock: "#8788EE",
+  Warrior: "#C69B6D",
+};
+
+//map tooltip background based on api response
+const bannerMapping: { [key: string]: string } = {
+  hordebanner1: "/horde-logo-banner.png",
+  alliancebanner1: "/alliance-logo-banner.png",
+};
+
 const Rankings = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
   const [rankings, setRankings] = useState<NerubarPalace | null>(null);
@@ -70,6 +107,7 @@ const Rankings = () => {
     healers: 0,
     dps: 0,
   });
+  const [membersPresent, setMembersPresent] = useState<DetailedCharModel[]>([]); //members present during boss kill
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadingBosses, setLoadingBosses] = useState<{
     [key: string]: boolean;
@@ -143,16 +181,17 @@ const Rankings = () => {
         }
         const ilvlArr: number[] = [];
         const initComp: GroupCompModel = { tanks: 0, healers: 0, dps: 0 };
+        const initMembers: DetailedCharModel[] = [];
 
         data.forEach((character) => {
           ilvlArr.push(character.itemLevelEquipped);
-
+          initMembers.push(character);
           //incrementing role
           if (character.specRole === "tank") initComp.tanks += 1;
           if (character.specRole === "dps") initComp.dps += 1;
           if (character.specRole === "healer") initComp.healers += 1;
         });
-
+        setMembersPresent(initMembers);
         setGroupComp(initComp);
         setAvgIlvl(
           Math.floor(
@@ -303,6 +342,39 @@ const Rankings = () => {
                   <div>Come back when you kill this boss!</div> // Show message if boss has not been killed
                 )}
                 <br />
+
+                {/* Members present during kill render */}
+                {membersPresent.length > 0 ? (
+                  membersPresent.map((member, idx) => {
+                    const className = member.className;
+                    const classColor =
+                      classColorMapping[className] || "#ffffff";
+                    const banner = "/default-banner.png"; //TODO: ADD profiel_banner TO THINGS THAT SHOULD BE SENT TO FRONTEND
+
+                    return (
+                      <CustomTooltip
+                        name={member.name}
+                        charClass={member.className}
+                        spec={member.specName}
+                        faction={member.raceFaction}
+                        backgroundImageUrl={banner}
+                        key={idx}
+                      >
+                        <span style={{ color: classColor, marginRight: "2px" }}>
+                          <Link
+                            color="inherit"
+                            href="http://localhost:3000"
+                            underline="hover"
+                          >
+                            {member.name} &nbsp;
+                          </Link>
+                        </span>
+                      </CustomTooltip>
+                    );
+                  })
+                ) : (
+                  <>no members present</>
+                )}
               </AccordionDetails>
             </Accordion>
           ))}
