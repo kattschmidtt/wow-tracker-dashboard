@@ -1,10 +1,8 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { NavLink } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState } from "react";
-import { BorderColor } from "@mui/icons-material";
+import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -14,9 +12,8 @@ interface CharacterCardProps {
   favorite: boolean;
 }
 
-//stlyed component for iframe to have slide in and out animation based on favorite
+// Styled component for iframe to have slide in and out animation based on favorite
 const IFrameComponent = styled("div")<{ isVisible: boolean }>(
-  //adding the isVisible prop to component
   ({ isVisible }) => ({
     width: "100%", //container takes up 100% of parent
     height: "18vh", //based on viewport height
@@ -39,15 +36,12 @@ const CharacterCard = (props: CharacterCardProps) => {
   const [isFavorite, setIsFavorite] = useState(favorite);
   const [isVisible, setIsVisible] = useState(favorite);
   const widgetUrl =
-    "https://raider.io/characters/us/stormrage/Foxxbozo?embed=1&embedmode=summary&embedName=1&classcolors=1&characterBackground=1&itemlevelcolors=1&showtime=10&chromargb=transparent";
+    "https://raider.io/characters/us/stormrage/Foxxbozo?embed=1&embedmode=&embedName=1&classcolors=1&showtime=10&chromargb=transparent";
 
   const cardNavStyles = {
     color: "inherit",
     textDecoration: "none",
     typography: "h6",
-    "&:hover": {
-      color: "grey.500",
-    },
     "&.active": {
       color: "text.secondary",
     },
@@ -55,8 +49,16 @@ const CharacterCard = (props: CharacterCardProps) => {
   };
 
   const handleSetFavorite = (e: React.MouseEvent<SVGSVGElement>) => {
-    setIsFavorite(!isFavorite);
-    console.log("toggled ", !isFavorite);
+    const newFavoriteStatus = !isFavorite;
+    setIsFavorite(newFavoriteStatus);
+
+    if (newFavoriteStatus) {
+      setIsVisible(true); // Show immediately if favorited
+    } else {
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 500);
+    }
   };
 
   return (
@@ -65,53 +67,54 @@ const CharacterCard = (props: CharacterCardProps) => {
         sx={{
           minWidth: "100%",
           height: "18vh",
+          padding: 0,
           position: "relative",
         }}
       >
         <Grid container>
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <CardContent
-              component={NavLink}
+              component="div"
               sx={{ ...cardNavStyles, padding: 0, margin: 0 }}
-              to={`http://localhost:3000`}
             >
-              {isFavorite ? (
-                <IFrameComponent isVisible={isFavorite}>
-                  <iframe style={{ display: "block" }} src={widgetUrl} />
-                </IFrameComponent>
+              {isFavorite && isVisible ? (
+                <div style={{ display: "relative" }}>
+                  <IFrameComponent isVisible={isVisible}>
+                    <iframe
+                      style={{ display: "block" }}
+                      loading="lazy"
+                      src={widgetUrl}
+                    />
+                  </IFrameComponent>
+                  <FavoriteIcon
+                    onClick={handleSetFavorite}
+                    sx={{
+                      color: "#FF91AF",
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      zIndex: 2, //above the iframe
+                    }}
+                  />
+                </div>
               ) : (
-                name
+                <div
+                  style={{
+                    height: "100%", // Take full height of CardContent
+                    display: "flex", // Use flexbox for alignment
+                    alignItems: "center", // Vertically center content
+                    justifyContent: "center", // Horizontally center content
+                    gap: "8px", // Add spacing between name and icon
+                  }}
+                >
+                  <div>{name}</div>
+                  <FavoriteBorderIcon
+                    onClick={handleSetFavorite}
+                    sx={{ "&:hover": { color: "#FF69B4" } }}
+                  />
+                </div>
               )}
             </CardContent>
-          </Grid>
-          <Grid
-            item
-            xs={4}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            {isFavorite ? (
-              <FavoriteIcon
-                onClick={handleSetFavorite}
-                sx={{
-                  color: "#FF91AF",
-                  zIndex: 1,
-                  "&:hover": { color: "#FF69B4" },
-                }}
-              />
-            ) : (
-              <FavoriteBorderIcon
-                onClick={handleSetFavorite}
-                sx={{
-                  color: "#FF91AF",
-                  zIndex: 1,
-                  "&:hover": { color: "#FF69B4" },
-                }}
-              />
-            )}
           </Grid>
         </Grid>
       </Card>
