@@ -29,13 +29,14 @@ const IFrameComponent = styled("div")<{ isVisible: boolean }>(
       width: "100%",
       height: "100%",
       border: "none",
+      display: "block",
     },
   }),
 );
 
 const CharacterCard = (props: CharacterCardProps) => {
   const { charId, name, favorite } = props;
-  const [isFavorite, setIsFavorite] = useState(favorite); //false for now, default value will be based on user context
+  const [isFavorite, setIsFavorite] = useState(favorite);
   const [isVisible, setIsVisible] = useState(favorite);
   const widgetUrl =
     "https://raider.io/characters/us/stormrage/Foxxbozo?embed=1&embedmode=summary&embedName=1&classcolors=1&characterBackground=1&itemlevelcolors=1&showtime=10&chromargb=transparent";
@@ -54,54 +55,63 @@ const CharacterCard = (props: CharacterCardProps) => {
   };
 
   const handleSetFavorite = (e: React.MouseEvent<SVGSVGElement>) => {
-    //when user presses heart button, set it as favorite to backend
     setIsFavorite(!isFavorite);
-    //update userContext in db
     console.log("toggled ", !isFavorite);
   };
 
   return (
     <div>
-      <Card sx={{ minWidth: 220, paddingBottom: "1rem", paddingTop: "1rem" }}>
+      <Card
+        sx={{
+          minWidth: "100%",
+          height: "18vh",
+          position: "relative",
+        }}
+      >
         <Grid container>
           <Grid item xs={8}>
-            {isFavorite ? (
-              <CardContent
-                component={NavLink}
-                to={`/${name}-${charId}`}
-                sx={cardNavStyles}
-              >
-                <IFrameComponent isVisible={isFavorite}>
-                  <iframe src={widgetUrl} />
-                </IFrameComponent>
-              </CardContent>
-            ) : (
-              <div>frick</div>
-            )}
-          </Grid>
-          <Grid>
-            <CardContent>
+            <CardContent
+              component={NavLink}
+              sx={{ ...cardNavStyles, padding: 0, margin: 0 }}
+              to={`http://localhost:3000`}
+            >
               {isFavorite ? (
-                <FavoriteIcon
-                  onClick={handleSetFavorite}
-                  sx={{
-                    color: "#FF91AF",
-                    "&:hover": {
-                      color: "#FF69B4",
-                    },
-                  }}
-                />
+                <IFrameComponent isVisible={isFavorite}>
+                  <iframe style={{ display: "block" }} src={widgetUrl} />
+                </IFrameComponent>
               ) : (
-                <FavoriteBorderIcon
-                  onClick={handleSetFavorite}
-                  sx={{
-                    "&:hover": {
-                      color: "#FF69B4",
-                    },
-                  }}
-                />
+                name
               )}
             </CardContent>
+          </Grid>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            {isFavorite ? (
+              <FavoriteIcon
+                onClick={handleSetFavorite}
+                sx={{
+                  color: "#FF91AF",
+                  zIndex: 1,
+                  "&:hover": { color: "#FF69B4" },
+                }}
+              />
+            ) : (
+              <FavoriteBorderIcon
+                onClick={handleSetFavorite}
+                sx={{
+                  color: "#FF91AF",
+                  zIndex: 1,
+                  "&:hover": { color: "#FF69B4" },
+                }}
+              />
+            )}
           </Grid>
         </Grid>
       </Card>
