@@ -1,8 +1,9 @@
 import Card from "@mui/material/Card";
+import Slide from "@mui/material/Slide";
 import CardContent from "@mui/material/CardContent";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -13,33 +14,34 @@ interface CharacterCardProps {
 }
 
 // Styled component for iframe to have slide in and out animation based on favorite
-const IFrameComponent = styled("div")<{ isVisible: boolean }>(
-  ({ isVisible }) => ({
-    width: "100%", //container takes up 100% of parent
-    height: "100%", //based on viewport height
-    overflow: "hidden",
-    position: "relative",
-    transform: isVisible ? "translateX(0)" : "translateX(-100%)", //if visible (favorite is set to true) is true, don't do anything. else do slide out animation
-    transition: "transform 0.5s ease-out", // property name | duration | easing function
-    "& iframe": {
-      //elements within IframeComponent
-      width: "100%",
-      height: "100%",
-      border: "none",
-      display: "block",
-    },
-  }),
-);
+const IFrameComponent = styled("div")(() => ({
+  width: "100%", //container takes up 100% of parent
+  height: "100%", //based on viewport height
+  overflow: "hidden",
+  position: "relative",
+  margin: 0,
+  padding: 0,
+  "& iframe": {
+    //elements within IframeComponent
+    width: "100%",
+    height: "100%",
+    border: "none",
+    display: "block",
+    margin: 0,
+    padding: 0,
+    boxSizing: "border-box",
+  },
+}));
 
 const CharacterCard = (props: CharacterCardProps) => {
   const { charId, name, favorite } = props;
   const [isFavorite, setIsFavorite] = useState(favorite);
-  const [isVisible, setIsVisible] = useState(favorite);
+  const containerRef = useRef<HTMLElement>(null);
+
   const widgetUrl =
     "https://raider.io/characters/us/stormrage/Foxxbozo?embed=1&embedmode=&embedName=1&classcolors=1&showtime=10&chromargb=transparent";
 
   const cardNavStyles = {
-    color: "inherit",
     textDecoration: "none",
     typography: "h6",
     "&.active": {
@@ -49,16 +51,7 @@ const CharacterCard = (props: CharacterCardProps) => {
   };
 
   const handleSetFavorite = (e: React.MouseEvent<SVGSVGElement>) => {
-    const newFavoriteStatus = !isFavorite;
-    setIsFavorite(newFavoriteStatus);
-
-    if (newFavoriteStatus) {
-      setIsVisible(true); // Show immediately if favorited
-    } else {
-      setTimeout(() => {
-        setIsVisible(false);
-      }, 500);
-    }
+    setIsFavorite(!isFavorite);
   };
 
   return (
@@ -78,45 +71,70 @@ const CharacterCard = (props: CharacterCardProps) => {
           <Grid item xs={12} sx={{ height: "100%" }}>
             <CardContent
               component="div"
-              sx={{ ...cardNavStyles, padding: 0, height: "100%", margin: 0 }}
+              sx={{
+                ...cardNavStyles,
+                padding: 0,
+                height: "100%",
+                margin: 0,
+                boxSizing: "content-box",
+              }}
             >
-              {isFavorite && isVisible ? (
-                <div style={{ display: "relative", height: "100%" }}>
-                  <IFrameComponent isVisible={isVisible}>
-                    <iframe
-                      style={{ display: "block" }}
-                      loading="lazy"
-                      src={widgetUrl}
-                    />
-                  </IFrameComponent>
-                  <FavoriteIcon
-                    onClick={handleSetFavorite}
-                    sx={{
-                      color: "#FF91AF",
-                      position: "absolute",
-                      top: 8,
-                      right: 8,
-                      zIndex: 2, //above the iframe
-                    }}
-                  />
-                </div>
-              ) : (
+              <div
+                ref={containerRef}
+                style={{ position: "relative", height: "100%" }}
+              >
                 <div
                   style={{
-                    height: "100%", // Take full height of CardContent
-                    display: "flex", // Use flexbox for alignment
-                    alignItems: "center", // Vertically center content
-                    justifyContent: "center", // Horizontally center content
-                    gap: "8px", // Add spacing between name and icon
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    zIndex: 1,
                   }}
                 >
                   <div>{name}</div>
                   <FavoriteBorderIcon
                     onClick={handleSetFavorite}
-                    sx={{ "&:hover": { color: "#FF69B4" } }}
+                    sx={{ "&:hover": { color: "#FF69B4" }, cursor: "pointer" }}
                   />
                 </div>
-              )}
+                <Slide
+                  in={isFavorite}
+                  container={containerRef.current}
+                  timeout={600}
+                  direction="left"
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      zIndex: 2,
+                    }}
+                  >
+                    <IFrameComponent>
+                      <iframe loading="lazy" src={widgetUrl} />
+                    </IFrameComponent>
+                    <FavoriteIcon
+                      onClick={handleSetFavorite}
+                      sx={{
+                        color: "#FF91AF",
+                        position: "absolute",
+                        top: 8,
+                        right: 8,
+                        cursor: "pointer",
+                      }}
+                    />
+                  </div>
+                </Slide>
+              </div>
             </CardContent>
           </Grid>
         </Grid>
