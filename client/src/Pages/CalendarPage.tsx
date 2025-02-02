@@ -1,24 +1,22 @@
-import { Box, Grid } from '@mui/material';
-import Header from '../components/Layout/Header';
-import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
-import MythicPlusTracking from '../components/MythicPlusTracking/MythicPlusTracking';
-import MythicPlusTrackingStats from '../components/MythicPlusTracking/MythicPlusTrackingStats';
-import BigCalendar from '../components/Calendar/BigCalendar';
+import { Box, Grid } from "@mui/material";
+import Header from "../components/Layout/Header";
+import NavigationSidebar from "../components/Sidebar/NavigationSidebar";
+import BigCalendar from "../components/Calendar/BigCalendar";
 
 const CalendarPage = () => {
   return (
     <>
       <Header />
-      <Box sx={{ display: 'flex', height: '100vh' }}>
+      <Box sx={{ display: "flex", height: "100vh" }}>
         {/* Sidebar */}
-        <Box sx={{ width: '16%', minWidth: 200 }}>
+        <Box sx={{ width: "16%", minWidth: 200 }}>
           <NavigationSidebar />
         </Box>
 
         {/* Main Content */}
-        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
           {/* Other Components */}
-          <Grid container spacing={2} sx={{ padding: '2rem' }}>
+          <Grid container spacing={2} sx={{ padding: "2rem" }}>
             <Grid item xs={12}>
               <p>test1</p>
             </Grid>
@@ -38,3 +36,4 @@ const CalendarPage = () => {
 };
 
 export default CalendarPage;
+
