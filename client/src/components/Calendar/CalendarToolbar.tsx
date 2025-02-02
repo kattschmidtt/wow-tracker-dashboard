@@ -1,6 +1,19 @@
 import { useState } from "react";
 import InputModal from "../Generics/InputModal";
-import { Button, ButtonGroup, Fab, Tooltip } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  Checkbox,
+  Fab,
+  Tooltip,
+  TextField,
+  FormControl,
+  FormControlLabel,
+  Autocomplete,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { ToolbarProps } from "react-big-calendar";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -9,6 +22,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 function CalendarToolbar(props: ToolbarProps) {
   const { label, onNavigate, onView } = props; //from react-big-calendar
   const [addEventModalOpen, setAddEventModalOpen] = useState(false);
+  const [repeatEvent, setRepeatEvent] = useState("never"); //auto set to never repeat
 
   //to bring up the add custom event modal
   const handleClickOpen = () => {
@@ -73,7 +87,60 @@ function CalendarToolbar(props: ToolbarProps) {
               close={handleClickClose}
               title={"Add an event"}
               eventType={"Add"}
-            />
+              onSubmit={() => alert("i submit")}
+            >
+              <TextField
+                label="Event Name"
+                variant="standard"
+                fullWidth
+                margin="normal"
+              />
+              <Button
+                onClick={() => alert("this will pop up Date and Time picker")}
+              >
+                Start Date/Time
+              </Button>
+              <Button
+                onClick={() => alert("this will pop up Date and Time picker")}
+              >
+                End Date/Time
+              </Button>
+              <FormControl>
+                <InputLabel>Repeat event?</InputLabel>
+                <Select value={repeatEvent} label="Repeat event?">
+                  <MenuItem value={"never"}>Never</MenuItem>
+                  <MenuItem value={"daily"}>Daily</MenuItem>
+                  <MenuItem value={"weekly"}>Weekly</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControlLabel
+                control={<Checkbox />}
+                label="Email reminder?"
+              />
+              <FormControlLabel
+                control={<Checkbox />}
+                label="In App reminder?"
+              />
+              {/* Chip auto complete */}
+              <Autocomplete
+                multiple
+                options={["peepee", "poopoo"]}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    placeholder="Tags"
+                  />
+                )}
+              />
+
+              <TextField
+                label="Description"
+                fullWidth
+                multiline
+                variant="standard"
+              />
+            </InputModal>
           </Tooltip>
         </div>
       </div>
