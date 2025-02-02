@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 import {
   BlizzardEventModel,
   UserCalendarEventModel,
@@ -7,11 +7,17 @@ import {
 export const CalendarContext = createContext<{
   userEvents: UserCalendarEventModel[];
   blizzardEvents: BlizzardEventModel[];
+  addUserEvent: (event: UserCalendarEventModel) => void;
+  updateUserEvent: (event: UserCalendarEventModel) => void;
+  deleteUserEvent: (eventId: number) => void;
   isLoading: boolean;
   error: string | null;
 }>({
   userEvents: [],
   blizzardEvents: [],
+  addUserEvent: () => {},
+  updateUserEvent: () => {},
+  deleteUserEvent: () => {},
   isLoading: true,
   error: null,
 });
@@ -30,9 +36,55 @@ export const CalendarProvider = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  //load in blizz event on render
+  useEffect(() => {
+    const loadBlizzEvent = async () => {
+      try {
+        //trying out async await format instead of .then
+        const resp = await fetch(`/placeholderCalendar.json`);
+        const eventData = await resp.json();
+        const mappedEvents: BlizzardeventModel[] = eventData.map(
+          (event: any) => ({
+            id: event.id,
+            title: event.title,
+            start: new Date(event.start),
+            end: new Date(event.end),
+          }),
+        );
+
+        setBlizzardEvents(mappedEvents);
+        setIsLoading(false);
+      } catch (err) {
+        setError(`Failed to load blizz events: ${err}`);
+        setIsLoading(false);
+      }
+    };
+
+    loadBlizzEvent();
+  }, []);
+
+  //user based events
+  const addUserEvent = (event: UserCalendarEventModel) =>
+    setUserEvents((prevEvents) => [...prevEvents, event]);
+  const updateUserEvent = (event: UserCalendarEventModel) => {
+    setUserEvents((prevEvents) =>
+      prevEvents.map((e) => (e.id === event.id ? event : e)),
+    );
+  };
+  const deleteUserEvent = (eventId: number) =>
+    setUserEvents((prevEvents) => prevEvents.filter((e) => e.id !== eventId));
+
   return (
     <CalendarContext.Provider
-      value={{ isLoading, error, userEvents, blizzardEvents }}
+      value={{
+        isLoading,
+        error,
+        userEvents,
+        blizzardEvents,
+        addUserEvent,
+        updateUserEvent,
+        deleteUserEvent,
+      }}
     >
       {children}
     </CalendarContext.Provider>
