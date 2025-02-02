@@ -2,7 +2,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -16,7 +16,7 @@ interface CharacterCardProps {
 const IFrameComponent = styled("div")<{ isVisible: boolean }>(
   ({ isVisible }) => ({
     width: "100%", //container takes up 100% of parent
-    height: "18vh", //based on viewport height
+    height: "100%", //based on viewport height
     overflow: "hidden",
     position: "relative",
     transform: isVisible ? "translateX(0)" : "translateX(-100%)", //if visible (favorite is set to true) is true, don't do anything. else do slide out animation
@@ -69,16 +69,19 @@ const CharacterCard = (props: CharacterCardProps) => {
           height: "18vh",
           padding: 0,
           position: "relative",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <Grid container>
-          <Grid item xs={12}>
+        <Grid container sx={{ height: "100%" }}>
+          <Grid item xs={12} sx={{ height: "100%" }}>
             <CardContent
               component="div"
-              sx={{ ...cardNavStyles, padding: 0, margin: 0 }}
+              sx={{ ...cardNavStyles, padding: 0, height: "100%", margin: 0 }}
             >
               {isFavorite && isVisible ? (
-                <div style={{ display: "relative" }}>
+                <div style={{ display: "relative", height: "100%" }}>
                   <IFrameComponent isVisible={isVisible}>
                     <iframe
                       style={{ display: "block" }}
