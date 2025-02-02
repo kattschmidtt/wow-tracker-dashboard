@@ -1,6 +1,7 @@
 import { useState } from "react";
 import InputModal from "../Generics/InputModal";
 import {
+  Box,
   Button,
   ButtonGroup,
   Checkbox,
@@ -13,6 +14,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Grid,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { ToolbarProps } from "react-big-calendar";
@@ -89,57 +91,84 @@ function CalendarToolbar(props: ToolbarProps) {
               eventType={"Add"}
               onSubmit={() => alert("i submit")}
             >
-              <TextField
-                label="Event Name"
-                variant="standard"
-                fullWidth
-                margin="normal"
-              />
-              <Button
-                onClick={() => alert("this will pop up Date and Time picker")}
-              >
-                Start Date/Time
-              </Button>
-              <Button
-                onClick={() => alert("this will pop up Date and Time picker")}
-              >
-                End Date/Time
-              </Button>
-              <FormControl>
-                <InputLabel>Repeat event?</InputLabel>
-                <Select value={repeatEvent} label="Repeat event?">
-                  <MenuItem value={"never"}>Never</MenuItem>
-                  <MenuItem value={"daily"}>Daily</MenuItem>
-                  <MenuItem value={"weekly"}>Weekly</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Email reminder?"
-              />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="In App reminder?"
-              />
-              {/* Chip auto complete */}
-              <Autocomplete
-                multiple
-                options={["peepee", "poopoo"]}
-                renderInput={(params) => (
+              <Grid container spacing={2}>
+                {/* Event Name */}
+                <Grid item xs={12}>
                   <TextField
-                    {...params}
+                    label="Event Name"
                     variant="standard"
-                    placeholder="Tags"
+                    fullWidth
+                    margin="normal"
                   />
-                )}
-              />
+                </Grid>
 
-              <TextField
-                label="Description"
-                fullWidth
-                multiline
-                variant="standard"
-              />
+                {/* start and end date/time */}
+                <Grid item xs={12}>
+                  <Box display="flex" gap={2}>
+                    <Button
+                      onClick={() =>
+                        alert("this will pop up Date and Time picker")
+                      }
+                    >
+                      Start Date/Time
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        alert("this will pop up Date and Time picker")
+                      }
+                    >
+                      End Date/Time
+                    </Button>
+                  </Box>
+                </Grid>
+
+                {/* repeat event, email reminder, in app reminder */}
+                <Grid item xs={12}>
+                  <Box display="flex" gap={2} alignItems="center">
+                    <FormControl>
+                      <InputLabel>Repeat event?</InputLabel>
+                      <Select value={repeatEvent} label="Repeat event?">
+                        <MenuItem value={"never"}>Never</MenuItem>
+                        <MenuItem value={"daily"}>Daily</MenuItem>
+                        <MenuItem value={"weekly"}>Weekly</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      label="Email reminder?"
+                    />
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      label="In App reminder?"
+                    />
+                  </Box>
+                </Grid>
+
+                {/* tags */}
+                <Grid item xs={12}>
+                  <Autocomplete
+                    multiple
+                    options={["peepee", "poopoo"]}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="standard"
+                        placeholder="Tags"
+                      />
+                    )}
+                  />
+                </Grid>
+
+                {/* description */}
+                <Grid item xs={12}>
+                  <TextField
+                    label="Description"
+                    fullWidth
+                    multiline
+                    variant="standard"
+                  />
+                </Grid>
+              </Grid>
             </InputModal>
           </Tooltip>
         </div>
