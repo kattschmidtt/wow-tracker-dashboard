@@ -29,12 +29,29 @@ interface CalendarProviderProps {
 export const CalendarProvider = ({
   children,
 }: CalendarProviderProps): JSX.Element => {
-  const [userEvents, setUserEvents] = useState<UserCalendarEventModel[]>([]); //initialized to saved .json
+  const [userEvents, setUserEvents] = useState<UserCalendarEventModel[]>(() => {
+    const saved = sessionStorage.getItem("userEvents");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return parsed.map((event: any) => ({
+        ...event,
+        start: new Date(event.start),
+        end: new Date(event.end),
+      }));
+    }
+    return [];
+  });
   const [blizzardEvents, setBlizzardEvents] = useState<BlizzardEventModel[]>(
     [],
   ); //this should be in the same place as the user .json events but rarely editted
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  //sessionstorage for userevents
+  useEffect(
+    () => sessionStorage.setItem("userEvents", JSON.stringify(userEvents)),
+    [userEvents],
+  );
 
   //load in blizz event on render
   useEffect(() => {

@@ -7,6 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Zoom } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
+import { UserCalendarEventModel } from "../../Models/calendarModel";
 
 //to make go woosh and zoom
 const Transition = forwardRef(function Transition(
@@ -24,6 +25,7 @@ interface InputModalProps {
   title: string;
   eventType: string;
   onSubmit: () => void;
+  eventData: Partial<UserCalendarEventModel>; //Partial<model> is a typescript shortcut of saying all properties in the model are optional
   children: ReactNode; //any type of
 }
 
@@ -52,4 +54,3 @@ const InputModal = ({
 };
 
 export default InputModal;
-

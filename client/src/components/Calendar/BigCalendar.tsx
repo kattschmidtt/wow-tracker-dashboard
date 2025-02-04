@@ -8,6 +8,7 @@ import CalendarToolbar from "./CalendarToolbar";
 import { CalendarContext } from "../../context/CalendarContext";
 import EditIcon from "@mui/icons-material/Edit";
 import InputModal from "../Generics/InputModal";
+import { UserCalendarEventModel } from "../../Models/calendarModel";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({
@@ -22,9 +23,12 @@ const localizer = dateFnsLocalizer({
 //TODO: make this a context call using the blizzard api. Model will have to be
 //  redone
 const MyCalendar = () => {
-  const { userEvents, blizzardEvents, isLoading, error } =
+  const { userEvents, blizzardEvents, isLoading, error, updateUserEvent } =
     useContext(CalendarContext);
   const [isEditing, setIsEditing] = useState<boolean>(false); //for openining editing modal
+  const [editingEvent, setEditingEvent] =
+    useState<UserCalendarEventModel | null>(null); //the actual event being edited
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -54,9 +58,10 @@ const MyCalendar = () => {
     };
   };
 
-  const handleEditDoubleClick = () => {
+  const handleEditDoubleClick = (event: any) => {
     //alert("you clicked edit woohoo");
     setIsEditing(true);
+    setEditingEvent(event);
   };
 
   if (isEditing) {
