@@ -1,11 +1,13 @@
 // MyCalendar.tsx
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import CalendarToolbar from "./CalendarToolbar";
 import { CalendarContext } from "../../context/CalendarContext";
+import EditIcon from "@mui/icons-material/Edit";
+import InputModal from "../Generics/InputModal";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({
@@ -22,11 +24,54 @@ const localizer = dateFnsLocalizer({
 const MyCalendar = () => {
   const { userEvents, blizzardEvents, isLoading, error } =
     useContext(CalendarContext);
-
+  const [isEditing, setIsEditing] = useState<boolean>(false); //for openining editing modal
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   const allEvents = [...userEvents, ...blizzardEvents];
+
+  //determine event color based on tags
+  const eventPropGetter = (event: any) => {
+    let bgColor = "#1e71e7"; //basic blizzard blue
+
+    if (event.tags && event.tags.includes("raid")) {
+      bgColor = "#d9ac25";
+    }
+    if (event.tags && event.tags.includes("guild event")) {
+      bgColor = "7A49A5";
+    }
+    if (event.tags && event.tags.includes("important")) {
+      bgColor = "#E4009A";
+    }
+
+    return {
+      style: {
+        backgroundColor: bgColor,
+        color: "#ffffff",
+        borderRadius: "4px",
+        border: "none",
+      },
+    };
+  };
+
+  const handleEditDoubleClick = () => {
+    //alert("you clicked edit woohoo");
+    setIsEditing(true);
+  };
+
+  if (isEditing) {
+    return (
+      <InputModal
+        open={isEditing}
+        close={() => setIsEditing(false)}
+        title={"Editing event"}
+        onSubmit={handleEditDoubleClick}
+        eventType={"Edit"}
+      >
+        <div> wow you editeded </div>
+      </InputModal>
+    );
+  }
 
   return (
     <div style={{ height: "100vh" }}>
@@ -39,6 +84,8 @@ const MyCalendar = () => {
         views={["month", "week", "day"]}
         style={{ height: "100%", width: "100%" }}
         components={{ toolbar: CalendarToolbar }}
+        eventPropGetter={eventPropGetter}
+        onDoubleClickEvent={handleEditDoubleClick}
       />
     </div>
   );
