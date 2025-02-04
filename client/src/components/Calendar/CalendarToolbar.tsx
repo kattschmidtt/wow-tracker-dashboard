@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import InputModal from "../Generics/InputModal";
 import CustomDateTimePicker from "../Generics/CustomDateTimePicker";
 import {
@@ -22,14 +22,17 @@ import { ToolbarProps } from "react-big-calendar";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { UserCalendarEventModel } from "../../Models/calendarModel";
+import { CalendarContext } from "../../context/CalendarContext";
 import dayjs, { Dayjs } from "dayjs";
 
 function CalendarToolbar(props: ToolbarProps) {
   const { label, onNavigate, onView } = props; //from react-big-calendar
+  const { addUserEvent } = useContext(CalendarContext);
   const [addEventModalOpen, setAddEventModalOpen] = useState(false);
   const [eventName, setEventName] = useState("");
   const [startDateTime, setStartDateTime] = useState<Dayjs | null>(null);
   const [endDateTime, setEndDateTime] = useState<Dayjs | null>(null);
+  const [dateError, setDateError] = useState<boolean>(false);
   const [emailOptIn, setEmailOptIn] = useState(false);
   const [inAppOptIn, setInAppOptIn] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
@@ -46,6 +49,13 @@ function CalendarToolbar(props: ToolbarProps) {
   };
 
   const handleAddEventSubmit = () => {
+    if (!startDateTime || !endDateTime || startDateTime.isAfter(endDateTime)) {
+      setDateError(true);
+      return;
+    }
+
+    setDateError(false);
+
     const eventData: UserCalendarEventModel = {
       id: Math.floor(Math.random() * 1000000),
       title: eventName,
@@ -58,18 +68,8 @@ function CalendarToolbar(props: ToolbarProps) {
       repeatEvent: repeatEvent,
       repeatOccurance: repeatOccurrence,
     };
-
-    const jsonData = JSON.stringify(eventData, null, 2);
-
-    const blob = new Blob([jsonData], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "eventData.json";
-    link.click();
-    URL.revokeObjectURL(url);
-
-    handleClickClose();
+    addUserEvent(eventData);
+    setAddEventModalOpen(false);
   };
 
   return (
@@ -124,7 +124,7 @@ function CalendarToolbar(props: ToolbarProps) {
             </Fab>
             <InputModal
               open={addEventModalOpen}
-              close={handleClickClose}
+              close={() => setAddEventModalOpen(false)}
               title={"Add an event"}
               eventType={"Add"}
               onSubmit={handleAddEventSubmit}
