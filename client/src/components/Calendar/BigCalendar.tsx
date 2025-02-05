@@ -9,6 +9,7 @@ import { CalendarContext } from "../../context/CalendarContext";
 import EditIcon from "@mui/icons-material/Edit";
 import InputModal from "../Generics/InputModal";
 import { UserCalendarEventModel } from "../../Models/calendarModel";
+import EditEventModal from "./EditEventModal";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({
@@ -25,7 +26,6 @@ const localizer = dateFnsLocalizer({
 const MyCalendar = () => {
   const { userEvents, blizzardEvents, isLoading, error, updateUserEvent } =
     useContext(CalendarContext);
-  const [isEditing, setIsEditing] = useState<boolean>(false); //for openining editing modal
   const [editingEvent, setEditingEvent] =
     useState<UserCalendarEventModel | null>(null); //the actual event being edited
 
@@ -60,23 +60,12 @@ const MyCalendar = () => {
 
   const handleEditDoubleClick = (event: any) => {
     //alert("you clicked edit woohoo");
-    setIsEditing(true);
+    //check to make sure it is a user event, blizzard events not editable
+    const isUserEvent = userEvents.some((e) => e.id === event.id); //where e is the item clicked
+    if (!isUserEvent) return;
+
     setEditingEvent(event);
   };
-
-  if (isEditing) {
-    return (
-      <InputModal
-        open={isEditing}
-        close={() => setIsEditing(false)}
-        title={"Editing event"}
-        onSubmit={handleEditDoubleClick}
-        eventType={"Edit"}
-      >
-        <div> wow you editeded </div>
-      </InputModal>
-    );
-  }
 
   return (
     <div style={{ height: "100vh" }}>
@@ -91,6 +80,13 @@ const MyCalendar = () => {
         components={{ toolbar: CalendarToolbar }}
         eventPropGetter={eventPropGetter}
         onDoubleClickEvent={handleEditDoubleClick}
+      />
+
+      <EditEventModal
+        event={editingEvent}
+        open={!!editingEvent}
+        onClose={() => setEditingEvent(null)}
+        onSubmit={updateUserEvent}
       />
     </div>
   );

@@ -25,7 +25,7 @@ interface InputModalProps {
   title: string;
   eventType: string;
   onSubmit: () => void;
-  eventData: Partial<UserCalendarEventModel>; //Partial<model> is a typescript shortcut of saying all properties in the model are optional
+  submitLabel?: string;
   children: ReactNode; //any type of
 }
 
@@ -37,18 +37,25 @@ const InputModal = ({
   onSubmit,
   children,
 }: InputModalProps) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); //propogation purposes
+    onSubmit();
+  };
+
   return (
     <Dialog open={open} onClose={close} TransitionComponent={Transition}>
-      {title && <DialogTitle>{title}</DialogTitle>}
-      <DialogContent>
-        <DialogContentText>{children}</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onSubmit} type="submit">
-          {eventType}
-        </Button>
-        <Button onClick={close}>Cancel</Button>
-      </DialogActions>
+      <form onSubmit={handleSubmit}>
+        {title && <DialogTitle>{title}</DialogTitle>}
+        <DialogContent>
+          <DialogContentText>{children}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onSubmit} type="submit">
+            {eventType}
+          </Button>
+          <Button onClick={close}>Cancel</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };
