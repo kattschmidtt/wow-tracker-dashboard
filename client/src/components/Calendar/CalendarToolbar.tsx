@@ -44,9 +44,6 @@ function CalendarToolbar(props: ToolbarProps) {
   const handleClickOpen = () => {
     setAddEventModalOpen(true);
   };
-  const handleClickClose = () => {
-    setAddEventModalOpen(false);
-  };
 
   const handleAddEventSubmit = () => {
     if (!startDateTime || !endDateTime || startDateTime.isAfter(endDateTime)) {
