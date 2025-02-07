@@ -21,6 +21,7 @@ interface EditEventModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (updatedEvent: UserCalendarEventModel) => void;
+  onDelete: (deleteEvent: UserCalendarEventModel) => void;
 }
 
 const EditEventModal = ({
@@ -28,6 +29,7 @@ const EditEventModal = ({
   open,
   onClose,
   onSubmit,
+  onDelete,
 }: EditEventModalProps) => {
   // Form state
   const [eventName, setEventName] = useState("");
@@ -84,6 +86,11 @@ const EditEventModal = ({
     onClose();
   };
 
+  const handleDelete = () => {
+    if (event) onDelete(event);
+    onClose();
+  };
+
   return (
     <InputModal
       open={open}
@@ -92,6 +99,7 @@ const EditEventModal = ({
       submitLabel="Save Changes"
       onSubmit={handleSubmit}
       eventType={"Update"}
+      onDelete={handleDelete}
     >
       <Grid container spacing={2}>
         {/* Event Name */}

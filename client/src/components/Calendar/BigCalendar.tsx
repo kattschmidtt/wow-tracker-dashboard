@@ -24,8 +24,14 @@ const localizer = dateFnsLocalizer({
 //TODO: make this a context call using the blizzard api. Model will have to be
 //  redone
 const MyCalendar = () => {
-  const { userEvents, blizzardEvents, isLoading, error, updateUserEvent } =
-    useContext(CalendarContext);
+  const {
+    userEvents,
+    blizzardEvents,
+    isLoading,
+    error,
+    updateUserEvent,
+    deleteUserEvent,
+  } = useContext(CalendarContext);
   const [editingEvent, setEditingEvent] =
     useState<UserCalendarEventModel | null>(null); //the actual event being edited
 
@@ -87,6 +93,7 @@ const MyCalendar = () => {
         open={!!editingEvent}
         onClose={() => setEditingEvent(null)}
         onSubmit={updateUserEvent}
+        onDelete={(event) => deleteUserEvent(event.id)}
       />
     </div>
   );

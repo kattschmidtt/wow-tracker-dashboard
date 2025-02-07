@@ -44,6 +44,11 @@ const InputModal = ({
     onSubmit();
   };
 
+  const handleDelete = (e: React.FormEvent) => {
+    e.preventDefault();
+    onDelete();
+  };
+
   return (
     <Dialog open={open} onClose={close} TransitionComponent={Transition}>
       <form onSubmit={handleSubmit}>
@@ -53,10 +58,7 @@ const InputModal = ({
         </DialogContent>
         <DialogActions sx={{ display: "flex" }}>
           {eventType === "Update" ? (
-            <Button
-              sx={{ marginRight: "auto" }}
-              onClick={() => alert("you clicked delete")}
-            >
+            <Button sx={{ marginRight: "auto" }} onClick={handleDelete}>
               {" "}
               delete{" "}
             </Button>
