@@ -50,7 +50,7 @@ const InputModal = ({
 
   return (
     <Dialog open={open} onClose={close} TransitionComponent={Transition}>
-      <form>
+      <form onSubmit={onSubmit}>
         {title && <DialogTitle>{title}</DialogTitle>}
         <DialogContent>
           <DialogContentText>{children}</DialogContentText>
@@ -66,7 +66,7 @@ const InputModal = ({
               delete{" "}
             </Button>
           ) : null}
-          <Button onClick={onSubmit} type="submit" color="success">
+          <Button type="submit" color="success">
             {eventType}
           </Button>
 

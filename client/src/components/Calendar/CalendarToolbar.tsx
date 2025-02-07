@@ -46,7 +46,9 @@ function CalendarToolbar(props: ToolbarProps) {
     setAddEventModalOpen(true);
   };
 
-  const handleAddEventSubmit = () => {
+  const handleAddEventSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (!startDateTime || !endDateTime) {
       setDateError("Start and End dates must be selected.");
       return;
@@ -72,6 +74,18 @@ function CalendarToolbar(props: ToolbarProps) {
       repeatOccurance: repeatOccurrence,
     };
     addUserEvent(eventData);
+
+    //reset after submit; TODO: there has to be a nicer way to do this besides just resetting it manually, yucky
+    setEventName("");
+    setStartDateTime(null);
+    setEndDateTime(null);
+    setTags([]);
+    setDescription("");
+    setRepeatEvent(false);
+    setRepeatOccurrence("never");
+    setEmailOptIn(false);
+    setInAppOptIn(false);
+
     setAddEventModalOpen(false);
   };
 
@@ -127,7 +141,10 @@ function CalendarToolbar(props: ToolbarProps) {
             </Fab>
             <InputModal
               open={addEventModalOpen}
-              close={() => setAddEventModalOpen(false)}
+              close={() => {
+                setAddEventModalOpen(false);
+                setDateError(null);
+              }}
               title={"Add an event"}
               eventType={"Add"}
               onSubmit={handleAddEventSubmit}
@@ -161,7 +178,11 @@ function CalendarToolbar(props: ToolbarProps) {
                   </Box>
                 </Grid>
 
-                {dateError && <Alert severity="error">{dateError}</Alert>}
+                {dateError && (
+                  <Grid item xs={12}>
+                    <Alert severity="error">{dateError}</Alert>
+                  </Grid>
+                )}
 
                 {/* repeat event, email reminder, in app reminder */}
                 <Grid item xs={12}>
