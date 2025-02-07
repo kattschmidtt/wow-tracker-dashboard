@@ -91,6 +91,7 @@ const EditEventModal = ({
       title="Edit Event"
       submitLabel="Save Changes"
       onSubmit={handleSubmit}
+      eventType={"Update"}
     >
       <Grid container spacing={2}>
         {/* Event Name */}

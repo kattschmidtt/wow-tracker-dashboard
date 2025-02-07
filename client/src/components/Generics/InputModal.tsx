@@ -25,6 +25,7 @@ interface InputModalProps {
   title: string;
   eventType: string;
   onSubmit: () => void;
+  onDelete: () => void;
   submitLabel?: string;
   children: ReactNode; //any type of
 }
@@ -35,6 +36,7 @@ const InputModal = ({
   title,
   eventType,
   onSubmit,
+  onDelete,
   children,
 }: InputModalProps) => {
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,10 +51,18 @@ const InputModal = ({
         <DialogContent>
           <DialogContentText>{children}</DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ display: "flex" }}>
+          <Button
+            sx={{ marginRight: "auto" }}
+            onClick={() => alert("you clicked delete")}
+          >
+            {" "}
+            delete{" "}
+          </Button>
           <Button onClick={onSubmit} type="submit">
             {eventType}
           </Button>
+
           <Button onClick={close}>Cancel</Button>
         </DialogActions>
       </form>
