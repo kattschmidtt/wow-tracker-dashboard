@@ -45,7 +45,7 @@ const InputModal = ({
 
   return (
     <Dialog open={open} onClose={close} TransitionComponent={Transition}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} noValidate>
         {title && <DialogTitle>{title}</DialogTitle>}
         <DialogContent>
           <DialogContentText>{children}</DialogContentText>

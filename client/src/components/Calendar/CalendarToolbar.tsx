@@ -156,9 +156,12 @@ function CalendarToolbar(props: ToolbarProps) {
                     label="Event Name"
                     variant="standard"
                     fullWidth
+                    required={true}
                     value={eventName}
                     onChange={(e) => setEventName(e.target.value)}
                     margin="normal"
+                    error={!eventName}
+                    helperText={!eventName ? "Event name is required" : ""}
                   />
                 </Grid>
 
