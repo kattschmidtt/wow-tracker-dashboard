@@ -20,16 +20,14 @@ const CalendarPage = () => {
             {/* Other Components */}
             <Grid container spacing={2} sx={{ padding: "2rem" }}>
               <Grid item xs={12}>
-                <p>test1</p>
+                <br /> <br />
               </Grid>
 
               <Grid item xs={12} sx={{ flexGrow: 1 }}>
                 <BigCalendar />
               </Grid>
 
-              <Grid item xs={12}>
-                <p>test3</p>
-              </Grid>
+              <Grid item xs={12}></Grid>
             </Grid>
           </Box>
         </Box>
