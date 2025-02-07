@@ -82,6 +82,7 @@ export const CalendarProvider = ({
 
   //user based events
   const addUserEvent = (event: UserCalendarEventModel) => {
+    console.log("before adduserevent", userEvents);
     setUserEvents((prevEvents) => [...prevEvents, event]);
     console.log("userEvents added through addUserEvent context: ", userEvents);
   };
