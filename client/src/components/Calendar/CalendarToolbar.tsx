@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import InputModal from "../Generics/InputModal";
 import CustomDateTimePicker from "../Generics/CustomDateTimePicker";
 import {
+  Alert,
   Box,
   Button,
   ButtonGroup,
@@ -32,7 +33,7 @@ function CalendarToolbar(props: ToolbarProps) {
   const [eventName, setEventName] = useState("");
   const [startDateTime, setStartDateTime] = useState<Dayjs | null>(null);
   const [endDateTime, setEndDateTime] = useState<Dayjs | null>(null);
-  const [dateError, setDateError] = useState<boolean>(false);
+  const [dateError, setDateError] = useState<string | null>(null);
   const [emailOptIn, setEmailOptIn] = useState(false);
   const [inAppOptIn, setInAppOptIn] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
@@ -46,12 +47,17 @@ function CalendarToolbar(props: ToolbarProps) {
   };
 
   const handleAddEventSubmit = () => {
-    if (!startDateTime || !endDateTime || startDateTime.isAfter(endDateTime)) {
-      setDateError(true);
+    if (!startDateTime || !endDateTime) {
+      setDateError("Start and End dates must be selected.");
       return;
     }
 
-    setDateError(false);
+    if (startDateTime.isAfter(endDateTime)) {
+      setDateError("End date cannot be before start date.");
+      return;
+    }
+
+    setDateError(null);
 
     const eventData: UserCalendarEventModel = {
       id: Math.floor(Math.random() * 1000000),
@@ -154,6 +160,8 @@ function CalendarToolbar(props: ToolbarProps) {
                     />
                   </Box>
                 </Grid>
+
+                {dateError && <Alert severity="error">{dateError}</Alert>}
 
                 {/* repeat event, email reminder, in app reminder */}
                 <Grid item xs={12}>
