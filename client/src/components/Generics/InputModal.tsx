@@ -38,11 +38,6 @@ const InputModal = ({
   onDelete,
   children,
 }: InputModalProps) => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); //propogation purposes
-    onSubmit();
-  };
-
   const handleDelete = (e: React.FormEvent) => {
     e.preventDefault();
     onDelete();
