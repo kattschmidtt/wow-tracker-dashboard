@@ -52,13 +52,15 @@ const InputModal = ({
           <DialogContentText>{children}</DialogContentText>
         </DialogContent>
         <DialogActions sx={{ display: "flex" }}>
-          <Button
-            sx={{ marginRight: "auto" }}
-            onClick={() => alert("you clicked delete")}
-          >
-            {" "}
-            delete{" "}
-          </Button>
+          {eventType === "Update" ? (
+            <Button
+              sx={{ marginRight: "auto" }}
+              onClick={() => alert("you clicked delete")}
+            >
+              {" "}
+              delete{" "}
+            </Button>
+          ) : null}
           <Button onClick={onSubmit} type="submit">
             {eventType}
           </Button>
