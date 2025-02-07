@@ -7,7 +7,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Zoom } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
-import { UserCalendarEventModel } from "../../Models/calendarModel";
 
 //to make go woosh and zoom
 const Transition = forwardRef(function Transition(
@@ -25,7 +24,7 @@ interface InputModalProps {
   title: string;
   eventType: string;
   onSubmit: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
   submitLabel?: string;
   children: ReactNode; //any type of
 }
@@ -58,12 +57,16 @@ const InputModal = ({
         </DialogContent>
         <DialogActions sx={{ display: "flex" }}>
           {eventType === "Update" ? (
-            <Button sx={{ marginRight: "auto" }} onClick={handleDelete}>
+            <Button
+              sx={{ marginRight: "auto" }}
+              color="error"
+              onClick={handleDelete}
+            >
               {" "}
               delete{" "}
             </Button>
           ) : null}
-          <Button onClick={onSubmit} type="submit">
+          <Button onClick={onSubmit} type="submit" color="success">
             {eventType}
           </Button>
 

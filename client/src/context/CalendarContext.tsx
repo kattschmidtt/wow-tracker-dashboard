@@ -60,7 +60,7 @@ export const CalendarProvider = ({
         //trying out async await format instead of .then
         const resp = await fetch(`/placeholderCalendar.json`);
         const eventData = await resp.json();
-        const mappedEvents: BlizzardeventModel[] = eventData.map(
+        const mappedEvents: BlizzardEventModel[] = eventData.map(
           (event: any) => ({
             id: event.id,
             title: event.title,
@@ -81,8 +81,10 @@ export const CalendarProvider = ({
   }, []);
 
   //user based events
-  const addUserEvent = (event: UserCalendarEventModel) =>
+  const addUserEvent = (event: UserCalendarEventModel) => {
     setUserEvents((prevEvents) => [...prevEvents, event]);
+    console.log("userEvents added through addUserEvent context: ", userEvents);
+  };
   const updateUserEvent = (event: UserCalendarEventModel) => {
     setUserEvents((prevEvents) =>
       prevEvents.map((e) => (e.id === event.id ? event : e)),

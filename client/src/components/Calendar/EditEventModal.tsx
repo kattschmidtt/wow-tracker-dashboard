@@ -58,7 +58,8 @@ const EditEventModal = ({
     }
   }, [event]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (
       !event ||
       !startDateTime ||

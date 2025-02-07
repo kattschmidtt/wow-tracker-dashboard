@@ -6,8 +6,7 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import CalendarToolbar from "./CalendarToolbar";
 import { CalendarContext } from "../../context/CalendarContext";
-import EditIcon from "@mui/icons-material/Edit";
-import InputModal from "../Generics/InputModal";
+import Tooltip from "@mui/material/Tooltip";
 import { UserCalendarEventModel } from "../../Models/calendarModel";
 import EditEventModal from "./EditEventModal";
 
@@ -64,6 +63,12 @@ const MyCalendar = () => {
     };
   };
 
+  const HoverEvent = ({ event }: { event: UserCalendarEventModel }) => (
+    <Tooltip title={event.description} placement="top">
+      <div style={{ width: "100%", height: "100%" }}>{event.title}</div>
+    </Tooltip>
+  );
+
   const handleEditDoubleClick = (event: any) => {
     //alert("you clicked edit woohoo");
     //check to make sure it is a user event, blizzard events not editable
@@ -83,9 +88,10 @@ const MyCalendar = () => {
         defaultView="month"
         views={["month", "week", "day"]}
         style={{ height: "100%", width: "100%" }}
-        components={{ toolbar: CalendarToolbar }}
+        components={{ toolbar: CalendarToolbar, event: HoverEvent }}
         eventPropGetter={eventPropGetter}
         onDoubleClickEvent={handleEditDoubleClick}
+        tooltipAccessor={() => ""}
       />
 
       <EditEventModal
