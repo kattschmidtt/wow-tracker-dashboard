@@ -23,7 +23,7 @@ const CalendarPage = () => {
                 <br /> <br />
               </Grid>
 
-              <Grid item xs={12} sx={{ flexGrow: 1 }}>
+              <Grid item xs={12} sx={{ flexGrow: 1, padding: "10rem" }}>
                 <BigCalendar />
               </Grid>
 
