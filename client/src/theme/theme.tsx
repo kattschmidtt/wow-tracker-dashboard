@@ -41,3 +41,66 @@ export const darkTheme = createTheme({
     },
   },
 });
+
+// Horde theme
+export const hordeTheme = createTheme({
+  palette: {
+    mode: "horde",
+    primary: {
+      main: "#c8785c",
+    },
+    secondary: {
+      main: "#906e4a",
+    },
+    background: {
+      default: "#d8d1ca",
+      paper: "#906e4a",
+    },
+    text: {
+      primary: "#c12b12",
+      secondary: "#c8785c",
+    },
+  },
+});
+
+// Alliance theme
+export const allianceTheme = createTheme({
+  palette: {
+    mode: "alliance",
+    primary: {
+      main: "#14244a",
+    },
+    secondary: {
+      main: "#dbbe2a",
+    },
+    background: {
+      default: "#d8d1ca",
+      paper: "#4a2e4f",
+    },
+    text: {
+      primary: "#ffffff",
+      secondary: "#dbbe2a",
+    },
+  },
+});
+
+// Battle net theme
+export const battlenetTheme = createTheme({
+  palette: {
+    mode: "battlenet",
+    primary: {
+      main: "#1e71e7",
+    },
+    secondary: {
+      main: "#d9ac25",
+    },
+    background: {
+      default: "#3b3b3b",
+      paper: "#071f2d",
+    },
+    text: {
+      primary: "#ffffff",
+      secondary: "#3b3b3b",
+    },
+  },
+});

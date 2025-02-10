@@ -91,7 +91,7 @@ const BossKillProgress = () => {
                 label={tab}
                 key={tab}
                 value={tab}
-                sx={{ color: "black", fontFamily: "Poppins" }}
+                sx={{ fontFamily: "Poppins" }}
               />
             ))}
           </Tabs>
