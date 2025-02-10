@@ -15,6 +15,8 @@
 
 - [ ] Add material ui theme component
 - [ ] Add toggle in avatar drop down on avatar
+- [ ] Fix header that had gray text and have it be the default white
+- [ ] Fix sidebar text color to white instead of black when darkmode is switched on
 
 ### Login
 

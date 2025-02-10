@@ -27,9 +27,6 @@ const navStyles = {
   color: "inherit",
   textDecoration: "none",
   typography: "h6",
-  "&:hover": {
-    color: "grey.500",
-  },
   "&.active": {
     color: "text.secondary",
   },
@@ -59,10 +56,7 @@ const Header = () => {
   };
 
   return (
-    <AppBar
-      position="fixed"
-      sx={{ mb: 3, background: "#a1dce6", boxShadow: "none", color: "black" }}
-    >
+    <AppBar position="fixed" sx={{ mb: 3, boxShadow: "none", color: "black" }}>
       <Toolbar
         sx={{
           display: "flex",
@@ -71,7 +65,7 @@ const Header = () => {
         }}
       >
         <Box display="flex" alignItems="center">
-          <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
+          <Typography component={NavLink} to="/" sx={navStyles}>
             WoW Tracker Board
           </Typography>
           <Switch checked={isDarkMode} onChange={toggleTheme} />
@@ -129,4 +123,3 @@ const Header = () => {
 };
 
 export default Header;
-
