@@ -1,101 +1,122 @@
-import { 
-  Box,   
-  Drawer, 
-  List, 
-  ListItem, 
-  ListItemButton, 
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
   ListItemIcon,
-  Tooltip, 
+  Tooltip,
+  styled,
 } from "@mui/material";
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
-import SportsHandballOutlinedIcon from '@mui/icons-material/SportsHandballOutlined';
-import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
+import SportsHandballOutlinedIcon from "@mui/icons-material/SportsHandballOutlined";
+import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { NavLink } from "react-router-dom";
 
 const icons = {
   SettingsOutlinedIcon,
   AppsOutlinedIcon,
   SportsHandballOutlinedIcon,
-  Groups2OutlinedIcon, 
+  Groups2OutlinedIcon,
   AccessTimeOutlinedIcon,
-  CalendarMonthIcon
+  CalendarMonthIcon,
 };
 
 interface SideBarItem {
   id: number;
   name: string;
-  path: string
+  path: string;
   icon: keyof typeof icons;
   tooltip: string;
 }
+
+const StyledNavLink = styled(NavLink)({
+  textDecoration: "none",
+  color: "inherit",
+  "&.active": {
+    color: "inherit",
+  },
+});
 
 const NavigationSidebar = () => {
   const drawerWidth = 240;
 
   const sideLinks: SideBarItem[] = [
     {
-      id: 1, 
+      id: 1,
       name: "Dashboard",
-      path: '/',
-      icon: 'AppsOutlinedIcon',
-      tooltip: 'Go to your dashboard'
+      path: "/",
+      icon: "AppsOutlinedIcon",
+      tooltip: "Go to your dashboard",
     },
     {
-      id: 2, 
+      id: 2,
       name: "My Character",
-      path: '/my-character',
-      icon: 'SportsHandballOutlinedIcon',
-      tooltip: 'Get specific character details'
+      path: "/my-character",
+      icon: "SportsHandballOutlinedIcon",
+      tooltip: "Get specific character details",
     },
     {
-      id: 3, 
+      id: 3,
       name: "My Guild",
-      path: '/my-guild',
-      icon: 'Groups2OutlinedIcon',
-      tooltip: 'Get specific guild details'
+      path: "/my-guild",
+      icon: "Groups2OutlinedIcon",
+      tooltip: "Get specific guild details",
     },
     {
-      id: 4, 
+      id: 4,
       name: "My Progress",
-      path: '/my-progress',
-      icon: 'AccessTimeOutlinedIcon',
-      tooltip: 'View all types of character progress'
+      path: "/my-progress",
+      icon: "AccessTimeOutlinedIcon",
+      tooltip: "View all types of character progress",
     },
     {
-      id: 5, 
+      id: 5,
       name: "My Calendar",
-      path: '/my-calendar',
-      icon: 'CalendarMonthIcon',
-      tooltip: 'Add, Edit, and View all important dates'
+      path: "/my-calendar",
+      icon: "CalendarMonthIcon",
+      tooltip: "Add, Edit, and View all important dates",
     },
-
-  ]
+  ];
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh'}}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Drawer
         sx={{
-          zIndex: 1, 
+          textDecoration: "none",
+          zIndex: 1,
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           },
         }}
         variant="permanent"
         anchor="left"
       >
-        <List sx={{top: '4.45rem'}}>
-          {sideLinks.map(sidebarItem => {
-            const Icon = icons[sidebarItem.icon]
+        <List sx={{ top: "4.45rem", textDecoration: "none" }}>
+          {sideLinks.map((sidebarItem) => {
+            const Icon = icons[sidebarItem.icon];
             return (
-              <Tooltip key={sidebarItem.id} title={sidebarItem.tooltip} placement="right">
-                <ListItem disablePadding component={NavLink} to={sidebarItem.path} sx={{textDecoration: 'none', color: 'black'}}>
-                  <ListItemButton key={sidebarItem.path}>
+              <Tooltip
+                key={sidebarItem.id}
+                title={sidebarItem.tooltip}
+                placement="right"
+              >
+                <ListItem
+                  disablePadding
+                  component={StyledNavLink}
+                  to={sidebarItem.path}
+                  sx={{ textDecoration: "none" }}
+                >
+                  <ListItemButton
+                    sx={{ textDecoration: "none" }}
+                    key={sidebarItem.path}
+                  >
                     <ListItemIcon>
                       <Icon />
                     </ListItemIcon>
@@ -103,17 +124,18 @@ const NavigationSidebar = () => {
                   </ListItemButton>
                 </ListItem>
               </Tooltip>
-            )
+            );
           })}
         </List>
 
-        <List sx={{ pt: '40rem', zIndex: '-1'}}>
-          <Tooltip title='Account wide settings'>
-            <ListItem 
-              disablePadding 
-              component={NavLink} 
-              to={'/settings'} 
-              sx={{textDecoration: 'none', color: 'black'}}>    
+        <List sx={{ pt: "40rem", zIndex: "-1" }}>
+          <Tooltip title="Account wide settings">
+            <ListItem
+              disablePadding
+              component={NavLink}
+              to={"/settings"}
+              sx={{ textDecoration: "none" }}
+            >
               <ListItemButton>
                 <ListItemIcon>
                   <SettingsOutlinedIcon />
@@ -122,7 +144,7 @@ const NavigationSidebar = () => {
               </ListItemButton>
             </ListItem>
           </Tooltip>
-          <span style={{fontSize: '.5rem'}}>
+          <span style={{ fontSize: ".5rem" }}>
             *All pictures belong to Blizzard Entertainment*
           </span>
         </List>
@@ -132,3 +154,4 @@ const NavigationSidebar = () => {
 };
 
 export default NavigationSidebar;
+

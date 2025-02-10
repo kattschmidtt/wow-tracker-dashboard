@@ -27,9 +27,6 @@ const navStyles = {
   color: "inherit",
   textDecoration: "none",
   typography: "h6",
-  "&.active": {
-    color: "text.secondary",
-  },
   fontFamily: "Poppins",
 };
 
@@ -56,7 +53,7 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="fixed" sx={{ mb: 3, boxShadow: "none", color: "black" }}>
+    <AppBar position="fixed" sx={{ mb: 3, boxShadow: "none" }}>
       <Toolbar
         sx={{
           display: "flex",
