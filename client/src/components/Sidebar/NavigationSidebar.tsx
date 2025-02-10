@@ -15,6 +15,7 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { NavLink } from "react-router-dom";
+import { StyledNavLink } from "../Generics/StyledNavLink";
 
 const icons = {
   SettingsOutlinedIcon,
@@ -32,14 +33,6 @@ interface SideBarItem {
   icon: keyof typeof icons;
   tooltip: string;
 }
-
-const StyledNavLink = styled(NavLink)({
-  textDecoration: "none",
-  color: "inherit",
-  "&.active": {
-    color: "inherit",
-  },
-});
 
 const NavigationSidebar = () => {
   const drawerWidth = 240;
@@ -132,7 +125,7 @@ const NavigationSidebar = () => {
           <Tooltip title="Account wide settings">
             <ListItem
               disablePadding
-              component={NavLink}
+              component={StyledNavLink}
               to={"/settings"}
               sx={{ textDecoration: "none" }}
             >
