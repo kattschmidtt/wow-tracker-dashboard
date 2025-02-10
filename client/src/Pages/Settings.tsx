@@ -17,7 +17,7 @@ import Avatar from "boring-avatars";
 import NavigationSidebar from "../components/Sidebar/NavigationSidebar";
 
 const Settings = () => {
-  const [themeChange, setThemeChange] = useState<themeChoices>("");
+  const [themeChange, setThemeChange] = useState<string>("");
 
   const handleThemeChange = (e: SelectChangeEvent) =>
     setThemeChange(e.target.value);
