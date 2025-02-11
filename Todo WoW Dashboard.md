@@ -13,10 +13,11 @@
 
 ## Theme
 
-- [ ] Add material ui theme component
-- [ ] Add toggle in avatar drop down on avatar
-- [ ] Fix header that had gray text and have it be the default white
-- [ ] Fix sidebar text color to white instead of black when darkmode is switched on
+- [x] Add material ui theme component
+- [x] Fix header that had gray text and have it be the default white
+- [x] Fix sidebar text color to white instead of black when darkmode is switched on
+- [ ] Add toggle function to settings
+- [ ] Move color toggle to right side of screen and have it be a moon/sun depending on theme
 
 ### Login
 
