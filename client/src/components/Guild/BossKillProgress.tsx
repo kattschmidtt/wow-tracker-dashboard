@@ -29,7 +29,7 @@ const BossKillProgress = () => {
     }
   };
 
-  const handleTabSwitch = (newTab: string) => {
+  const handleTabSwitch = (e: React.SyntheticEvent, newTab: string) => {
     setActiveTab(newTab);
   };
 
@@ -40,7 +40,9 @@ const BossKillProgress = () => {
     } else if (activeTab === "Heroic") {
       difficulty = "heroic";
     }
-
+    console.log("bossslug: ", bossSlug);
+    console.log("difficulty: ", difficulty);
+    console.log(difficultyTabs);
     return bossSlug
       ? `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=${difficulty}&guilds=us%2Fproudmoore%2FAcrimonious&boss=${bossSlug}`
       : `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=${difficulty}&guilds=us%2Fproudmoore%2FAcrimonious&boss=${boss}`;
@@ -131,6 +133,7 @@ const BossKillProgress = () => {
               {bossSlug && (
                 <div style={{ marginTop: "20px" }}>
                   <iframe
+                    key={`${bossSlug || boss}-${activeTab}`}
                     src={iFrameSrc}
                     title="Raider.IO Widget"
                     style={{
