@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Header from "../components/Layout/Header";
 import {
   Box,
@@ -15,12 +14,13 @@ import {
 } from "@mui/material";
 import Avatar from "boring-avatars";
 import NavigationSidebar from "../components/Sidebar/NavigationSidebar";
+import { useTheme } from "../context/ThemeContext.tsx";
 
 const Settings = () => {
-  const [themeChange, setThemeChange] = useState<string>("");
+  const { themeName, setThemeName } = useTheme(); //import theme context
 
-  const handleThemeChange = (e: SelectChangeEvent) =>
-    setThemeChange(e.target.value);
+  const handleThemechange = (e: SelectChangeEvent) =>
+    setThemeName(e.target.value);
 
   return (
     <>
@@ -88,15 +88,18 @@ const Settings = () => {
                         </Grid>
                         <Grid item xs={12} sm={10} md={10}>
                           <Select
-                            value={themeChange}
-                            onChange={handleThemeChange}
+                            labelId="theme-select-label"
+                            id="theme-select"
+                            value={themeName}
+                            onChange={handleThemechange}
+                            label="Theme"
                           >
-                            <MenuItem value={"light"}>Light</MenuItem>
-                            <MenuItem value={"dark"}>Dark</MenuItem>
-                            <MenuItem value={"alliance"}>Alliance</MenuItem>
-                            <MenuItem value={"horde"}>Horde</MenuItem>
-                            <MenuItem value={"battlenet"}>Battle.Net</MenuItem>
-                          </Select>
+                            <MenuItem value="light">Light</MenuItem>
+                            <MenuItem value="dark">Dark</MenuItem>
+                            <MenuItem value="alliance">Alliance</MenuItem>
+                            <MenuItem value="horde">Horde</MenuItem>
+                            <MenuItem value="battlenet">Battle.net</MenuItem>
+                          </Select>{" "}
                         </Grid>
                       </Grid>
                     </FormControl>

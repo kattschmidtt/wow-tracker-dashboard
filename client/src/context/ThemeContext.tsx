@@ -1,10 +1,18 @@
 import React, { createContext, useContext, useState } from "react";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
-import { lightTheme, darkTheme } from "../theme/theme.tsx";
+import {
+  lightTheme,
+  darkTheme,
+  allianceTheme,
+  hordeTheme,
+  battlenetTheme,
+} from "../theme/theme.tsx";
+
+type ThemeNames = "light" | "dark" | "alliance" | "horde" | "battlenet";
 
 type ThemeContextType = {
-  isDarkMode: boolean;
-  toggleTheme: () => void;
+  themeName: ThemeNames;
+  setTheme: (name: ThemeNames) => void;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -12,17 +20,19 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [themeName, setThemeName] = useState<ThemeNames>("dark");
 
-  const toggleTheme = () => {
-    setIsDarkMode((prevMode) => !prevMode);
+  const themes = {
+    light: lightTheme,
+    dark: darkTheme,
+    alliance: allianceTheme,
+    horde: hordeTheme,
+    battlenet: battlenetTheme,
   };
 
-  const theme = isDarkMode ? darkTheme : lightTheme;
-
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
-      <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
+    <ThemeContext.Provider value={{ themeName, setTheme: setThemeName }}>
+      <MuiThemeProvider theme={themes[themeName]}>{children}</MuiThemeProvider>
     </ThemeContext.Provider>
   );
 };

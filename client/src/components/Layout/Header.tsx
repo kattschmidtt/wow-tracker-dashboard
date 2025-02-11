@@ -17,6 +17,8 @@ import { useUserContext } from "../../context/userContext";
 import Avatar from "boring-avatars";
 import { useTheme } from "../../context/ThemeContext";
 import React, { useState } from "react";
+import BedtimeIcon from "@mui/icons-material/Bedtime";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
 const userDropdown = [
   { title: "Settings", path: "/settings" },
@@ -65,13 +67,13 @@ const Header = () => {
           <Typography component={NavLink} to="/" sx={navStyles}>
             WoW Tracker Board
           </Typography>
-          <Switch checked={isDarkMode} onChange={toggleTheme} />
         </Box>
 
         <User />
 
         <Box display="flex" alignItems="center">
           <List sx={{ display: "flex" }}>
+            <Switch checked={isDarkMode} onChange={toggleTheme} />
             <SearchBar />
             {isLoggedIn ? (
               <>
