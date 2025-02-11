@@ -104,14 +104,10 @@ const NavigationSidebar = () => {
                   disablePadding
                   component={StyledNavLink}
                   to={sidebarItem.path}
-                  sx={{ textDecoration: "none" }}
                 >
-                  <ListItemButton
-                    sx={{ textDecoration: "none" }}
-                    key={sidebarItem.path}
-                  >
-                    <ListItemIcon>
-                      <Icon />
+                  <ListItemButton key={sidebarItem.path}>
+                    <ListItemIcon sx={{ color: "inherit" }}>
+                      <Icon sx={{ color: "inherit" }} />
                     </ListItemIcon>
                     {sidebarItem.name}
                   </ListItemButton>
@@ -147,4 +143,3 @@ const NavigationSidebar = () => {
 };
 
 export default NavigationSidebar;
-

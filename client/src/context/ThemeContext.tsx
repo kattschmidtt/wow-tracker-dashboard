@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import {
   lightTheme,
@@ -20,7 +20,10 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [themeName, setThemeName] = useState<ThemeNames>("dark");
+  const [themeName, setThemeName] = useState<ThemeNames>(() => {
+    const savedTheme = sessionStorage.getItem("theme") as ThemeNames | null;
+    return savedTheme || "dark";
+  });
 
   const themes = {
     light: lightTheme,
@@ -32,7 +35,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const setTheme = (name: ThemeNames) => {
     setThemeName(name);
+    sessionStorage.setItem("theme", name);
   };
+
+  useEffect(() => {
+    const savedTheme = sessionStorage.getItem("theme") as ThemeNames | null;
+    if (savedTheme) setThemeName(savedTheme);
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ themeName, setTheme }}>

@@ -46,18 +46,18 @@ export const darkTheme = createTheme({
 export const hordeTheme = createTheme({
   palette: {
     primary: {
-      main: "#c8785c",
+      main: "#8c0000",
     },
     secondary: {
       main: "#906e4a",
     },
     background: {
       default: "#d8d1ca",
-      paper: "#906e4a",
+      paper: "#8c0000",
     },
     text: {
-      primary: "#c12b12",
-      secondary: "#c8785c",
+      primary: "#ffffff",
+      secondary: "#906e4a",
     },
   },
 });
@@ -73,7 +73,7 @@ export const allianceTheme = createTheme({
     },
     background: {
       default: "#d8d1ca",
-      paper: "#4a2e4f",
+      paper: "#14244a",
     },
     text: {
       primary: "#ffffff",
@@ -97,7 +97,7 @@ export const battlenetTheme = createTheme({
     },
     text: {
       primary: "#ffffff",
-      secondary: "#3b3b3b",
+      secondary: "#fa4093",
     },
   },
 });

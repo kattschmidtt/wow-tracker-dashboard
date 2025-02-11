@@ -5,7 +5,10 @@ export const StyledNavLink = styled(NavLink)(({ theme }) => ({
   textDecoration: "none",
   color: "inherit",
   "&.active": {
-    color: theme.palette.primary.main,
+    color: theme.palette.text.secondary,
     fontWeight: "bold",
+  },
+  "& .MuiListItemIcon-root": {
+    color: "inherit",
   },
 }));
