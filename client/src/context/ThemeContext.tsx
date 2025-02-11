@@ -30,8 +30,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     battlenet: battlenetTheme,
   };
 
+  const setTheme = (name: ThemeNames) => {
+    setThemeName(name);
+  };
+
   return (
-    <ThemeContext.Provider value={{ themeName, setTheme: setThemeName }}>
+    <ThemeContext.Provider value={{ themeName, setTheme }}>
       <MuiThemeProvider theme={themes[themeName]}>{children}</MuiThemeProvider>
     </ThemeContext.Provider>
   );

@@ -17,10 +17,9 @@ import NavigationSidebar from "../components/Sidebar/NavigationSidebar";
 import { useTheme } from "../context/ThemeContext.tsx";
 
 const Settings = () => {
-  const { themeName, setThemeName } = useTheme(); //import theme context
+  const { themeName, setTheme } = useTheme(); //import theme context
 
-  const handleThemechange = (e: SelectChangeEvent) =>
-    setThemeName(e.target.value);
+  const handleThemechange = (e: SelectChangeEvent) => setTheme(e.target.value);
 
   return (
     <>
