@@ -17,7 +17,6 @@
 - [x] Fix header that had gray text and have it be the default white
 - [x] Fix sidebar text color to white instead of black when darkmode is switched on
 - [ ] Add toggle function to settings
-- [ ] Move color toggle to right side of screen and have it be a moon/sun depending on theme
 
 ### Login
 
