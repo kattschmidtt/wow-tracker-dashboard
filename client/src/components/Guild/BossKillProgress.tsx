@@ -40,9 +40,6 @@ const BossKillProgress = () => {
     } else if (activeTab === "Heroic") {
       difficulty = "heroic";
     }
-    console.log("bossslug: ", bossSlug);
-    console.log("difficulty: ", difficulty);
-    console.log(difficultyTabs);
     return bossSlug
       ? `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=${difficulty}&guilds=us%2Fproudmoore%2FAcrimonious&boss=${bossSlug}`
       : `https://raider.io/widgets/health-over-attempt?raid=latest&type=attempt&period=until_kill&difficulty=${difficulty}&guilds=us%2Fproudmoore%2FAcrimonious&boss=${boss}`;
