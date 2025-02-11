@@ -17,8 +17,6 @@ import { useUserContext } from "../../context/userContext";
 import Avatar from "boring-avatars";
 import { useTheme } from "../../context/ThemeContext";
 import React, { useState } from "react";
-import BedtimeIcon from "@mui/icons-material/Bedtime";
-import LightModeIcon from "@mui/icons-material/LightMode";
 
 const userDropdown = [
   { title: "Settings", path: "/settings" },
@@ -35,7 +33,6 @@ const navStyles = {
 const Header = () => {
   const { isLoggedIn, logout } = useUserContext();
   //const [isLoggedIn, setIsLoggedIn ] = useState(true);
-  const { isDarkMode, toggleTheme } = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -73,7 +70,6 @@ const Header = () => {
 
         <Box display="flex" alignItems="center">
           <List sx={{ display: "flex" }}>
-            <Switch checked={isDarkMode} onChange={toggleTheme} />
             <SearchBar />
             {isLoggedIn ? (
               <>
