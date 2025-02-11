@@ -65,11 +65,11 @@ const Members = () => {
         paddingLeft: "5rem",
       }}
     >
-      <h4 style={{ color: "#fff" }}>Members</h4>
+      <h4>Members</h4>
       {members &&
         members.map((member, idx) => {
           const className = member.character.class;
-          const classColor = classColorMapping[className] || "#FFFFFF";
+          const classColor = classColorMapping[className] || "#000000";
           const profileBanner = member.character.profile_banner;
           const banner = bannerMapping[profileBanner] || "";
 
@@ -95,7 +95,7 @@ const Members = () => {
             </CustomTooltip>
           );
         })}
-      <span style={{ color: "white" }}>
+      <span>
         <Link
           color="inherit"
           href="https://raider.io/guilds/us/proudmoore/Acrimonious"

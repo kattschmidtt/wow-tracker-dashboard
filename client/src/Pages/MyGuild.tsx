@@ -1,30 +1,28 @@
-import { useContext } from 'react';
-import Header from '../components/Layout/Header';
-import { Box, Card, CardContent, Grid, Paper } from '@mui/material';
-import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
-import { GuildContext } from '../context/GuildContext';
-import BossKillProgress from '../components/Guild/BossKillProgress';
-import Members from '../components/Guild/Members';
-import Rankings from '../components/Guild/Rankings';
+import { useContext } from "react";
+import Header from "../components/Layout/Header";
+import { Box, Card, CardContent, Grid, Paper } from "@mui/material";
+import NavigationSidebar from "../components/Sidebar/NavigationSidebar";
+import { GuildContext } from "../context/GuildContext";
+import BossKillProgress from "../components/Guild/BossKillProgress";
+import Members from "../components/Guild/Members";
+import Rankings from "../components/Guild/Rankings";
 
 const MyGuild = () => {
-
   const { isLoading } = useContext(GuildContext);
 
   return (
     <>
-    <Header />
-      <Box sx={{ display: 'flex', height: '100vh' }}>
+      <Header />
+      <Box sx={{ display: "flex", height: "100vh" }}>
         {/* Sidebar */}
-        <Box sx={{ width: '16%', minWidth: 200 }}>
+        <Box sx={{ width: "16%", minWidth: 200 }}>
           <NavigationSidebar />
         </Box>
 
         {/* Main Content */}
-        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
           {/* Other Components */}
-          <Grid container spacing={2} sx={{ padding: '6rem' }}>
-            
+          <Grid container spacing={2} sx={{ padding: "6rem" }}>
             <Grid item xs={12}>
               <h2>Acrimonious - Proudmoore</h2>
             </Grid>
@@ -33,25 +31,32 @@ const MyGuild = () => {
             <Grid item xs={12} sx={{ flexGrow: 1 }}>
               <Card>
                 <CardContent>
-                <Box sx={{ width: '100%' }}>
-                  <Grid container spacing={2} sx={{ pb: '2rem' }}>
-                    {/* background is battle net black for now so we can see priest names */}
-                    {/* Left component */}
-                    <Grid item xs={12} sm={6} md={6}>
-                      <Paper sx={{ width: '100%', mb: 2, pt: '1rem', bgcolor: '#191B21', display: 'flex', justifyContent: 'center' }}>
-                        {isLoading ? (<>test it loading</>) : (<Members />)}
-                      </Paper>
-                    </Grid>
+                  <Box sx={{ width: "100%" }}>
+                    <Grid container spacing={2} sx={{ pb: "2rem" }}>
+                      {/* background is battle net black for now so we can see priest names */}
+                      {/* Left component */}
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Paper
+                          sx={{
+                            width: "100%",
+                            mb: 2,
+                            pt: "1rem",
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {isLoading ? <>test it loading</> : <Members />}
+                        </Paper>
+                      </Grid>
 
-                    {/* Left component */}
-                    <Grid item xs={12} sm={6} md={6}>
-                      <Paper sx={{ width: '100%', mb: 2, pt: '1rem' }}>
-                        {isLoading ? (<>test it loading</>) : (<Rankings />)}
-                      </Paper>
+                      {/* Left component */}
+                      <Grid item xs={12} sm={6} md={6}>
+                        <Paper sx={{ width: "100%", mb: 2, pt: "1rem" }}>
+                          {isLoading ? <>test it loading</> : <Rankings />}
+                        </Paper>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Box>
-
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
@@ -77,7 +82,6 @@ const MyGuild = () => {
                 </CardContent>
               </Card>
             </Grid>
-
           </Grid>
         </Box>
       </Box>
