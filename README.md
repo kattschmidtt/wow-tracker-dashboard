@@ -4,25 +4,29 @@ A simple and user-friendly dashboard for World of Warcraft (WoW) players to keep
 
 ### Tech Stack
 
-**Client:** 
+**Client:**
+
 - React with TS
 - Material-UI
 - React Google Charts
 - React Beautiful DnD
 - React-Big-Calendar
 
+**Server:**
 
-**Server:** 
 - Golang
-- Postgres 
+- Postgres
 - GORM
 
 **Data sources:**
+
 - Raider.io
 - Blizzard
 - wow.zamimg.com
 
-![alt text](https://i.redd.it/al5f1rbrrm341.jpg)  
+![alt text](https://i.redd.it/al5f1rbrrm341.jpg)
 
-*All pictures/account information belong to Blizzard Entertainment*  
-*except this great meme*
+_All pictures/account information belong to Blizzard Entertainment_  
+_except this great meme_
+
+- ![API Documentation for Archon and the MyProgress tab](https://www.archon.gg/wow/articles/help/API-documentation)

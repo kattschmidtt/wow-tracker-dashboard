@@ -20,6 +20,8 @@
 
 ### Login
 
+- [ ] Make it work lol
+
 #### My Progress
 
 - [ ] Add ILVL graph, can be thought of as an mmr graph
