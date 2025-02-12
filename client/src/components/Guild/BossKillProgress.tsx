@@ -80,20 +80,37 @@ const BossKillProgress = () => {
     <>
       <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
         <div style={{ width: "200px" }}>
-          <Tabs
-            value={activeTab}
-            onChange={handleTabSwitch}
-            orientation="vertical"
-          >
-            {difficultyTabs.map((tab) => (
-              <Tab
-                label={tab}
-                key={tab}
-                value={tab}
-                sx={{ fontFamily: "Poppins" }}
-              />
-            ))}
-          </Tabs>
+          <div style={{ width: "200px", height: "100%" }}>
+            <Tabs
+              value={activeTab}
+              onChange={handleTabSwitch}
+              orientation="vertical"
+              sx={{
+                "& .MuiTabs-indicator": {
+                  left: 0,
+                  right: "auto",
+                  backgroundColor: "primary.main",
+                  width: "4px",
+                },
+              }}
+            >
+              {difficultyTabs.map((tab) => (
+                <Tab
+                  label={tab}
+                  key={tab}
+                  value={tab}
+                  sx={{
+                    fontFamily: "Poppins",
+                    fontSize: "1rem",
+                    "&.Mui-selected": {
+                      color: "text.primary",
+                      fontWeight: 600,
+                    },
+                  }}
+                />
+              ))}
+            </Tabs>
+          </div>{" "}
         </div>
 
         <div style={{ flexGrow: 1 }}>
