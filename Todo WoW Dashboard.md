@@ -22,9 +22,20 @@
 
 #### My Progress
 
+- [ ] Add ILVL graph, can be thought of as an mmr graph
+- [ ] make the archon page lmao
+
 ##### Settings page
 
 - [ ] Add section to adjust email listed
 - [ ] Add list of themes available and allow them to change
 
 ###### My Character
+
+####### Random
+
+- [ ] Common talent loadouts for certain dungeons
+- [ ] M+ progress for guildies as well. Have the ability to look up guildies IO and what keys would be a boost to their IO
+- [ ] Guild page: add list of number of professions in guild. ex: 62 blacksmiths, etc...
+- [ ] Guild page: on hover have a members profession and their specilization
+- [ ] Home page: add wow token widget

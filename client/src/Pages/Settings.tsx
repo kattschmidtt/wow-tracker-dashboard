@@ -71,7 +71,7 @@ const Settings = () => {
                     >
                       <Grid container spacing={2} alignItems="center">
                         <Grid item xs={12} sm={2} md={2}>
-                          <div>Username</div>
+                          <div>Email</div>
                         </Grid>
                         <Grid item xs={12} sm={2} md={10}>
                           <Input sx={{ fontFamily: "Poppins" }} />

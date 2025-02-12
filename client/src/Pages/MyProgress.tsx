@@ -1,24 +1,53 @@
-import { Box, Grid } from '@mui/material';
-import React from 'react';
-import Header from '../components/Layout/Header';
-import NavigationSidebar from '../components/Sidebar/NavigationSidebar';
+import { Box, Card, CardContent, Grid } from "@mui/material";
+import Header from "../components/Layout/Header";
+import NavigationSidebar from "../components/Sidebar/NavigationSidebar";
 
 const MyProgress = () => {
   return (
     <>
-    <Header />
-      <div>
-        <Box sx={{ flexGrow: 1 }}>
+      <Header />
+      <Box sx={{ display: "flex", height: "100vh" }}>
+        <NavigationSidebar />
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={2} md={2}>
-              <NavigationSidebar />
+            <Grid item xs={12} sm={4}>
+              <Card>
+                <CardContent></CardContent>
+              </Card>
             </Grid>
-            me prog
+            <Grid item xs={12} sm={4}>
+              <Card>
+                <CardContent></CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Card>
+                <CardContent></CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12}>
+              <Card>
+                <CardContent></CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12}>
+              <Card>
+                <CardContent></CardContent>
+              </Card>
+            </Grid>
           </Grid>
         </Box>
-      </div>
+      </Box>
     </>
   );
 };
-
 export default MyProgress;
+
