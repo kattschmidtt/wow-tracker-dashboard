@@ -21,13 +21,13 @@ func BattlenetConfig() oauth2.Config {
 	}
 
 	AppConfig.BattlenetLoginConfig = oauth2.Config{
-		RedirectURL:  "http://localhost:3000",
+		RedirectURL:  "http://localhost:8080/battlenet_callback",
 		ClientID:     os.Getenv("BATTLENET_CLIENT_ID"),
 		ClientSecret: os.Getenv("BATTLENET_CLIENT_SECRET"),
 		Scopes:       []string{"wow.profile"},
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  "https://battle.net/oauth/authorize",
-			TokenURL: "https://battle.net/oauth/token",
+			AuthURL:  "https://oauth.battle.net/authorize",
+			TokenURL: "https://oauth.battle.net/token",
 		},
 	}
 

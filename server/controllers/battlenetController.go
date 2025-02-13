@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"server/config"
@@ -33,17 +33,25 @@ func BattlenetCallback(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Code-Token exchange failed!")
 	}
 
-	resp, err := http.Get("https://www.oauth.battle.net/oauth/userinfo?region=us&access_token=" + token.AccessToken)
+	client := http.Client{}
+	req, err := http.NewRequest("GET", "https://oauth.battle.net/userinfo", nil)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Error creating userinfo request!")
+	}
+	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("User data fetch failed!")
 	}
 	defer resp.Body.Close()
 
-	userData, err := ioutil.ReadAll(resp.Body)
+	userData, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("JSON parsing failed")
 	}
 
+	c.Redirect("http://localhost:3000")
 	// Return user data as JSON
 	return c.Status(fiber.StatusOK).Send(userData)
 }
