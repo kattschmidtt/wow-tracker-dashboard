@@ -39,7 +39,7 @@ func main() {
 	config.BattlenetConfig()
 
 	app.Get("/battlenet_login", controllers.BattlenetLogin)
-	app.Post("/battlenet_callback", controllers.BattlenetCallback)
+	app.Get("/battlenet_callback", controllers.BattlenetCallback)
 
 	//app.Get("/getChars", controllers.GetChars)
 	app.Get("/affixes", controllers.GetCurrentAffixList)
