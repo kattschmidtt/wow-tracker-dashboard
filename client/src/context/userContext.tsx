@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
+import { BattlenetUserModel } from "../Models/userModel";
 
 interface UserContextType {
   token: string | null;
@@ -16,11 +17,26 @@ interface UserContextProviderProps {
 
 export const UserProvider = ({ children }: UserContextProviderProps) => {
   const [token, setToken] = useState<string | null>(null);
-  const [userData, setUserData] = useState<object | null>(null);
+  const [userData, setUserData] = useState<BattlenetUserModel | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const login = async () => {
-    setIsLoggedIn(true);
+    try {
+      const resp = await fetch("http://localhost:8080/battlenet_login");
+      if (!resp.ok) {
+        throw new Error(`HTTP error! status: ${resp.status}`);
+      }
+      const respJson = await resp.json();
+      setUserData(respJson);
+      setIsLoggedIn(true);
+
+      window.location.href = "http://localhost:3000/";
+    } catch (err) {
+      console.log(
+        "this is an error from the login function in userProvider: ",
+        err,
+      );
+    }
   };
 
   const logout = () => {
@@ -31,7 +47,9 @@ export const UserProvider = ({ children }: UserContextProviderProps) => {
   };
 
   return (
-    <UserContext.Provider value={{ token, isLoggedIn, userData, login, logout }}>
+    <UserContext.Provider
+      value={{ token, isLoggedIn, userData, login, logout }}
+    >
       {children}
     </UserContext.Provider>
   );
